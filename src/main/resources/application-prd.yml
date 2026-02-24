@@ -20,30 +20,7 @@ spring:
         #        dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           exception-handling: ignore
-  data:
-    mongodb:
-      uri: ${MONGO_DB_URL}
-      database: puppynote
-    logging:
-      level:
-        p6spy: info
 
-      decorator:
-        datasource:
-          p6spy:
-            enable-logging: true
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: puppynote1215@gmail.com
-    password: ${EMAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          starttls:
-            enable: true
-          auth: true
 
 oauth:
   kakao:
@@ -54,27 +31,6 @@ oauth:
     api:
       url: https://www.googleapis.com
       name: googleApi
-  naver:
-    api:
-      url: https://openai.naver.com
-      name: naverApi
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-
-slack:
-  webhook:
-    url: ${SLACK_WEBHOOK}
-
-logging:
-  config: classpath:logback/logback-config.xml
-
-aws:
-  access-key: ${AWS_ACCESS_KEY}  # AWS IAM Access Key
-  secret-key: ${AWS_SECRET_KEY}  # AWS IAM Secret Key
-  s3:
-    region: ap-northeast-2  # Seoul Region
-    bucket:
-      user: ${USER_BUCKET}  # 사용자 관련 파일 버킷
-      challenge: ${CHALLENGE_BUCKET}  # 챌린지 관련 파일 버킷
-      challenge-badge: ${CHALLENGE_BADGE_BUCKET}  # 챌린지 관련 파일 버킷

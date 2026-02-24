@@ -29,7 +29,6 @@ public class OAuthLoginResponse {
 			.email(user.getEmail())
 			.accessToken(jwtToken.getAccessToken())
 			.refreshToken(jwtToken.getRefreshToken())
-			.settingStatus(user.getSettingStatus())
 			.build();
 	}
 }

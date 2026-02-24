@@ -1,0 +1,38 @@
+[[user-login]]
+=== 일반 로그인
+
+==== HTTP Request
+
+include::{snippets}/user-login/http-request.adoc[]
+include::{snippets}/user-login/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-login/http-response.adoc[]
+include::{snippets}/user-login/response-fields.adoc[]
+
+[[user-oauthLogin]]
+=== OAuth 로그인
+
+==== HTTP Request
+
+include::{snippets}/user-oauthLogin/http-request.adoc[]
+include::{snippets}/user-oauthLogin/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-oauthLogin/http-response.adoc[]
+include::{snippets}/user-oauthLogin/response-fields.adoc[]
+
+[[user-save]]
+=== 일반회원 저장
+
+==== HTTP Request
+
+include::{snippets}/user-save/http-request.adoc[]
+include::{snippets}/user-save/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-save/http-response.adoc[]
+include::{snippets}/user-save/response-fields.adoc[]

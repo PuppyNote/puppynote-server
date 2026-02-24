@@ -30,7 +30,6 @@ public class ApiControllerAdvice {
 	@ExceptionHandler(Exception.class)
 	public ApiResponse<Object> exception(Exception e, HttpServletRequest request) throws IOException {
 		log.error(e.getMessage(), e);
-		slackService.sendErrorNotification(e, request);
 		return ApiResponse.of(
 			HttpStatus.INTERNAL_SERVER_ERROR,
 			"서버 로직 에러",

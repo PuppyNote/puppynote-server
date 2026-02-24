@@ -18,18 +18,6 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
       - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: puppynote1215@gmail.com
-    password: test
-    properties:
-      mail:
-        smtp:
-          starttls:
-            enable: true
-          auth: true
-
 oauth:
   kakao:
     api:
@@ -39,33 +27,6 @@ oauth:
     api:
       url: https://www.googleapis.com
       name: googleApi
-  naver:
-    api:
-      url: https://openai.naver.com
-      name: naverApi
 
 jwt:
   secret-key: 4a0pPV9g4/6OvKKzV1MpVdIchBeTfcjd/TRKbuWUgpNY3jyh6YA/aBnpe4kPsAY5WJoBBzOG358zqS5/E0TSag==
-
-oracle:
-  cloud:
-    region: ap-chuncheon-1
-  name-space-name: testnamespace
-  user:
-    bucket-name: testbucket
-  challenge:
-    bucket-name: testchallengebucket
-
-slack:
-  webhook:
-    url: www.test.com/test/webhook/url
-
-aws:
-  access-key: testaccesskey  # AWS IAM Access Key
-  secret-key: testsecretkey  # AWS IAM Secret Key
-  s3:
-    region: ap-northeast-2  # Seoul Region
-    bucket:
-      user: testuserbucket  # 사용자 관련 파일 버킷
-      challenge: testchallengebucket  # 챌린지 관련 파일 버킷
-      challenge-badge: testchallengebadgebucket  # 챌린지 배지 관련 파일 버킷

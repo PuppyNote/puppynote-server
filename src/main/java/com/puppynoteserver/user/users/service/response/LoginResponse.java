@@ -27,7 +27,6 @@ public class LoginResponse {
 			.email(user.getEmail())
 			.accessToken(jwtToken.getAccessToken())
 			.refreshToken(jwtToken.getRefreshToken())
-			.settingStatus(user.getSettingStatus())
 			.build();
 	}
 }

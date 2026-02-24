@@ -49,14 +49,12 @@ public class User extends BaseTimeEntity {
     private List<Push> pushes = new ArrayList<>();
 
     @Builder
-    public User(String email, Long id, String nickName, String password, String profileUrl, List<Push> pushes, List<RefreshToken> refreshTokens, Role role, SnsType snsType, String useYn) {
+    public User(String email, Long id, String nickName, String password, String profileUrl, Role role, SnsType snsType, String useYn) {
         this.email = email;
         this.id = id;
         this.nickName = nickName;
         this.password = password;
         this.profileUrl = profileUrl;
-        this.pushes = pushes;
-        this.refreshTokens = refreshTokens;
         this.role = role;
         this.snsType = snsType;
         this.useYn = useYn;
