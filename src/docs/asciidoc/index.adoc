@@ -9,6 +9,13 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
+[[User-API]]
+== User API
+
+include::api/user/signup.adoc[]
+
+include::api/user/email.adoc[]
+
 [[Login-API]]
 == Login API
 
