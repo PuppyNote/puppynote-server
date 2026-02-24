@@ -18,6 +18,19 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
       - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: puppynote0330@gmail.com
+    password: test
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
 oauth:
   kakao:
     api:
