@@ -24,42 +24,44 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
-	private static final String[] excludePath = {
-		"/api/v1/auth",                 //로그인 예정
-		"/api/v1/confirmEmail",
-		"/docs",                        //API문서는 예외
-		"/health-check"
-	};
+    private static final String[] excludePath = {
+            "/api/v1/auth",                 //로그인 예정
+            "/api/v1/user/signUp",
+            "/api/v1/user/email/send",
+            "/api/v1/confirmEmail",
+            "/docs",                        //API문서는 예외
+            "/health-check"
+    };
 
-	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) {
-		String path = request.getServletPath();
-		return Arrays.stream(excludePath).anyMatch(path::startsWith);
-	}
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return Arrays.stream(excludePath).anyMatch(path::startsWith);
+    }
 
-	@Override
-	protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
-		@NotNull @NonNull FilterChain filterChain)
-		throws ServletException, IOException {
-		try {
-			// Header에서 토큰 받아옴
-			String token = jwtTokenProvider.resolveToken(request);
-			// 유효한 토큰인지 확인
-			if (token != null && jwtTokenProvider.extractSubject(token)) {
-				// 토큰이 유효하면 토큰으로부터 유저 정보를 세팅
-				Authentication authentication = jwtTokenProvider.getAuthentication(token);
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			} else {
-				throw new JwtTokenException("JWT토큰이 수신되지 않았거나 형식이 맞지않습니다.");
-			}
-		} catch (ExpiredJwtException e) {
-			throw new JwtTokenException("JWT토큰이 만료되었습니다.", e);
-		} catch (JwtException | IllegalArgumentException e) {
-			throw new JwtTokenException("JWT토큰이 수신되지 않았거나 형식이 맞지않습니다.", e);
-		}
+    @Override
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
+                                    @NotNull @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            // Header에서 토큰 받아옴
+            String token = jwtTokenProvider.resolveToken(request);
+            // 유효한 토큰인지 확인
+            if (token != null && jwtTokenProvider.extractSubject(token)) {
+                // 토큰이 유효하면 토큰으로부터 유저 정보를 세팅
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                throw new JwtTokenException("JWT토큰이 수신되지 않았거나 형식이 맞지않습니다.");
+            }
+        } catch (ExpiredJwtException e) {
+            throw new JwtTokenException("JWT토큰이 만료되었습니다.", e);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new JwtTokenException("JWT토큰이 수신되지 않았거나 형식이 맞지않습니다.", e);
+        }
 
-		filterChain.doFilter(request, response);
-	}
+        filterChain.doFilter(request, response);
+    }
 }
