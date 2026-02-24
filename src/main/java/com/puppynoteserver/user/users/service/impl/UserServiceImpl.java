@@ -8,7 +8,6 @@ import com.puppynoteserver.user.users.entity.enums.SnsType;
 import com.puppynoteserver.user.users.repository.UserRepository;
 import com.puppynoteserver.user.users.service.UserService;
 import com.puppynoteserver.user.users.service.request.EmailSendServiceRequest;
-import com.puppynoteserver.user.users.service.request.EmailVerifyServiceRequest;
 import com.puppynoteserver.user.users.service.request.SignUpServiceRequest;
 import com.puppynoteserver.user.users.service.response.SignUpResponse;
 import lombok.RequiredArgsConstructor;
