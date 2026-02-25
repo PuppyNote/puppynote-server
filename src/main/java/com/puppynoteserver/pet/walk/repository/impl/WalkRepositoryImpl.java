@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,5 +29,10 @@ public class WalkRepositoryImpl implements WalkRepository {
     @Override
     public List<Walk> findByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end) {
         return walkJpaRepository.findByPetIdAndStartTimeBetween(petId, start, end);
+    }
+
+    @Override
+    public Optional<Walk> findById(Long walkId) {
+        return walkJpaRepository.findWithPhotosById(walkId);
     }
 }

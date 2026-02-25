@@ -1,9 +1,12 @@
 package com.puppynoteserver.pet.walk.service.impl;
 
+import com.puppynoteserver.pet.walk.entity.Walk;
 import com.puppynoteserver.pet.walk.repository.WalkRepository;
 import com.puppynoteserver.pet.walk.service.WalkReadService;
 import com.puppynoteserver.pet.walk.service.response.WalkCalendarResponse;
+import com.puppynoteserver.pet.walk.service.response.WalkDetailResponse;
 import com.puppynoteserver.pet.walk.service.response.WalkResponse;
+import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.storage.enums.BucketKind;
 import com.puppynoteserver.storage.service.S3StorageService;
 import lombok.RequiredArgsConstructor;
@@ -57,5 +60,17 @@ public class WalkReadServiceImpl implements WalkReadService {
         return firstDay.datesUntil(lastDay.plusDays(1))
                 .map(date -> WalkCalendarResponse.of(date, walkDates.contains(date)))
                 .toList();
+    }
+
+    @Override
+    public WalkDetailResponse getWalkDetail(Long walkId) {
+        Walk walk = walkRepository.findById(walkId)
+                .orElseThrow(() -> new NotFoundException("산책 기록을 찾을 수 없습니다."));
+
+        List<String> photoUrls = walk.getPhotos().stream()
+                .map(photo -> s3StorageService.createPresignedUrl(photo.getImageKey(), BucketKind.WALK_PHOTO))
+                .toList();
+
+        return WalkDetailResponse.of(walk, photoUrls);
     }
 }

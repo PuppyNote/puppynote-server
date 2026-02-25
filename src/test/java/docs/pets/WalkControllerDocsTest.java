@@ -18,6 +18,7 @@ import java.time.YearMonth;
 import java.util.List;
 
 import com.puppynoteserver.pet.walk.service.response.WalkCalendarResponse;
+import com.puppynoteserver.pet.walk.service.response.WalkDetailResponse;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -41,6 +42,66 @@ public class WalkControllerDocsTest extends RestDocsSupport {
     @Override
     protected Object initController() {
         return new WalkController(walkWriteService, walkReadService);
+    }
+
+    @DisplayName("산책 상세 조회 API")
+    @Test
+    void getWalkDetail() throws Exception {
+        WalkDetailResponse response = mock(WalkDetailResponse.class);
+        given(response.getWalkId()).willReturn(1L);
+        given(response.getPetId()).willReturn(1L);
+        given(response.getStartTime()).willReturn(LocalDateTime.of(2026, 2, 25, 8, 0, 0));
+        given(response.getEndTime()).willReturn(LocalDateTime.of(2026, 2, 25, 8, 30, 0));
+        given(response.getLatitude()).willReturn(new BigDecimal("37.5665000"));
+        given(response.getLongitude()).willReturn(new BigDecimal("126.9780000"));
+        given(response.getLocation()).willReturn("한강공원 여의도");
+        given(response.getMemo()).willReturn("오늘 산책 날씨 맑음");
+        given(response.getPhotoUrls()).willReturn(List.of(
+                "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/abc123.jpg?X-Amz-Expires=3600",
+                "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/def456.jpg?X-Amz-Expires=3600"
+        ));
+        given(walkReadService.getWalkDetail(anyLong())).willReturn(response);
+
+        mockMvc.perform(
+                        get("/api/v1/walks/{walkId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("walk-detail",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("walkId").description("산책 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.walkId").type(JsonFieldType.NUMBER)
+                                        .description("산책 ID"),
+                                fieldWithPath("data.petId").type(JsonFieldType.NUMBER)
+                                        .description("펫 ID"),
+                                fieldWithPath("data.startTime").type(JsonFieldType.STRING)
+                                        .description("산책 시작 시간"),
+                                fieldWithPath("data.endTime").type(JsonFieldType.STRING)
+                                        .description("산책 종료 시간"),
+                                fieldWithPath("data.latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("data.longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("data.location").type(JsonFieldType.STRING)
+                                        .description("위치명").optional(),
+                                fieldWithPath("data.memo").type(JsonFieldType.STRING)
+                                        .description("메모").optional(),
+                                fieldWithPath("data.photoUrls").type(JsonFieldType.ARRAY)
+                                        .description("산책 사진 Presigned URL 목록 (유효시간 1시간)")
+                        )
+                ));
     }
 
     @DisplayName("산책 캘린더 조회 API")

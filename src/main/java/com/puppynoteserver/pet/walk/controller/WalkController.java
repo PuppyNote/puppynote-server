@@ -5,6 +5,7 @@ import com.puppynoteserver.pet.walk.controller.request.WalkCreateRequest;
 import com.puppynoteserver.pet.walk.service.WalkReadService;
 import com.puppynoteserver.pet.walk.service.WalkWriteService;
 import com.puppynoteserver.pet.walk.service.response.WalkCalendarResponse;
+import com.puppynoteserver.pet.walk.service.response.WalkDetailResponse;
 import com.puppynoteserver.pet.walk.service.response.WalkResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,11 @@ public class WalkController {
 
     private final WalkWriteService walkWriteService;
     private final WalkReadService walkReadService;
+
+    @GetMapping("/{walkId}")
+    public ApiResponse<WalkDetailResponse> getWalkDetail(@PathVariable Long walkId) {
+        return ApiResponse.ok(walkReadService.getWalkDetail(walkId));
+    }
 
     @GetMapping("/calendar")
     public ApiResponse<List<WalkCalendarResponse>> getWalkCalendar(
