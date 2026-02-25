@@ -26,7 +26,7 @@ public class QFamilyMember extends EntityPathBase<FamilyMember> {
 
     public final com.puppynoteserver.pet.pets.entity.QPet pet;
 
-    public final StringPath role = createString("role");
+    public final EnumPath<com.puppynoteserver.pet.familyMembers.entity.enums.RoleType> role = createEnum("role", com.puppynoteserver.pet.familyMembers.entity.enums.RoleType.class);
 
     public final com.puppynoteserver.user.users.entity.QUser user;
 

@@ -23,8 +23,6 @@ public class QPet extends EntityPathBase<Pet> {
 
     public final DatePath<java.time.LocalDate> birthDate = createDate("birthDate", java.time.LocalDate.class);
 
-    public final StringPath breed = createString("breed");
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
@@ -32,12 +30,10 @@ public class QPet extends EntityPathBase<Pet> {
 
     public final StringPath name = createString("name");
 
-    public final StringPath profileImageUrl = createString("profileImageUrl");
+    public final StringPath profileImage = createString("profileImage");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
-
-    public final NumberPath<java.math.BigDecimal> weight = createNumber("weight", java.math.BigDecimal.class);
 
     public QPet(String variable) {
         super(Pet.class, forVariable(variable));
