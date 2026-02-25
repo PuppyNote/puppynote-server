@@ -44,12 +44,12 @@ public class PetWalkAlarm extends BaseTimeEntity {
     private LocalTime alarmTime;
 
     public static PetWalkAlarm of(Pet pet, AlarmStatus alarmStatus, Set<AlarmDay> alarmDays, LocalTime alarmTime) {
-        PetWalkAlarm petAlarm = new PetWalkAlarm();
-        petAlarm.pet = pet;
-        petAlarm.alarmStatus = alarmStatus;
-        petAlarm.alarmDays = alarmDays;
-        petAlarm.alarmTime = alarmTime;
-        return petAlarm;
+        PetWalkAlarm petWalkAlarm = new PetWalkAlarm();
+        petWalkAlarm.pet = pet;
+        petWalkAlarm.alarmStatus = alarmStatus;
+        petWalkAlarm.alarmDays = alarmDays;
+        petWalkAlarm.alarmTime = alarmTime;
+        return petWalkAlarm;
     }
 
     public void update(AlarmStatus alarmStatus, Set<AlarmDay> alarmDays, LocalTime alarmTime) {
