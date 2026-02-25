@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class WalkResponse {
@@ -18,11 +17,11 @@ public class WalkResponse {
     private final BigDecimal longitude;
     private final String location;
     private final String memo;
-    private final List<String> photoUrls;
+    private final String photoUrl;
 
     private WalkResponse(Long walkId, Long petId, LocalDateTime startTime, LocalDateTime endTime,
                          BigDecimal latitude, BigDecimal longitude,
-                         String location, String memo, List<String> photoUrls) {
+                         String location, String memo, String photoUrl) {
         this.walkId = walkId;
         this.petId = petId;
         this.startTime = startTime;
@@ -31,10 +30,10 @@ public class WalkResponse {
         this.longitude = longitude;
         this.location = location;
         this.memo = memo;
-        this.photoUrls = photoUrls;
+        this.photoUrl = photoUrl;
     }
 
-    public static WalkResponse of(Walk walk, List<String> photoUrls) {
+    public static WalkResponse of(Walk walk, String photoUrl) {
         return new WalkResponse(
                 walk.getId(),
                 walk.getPet().getId(),
@@ -44,7 +43,7 @@ public class WalkResponse {
                 walk.getLongitude(),
                 walk.getLocation(),
                 walk.getMemo(),
-                photoUrls
+                photoUrl
         );
     }
 }

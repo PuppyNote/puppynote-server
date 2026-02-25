@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -38,11 +37,9 @@ public class WalkWriteServiceImpl implements WalkWriteService {
 
         Walk savedWalk = walkRepository.save(walk);
 
-        List<String> photoUrls = photoKeys == null ? Collections.emptyList() :
-                photoKeys.stream()
-                        .map(key -> s3StorageService.createPresignedUrl(key, BucketKind.WALK_PHOTO))
-                        .toList();
+        String photoUrl = (photoKeys == null || photoKeys.isEmpty()) ? null :
+                s3StorageService.createPresignedUrl(photoKeys.get(0), BucketKind.WALK_PHOTO);
 
-        return WalkResponse.of(savedWalk, photoUrls);
+        return WalkResponse.of(savedWalk, photoUrl);
     }
 }

@@ -100,9 +100,9 @@ public class WalkControllerDocsTest extends RestDocsSupport {
         given(response1.getLongitude()).willReturn(new BigDecimal("126.9780000"));
         given(response1.getLocation()).willReturn("한강공원 여의도");
         given(response1.getMemo()).willReturn("오늘 산책 날씨 맑음");
-        given(response1.getPhotoUrls()).willReturn(List.of(
+        given(response1.getPhotoUrl()).willReturn(
                 "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/abc123.jpg?X-Amz-Expires=3600"
-        ));
+        );
 
         given(walkReadService.getWalksByPetId(anyLong(), any(LocalDate.class))).willReturn(List.of(response1));
 
@@ -145,8 +145,8 @@ public class WalkControllerDocsTest extends RestDocsSupport {
                                         .description("위치명").optional(),
                                 fieldWithPath("data[].memo").type(JsonFieldType.STRING)
                                         .description("메모").optional(),
-                                fieldWithPath("data[].photoUrls").type(JsonFieldType.ARRAY)
-                                        .description("산책 사진 Presigned URL 목록 (유효시간 1시간)")
+                                fieldWithPath("data[].photoUrl").type(JsonFieldType.STRING)
+                                        .description("산책 사진 Presigned URL (유효시간 1시간)").optional()
                         )
                 ));
     }
@@ -174,10 +174,9 @@ public class WalkControllerDocsTest extends RestDocsSupport {
         given(response.getLongitude()).willReturn(new BigDecimal("126.9780000"));
         given(response.getLocation()).willReturn("한강공원 여의도");
         given(response.getMemo()).willReturn("오늘 산책 날씨 맑음");
-        given(response.getPhotoUrls()).willReturn(List.of(
-                "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/abc123.jpg?X-Amz-Expires=3600",
-                "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/def456.jpg?X-Amz-Expires=3600"
-        ));
+        given(response.getPhotoUrl()).willReturn(
+                "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/abc123.jpg?X-Amz-Expires=3600"
+        );
         given(walkWriteService.create(any(WalkCreateServiceRequest.class))).willReturn(response);
 
         mockMvc.perform(
@@ -233,8 +232,8 @@ public class WalkControllerDocsTest extends RestDocsSupport {
                                         .description("위치명").optional(),
                                 fieldWithPath("data.memo").type(JsonFieldType.STRING)
                                         .description("메모").optional(),
-                                fieldWithPath("data.photoUrls").type(JsonFieldType.ARRAY)
-                                        .description("산책 사진 Presigned URL 목록 (유효시간 1시간)")
+                                fieldWithPath("data.photoUrl").type(JsonFieldType.STRING)
+                                        .description("산책 사진 Presigned URL (유효시간 1시간)").optional()
                         )
                 ));
     }
