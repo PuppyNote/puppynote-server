@@ -1,3 +1,15 @@
+[[pet-item-categories]]
+=== 용품 카테고리 공통코드 조회
+
+==== HTTP Request
+
+include::{snippets}/pet-item-categories/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-categories/http-response.adoc[]
+include::{snippets}/pet-item-categories/response-fields.adoc[]
+
 [[pet-item-create]]
 === 용품 등록
 

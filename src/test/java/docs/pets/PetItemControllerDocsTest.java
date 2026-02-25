@@ -38,6 +38,44 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
         return new PetItemController(petItemWriteService, petItemReadService);
     }
 
+    @DisplayName("용품 카테고리 공통코드 조회 API")
+    @Test
+    void getCategories() throws Exception {
+        mockMvc.perform(
+                        get("/api/v1/pet-items/categories")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("pet-item-categories",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY)
+                                        .description("대분류별 카테고리 목록"),
+                                fieldWithPath("data[].majorCategory").type(JsonFieldType.STRING)
+                                        .description("대분류 코드"),
+                                fieldWithPath("data[].majorCategoryName").type(JsonFieldType.STRING)
+                                        .description("대분류명"),
+                                fieldWithPath("data[].majorCategoryEmoji").type(JsonFieldType.STRING)
+                                        .description("대분류 이모지"),
+                                fieldWithPath("data[].categories").type(JsonFieldType.ARRAY)
+                                        .description("소분류 목록"),
+                                fieldWithPath("data[].categories[].category").type(JsonFieldType.STRING)
+                                        .description("소분류 코드"),
+                                fieldWithPath("data[].categories[].categoryName").type(JsonFieldType.STRING)
+                                        .description("소분류명"),
+                                fieldWithPath("data[].categories[].emoji").type(JsonFieldType.STRING)
+                                        .description("소분류 이모지")
+                        )
+                ));
+    }
+
     @DisplayName("용품 등록 API")
     @Test
     void createPetItem() throws Exception {
@@ -54,8 +92,12 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
         given(response.getPetItemId()).willReturn(1L);
         given(response.getPetId()).willReturn(1L);
         given(response.getName()).willReturn("로얄캐닌 미니 어덜트");
+        given(response.getMajorCategory()).willReturn("FOOD_NUTRITION");
+        given(response.getMajorCategoryName()).willReturn("식품/영양");
+        given(response.getMajorCategoryEmoji()).willReturn("🍖");
         given(response.getCategory()).willReturn(ItemCategory.FOOD);
-        given(response.getCategoryDescription()).willReturn("사료");
+        given(response.getCategoryName()).willReturn("사료");
+        given(response.getCategoryEmoji()).willReturn("🍚");
         given(response.getPurchaseCycleDays()).willReturn(30);
         given(response.getPurchaseUrl()).willReturn("https://www.coupang.com/vp/products/example");
         given(response.getImageUrl()).willReturn(
@@ -81,7 +123,7 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("name").type(JsonFieldType.STRING)
                                         .description("용품명"),
                                 fieldWithPath("category").type(JsonFieldType.STRING)
-                                        .description("카테고리 (FOOD, SNACK, SHAMPOO, ...)"),
+                                        .description("소분류 카테고리 코드 (공통코드 조회 API 참고)"),
                                 fieldWithPath("purchaseCycleDays").type(JsonFieldType.NUMBER)
                                         .description("구매 주기 (일 단위, 최소 1)"),
                                 fieldWithPath("purchaseUrl").type(JsonFieldType.STRING)
@@ -104,10 +146,18 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
                                         .description("펫 ID"),
                                 fieldWithPath("data.name").type(JsonFieldType.STRING)
                                         .description("용품명"),
+                                fieldWithPath("data.majorCategory").type(JsonFieldType.STRING)
+                                        .description("대분류 코드"),
+                                fieldWithPath("data.majorCategoryName").type(JsonFieldType.STRING)
+                                        .description("대분류명"),
+                                fieldWithPath("data.majorCategoryEmoji").type(JsonFieldType.STRING)
+                                        .description("대분류 이모지"),
                                 fieldWithPath("data.category").type(JsonFieldType.STRING)
-                                        .description("카테고리 코드"),
-                                fieldWithPath("data.categoryDescription").type(JsonFieldType.STRING)
-                                        .description("카테고리명"),
+                                        .description("소분류 코드"),
+                                fieldWithPath("data.categoryName").type(JsonFieldType.STRING)
+                                        .description("소분류명"),
+                                fieldWithPath("data.categoryEmoji").type(JsonFieldType.STRING)
+                                        .description("소분류 이모지"),
                                 fieldWithPath("data.purchaseCycleDays").type(JsonFieldType.NUMBER)
                                         .description("구매 주기 (일)"),
                                 fieldWithPath("data.purchaseUrl").type(JsonFieldType.STRING)
@@ -129,8 +179,12 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
         given(response1.getPetItemId()).willReturn(1L);
         given(response1.getPetId()).willReturn(1L);
         given(response1.getName()).willReturn("로얄캐닌 미니 어덜트");
+        given(response1.getMajorCategory()).willReturn("FOOD_NUTRITION");
+        given(response1.getMajorCategoryName()).willReturn("식품/영양");
+        given(response1.getMajorCategoryEmoji()).willReturn("🍖");
         given(response1.getCategory()).willReturn(ItemCategory.FOOD);
-        given(response1.getCategoryDescription()).willReturn("사료");
+        given(response1.getCategoryName()).willReturn("사료");
+        given(response1.getCategoryEmoji()).willReturn("🍚");
         given(response1.getPurchaseCycleDays()).willReturn(30);
         given(response1.getPurchaseUrl()).willReturn("https://www.coupang.com/vp/products/example");
         given(response1.getImageUrl()).willReturn(
@@ -153,7 +207,7 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         queryParameters(
                                 parameterWithName("petId").description("조회할 펫 ID"),
-                                parameterWithName("category").description("카테고리 필터 (선택, 미입력 시 전체 조회)").optional()
+                                parameterWithName("category").description("소분류 카테고리 필터 (선택, 미입력 시 전체 조회)").optional()
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
@@ -170,10 +224,18 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
                                         .description("펫 ID"),
                                 fieldWithPath("data[].name").type(JsonFieldType.STRING)
                                         .description("용품명"),
+                                fieldWithPath("data[].majorCategory").type(JsonFieldType.STRING)
+                                        .description("대분류 코드"),
+                                fieldWithPath("data[].majorCategoryName").type(JsonFieldType.STRING)
+                                        .description("대분류명"),
+                                fieldWithPath("data[].majorCategoryEmoji").type(JsonFieldType.STRING)
+                                        .description("대분류 이모지"),
                                 fieldWithPath("data[].category").type(JsonFieldType.STRING)
-                                        .description("카테고리 코드"),
-                                fieldWithPath("data[].categoryDescription").type(JsonFieldType.STRING)
-                                        .description("카테고리명"),
+                                        .description("소분류 코드"),
+                                fieldWithPath("data[].categoryName").type(JsonFieldType.STRING)
+                                        .description("소분류명"),
+                                fieldWithPath("data[].categoryEmoji").type(JsonFieldType.STRING)
+                                        .description("소분류 이모지"),
                                 fieldWithPath("data[].purchaseCycleDays").type(JsonFieldType.NUMBER)
                                         .description("구매 주기 (일)"),
                                 fieldWithPath("data[].purchaseUrl").type(JsonFieldType.STRING)
@@ -195,8 +257,12 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
         given(response.getPetItemId()).willReturn(1L);
         given(response.getPetId()).willReturn(1L);
         given(response.getName()).willReturn("로얄캐닌 미니 어덜트");
+        given(response.getMajorCategory()).willReturn("FOOD_NUTRITION");
+        given(response.getMajorCategoryName()).willReturn("식품/영양");
+        given(response.getMajorCategoryEmoji()).willReturn("🍖");
         given(response.getCategory()).willReturn(ItemCategory.FOOD);
-        given(response.getCategoryDescription()).willReturn("사료");
+        given(response.getCategoryName()).willReturn("사료");
+        given(response.getCategoryEmoji()).willReturn("🍚");
         given(response.getPurchaseCycleDays()).willReturn(30);
         given(response.getPurchaseUrl()).willReturn("https://www.coupang.com/vp/products/example");
         given(response.getImageUrl()).willReturn(
@@ -232,10 +298,18 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
                                         .description("펫 ID"),
                                 fieldWithPath("data.name").type(JsonFieldType.STRING)
                                         .description("용품명"),
+                                fieldWithPath("data.majorCategory").type(JsonFieldType.STRING)
+                                        .description("대분류 코드"),
+                                fieldWithPath("data.majorCategoryName").type(JsonFieldType.STRING)
+                                        .description("대분류명"),
+                                fieldWithPath("data.majorCategoryEmoji").type(JsonFieldType.STRING)
+                                        .description("대분류 이모지"),
                                 fieldWithPath("data.category").type(JsonFieldType.STRING)
-                                        .description("카테고리 코드"),
-                                fieldWithPath("data.categoryDescription").type(JsonFieldType.STRING)
-                                        .description("카테고리명"),
+                                        .description("소분류 코드"),
+                                fieldWithPath("data.categoryName").type(JsonFieldType.STRING)
+                                        .description("소분류명"),
+                                fieldWithPath("data.categoryEmoji").type(JsonFieldType.STRING)
+                                        .description("소분류 이모지"),
                                 fieldWithPath("data.purchaseCycleDays").type(JsonFieldType.NUMBER)
                                         .description("구매 주기 (일)"),
                                 fieldWithPath("data.purchaseUrl").type(JsonFieldType.STRING)
