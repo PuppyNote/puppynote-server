@@ -1,0 +1,32 @@
+package com.puppynoteserver.pet.userItemCategories.controller;
+
+import com.puppynoteserver.global.ApiResponse;
+import com.puppynoteserver.pet.userItemCategories.controller.request.UserItemCategorySaveRequest;
+import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryReadService;
+import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryWriteService;
+import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/user-item-categories")
+public class UserItemCategoryController {
+
+    private final UserItemCategoryWriteService userItemCategoryWriteService;
+    private final UserItemCategoryReadService userItemCategoryReadService;
+
+    @PostMapping
+    public ApiResponse<List<UserItemCategoryResponse>> saveCategories(
+            @Valid @RequestBody UserItemCategorySaveRequest request) {
+        return ApiResponse.ok(userItemCategoryWriteService.saveCategories(request.getCategories()));
+    }
+
+    @GetMapping
+    public ApiResponse<List<UserItemCategoryResponse>> getMyCategories() {
+        return ApiResponse.ok(userItemCategoryReadService.getMyCategories());
+    }
+}
