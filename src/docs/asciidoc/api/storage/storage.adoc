@@ -1,0 +1,13 @@
+[[storage-upload]]
+=== 파일 업로드
+
+==== HTTP Request
+
+include::{snippets}/storage-upload/http-request.adoc[]
+include::{snippets}/storage-upload/path-parameters.adoc[]
+include::{snippets}/storage-upload/request-parts.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/storage-upload/http-response.adoc[]
+include::{snippets}/storage-upload/response-fields.adoc[]

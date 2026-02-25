@@ -43,3 +43,11 @@ oauth:
 
 jwt:
   secret-key: 4a0pPV9g4/6OvKKzV1MpVdIchBeTfcjd/TRKbuWUgpNY3jyh6YA/aBnpe4kPsAY5WJoBBzOG358zqS5/E0TSag==
+
+aws:
+  access-key: testaccesskey  # AWS IAM Access Key
+  secret-key: testsecretkey  # AWS IAM Secret Key
+  s3:
+    region: ap-northeast-2  # Seoul Region
+    bucket:
+      puppy-profile: testpuppybucket  # 사용자 관련 파일 버킷

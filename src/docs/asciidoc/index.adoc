@@ -25,3 +25,8 @@ include::api/login/login.adoc[]
 == Pet API
 
 include::api/pet/pet.adoc[]
+
+[[Storage-API]]
+== Storage API
+
+include::api/storage/storage.adoc[]
