@@ -1,3 +1,16 @@
+[[walk-calendar]]
+=== 산책 캘린더 조회
+
+==== HTTP Request
+
+include::{snippets}/walk-calendar/http-request.adoc[]
+include::{snippets}/walk-calendar/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/walk-calendar/http-response.adoc[]
+include::{snippets}/walk-calendar/response-fields.adoc[]
+
 [[walk-list]]
 === 산책 이력 목록 조회
 

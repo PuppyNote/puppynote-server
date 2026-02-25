@@ -14,7 +14,10 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
+
+import com.puppynoteserver.pet.walk.service.response.WalkCalendarResponse;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -38,6 +41,51 @@ public class WalkControllerDocsTest extends RestDocsSupport {
     @Override
     protected Object initController() {
         return new WalkController(walkWriteService, walkReadService);
+    }
+
+    @DisplayName("산책 캘린더 조회 API")
+    @Test
+    void getWalkCalendar() throws Exception {
+        WalkCalendarResponse response1 = mock(WalkCalendarResponse.class);
+        given(response1.getDate()).willReturn(LocalDate.of(2026, 2, 1));
+        given(response1.isHasWalk()).willReturn(false);
+
+        WalkCalendarResponse response2 = mock(WalkCalendarResponse.class);
+        given(response2.getDate()).willReturn(LocalDate.of(2026, 2, 2));
+        given(response2.isHasWalk()).willReturn(true);
+
+        given(walkReadService.getWalkCalendar(anyLong(), any(YearMonth.class)))
+                .willReturn(List.of(response1, response2));
+
+        mockMvc.perform(
+                        get("/api/v1/walks/calendar")
+                                .param("petId", "1")
+                                .param("yearMonth", "2026-02")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("walk-calendar",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("petId").description("조회할 펫 ID"),
+                                parameterWithName("yearMonth").description("조회할 연월 (yyyy-MM)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY)
+                                        .description("일별 산책 여부 목록"),
+                                fieldWithPath("data[].date").type(JsonFieldType.STRING)
+                                        .description("날짜 (yyyy-MM-dd)"),
+                                fieldWithPath("data[].hasWalk").type(JsonFieldType.BOOLEAN)
+                                        .description("해당 날짜에 산책 이력 존재 여부")
+                        )
+                ));
     }
 
     @DisplayName("산책 이력 목록 조회 API")
