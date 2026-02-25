@@ -5,6 +5,7 @@ import com.puppynoteserver.pet.petItems.controller.request.PetItemCreateRequest;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
 import com.puppynoteserver.pet.petItems.service.PetItemReadService;
 import com.puppynoteserver.pet.petItems.service.PetItemWriteService;
+import com.puppynoteserver.pet.petItems.service.response.ItemCategoryGroupResponse;
 import com.puppynoteserver.pet.petItems.service.response.PetItemResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,10 @@ public class PetItemController {
     @GetMapping("/{petItemId}")
     public ApiResponse<PetItemResponse> getPetItemDetail(@PathVariable Long petItemId) {
         return ApiResponse.ok(petItemReadService.getItemDetail(petItemId));
+    }
+
+    @GetMapping("/categories")
+    public ApiResponse<List<ItemCategoryGroupResponse>> getCategories() {
+        return ApiResponse.ok(ItemCategoryGroupResponse.ofAll());
     }
 }

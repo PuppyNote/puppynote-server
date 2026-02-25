@@ -14,8 +14,12 @@ public class PetItemResponse {
     private Long petItemId;
     private Long petId;
     private String name;
+    private String majorCategory;
+    private String majorCategoryName;
+    private String majorCategoryEmoji;
     private ItemCategory category;
-    private String categoryDescription;
+    private String categoryName;
+    private String categoryEmoji;
     private int purchaseCycleDays;
     private String purchaseUrl;
     private String imageUrl;
@@ -27,12 +31,18 @@ public class PetItemResponse {
                 ? lastPurchasedAt.plusDays(petItem.getPurchaseCycleDays())
                 : null;
 
+        ItemCategory category = petItem.getCategory();
+
         return PetItemResponse.builder()
                 .petItemId(petItem.getId())
                 .petId(petItem.getPet().getId())
                 .name(petItem.getName())
-                .category(petItem.getCategory())
-                .categoryDescription(petItem.getCategory().getDescription())
+                .majorCategory(category.getMajorCategory().name())
+                .majorCategoryName(category.getMajorCategory().getDescription())
+                .majorCategoryEmoji(category.getMajorCategory().getEmoji())
+                .category(category)
+                .categoryName(category.getDescription())
+                .categoryEmoji(category.getEmoji())
                 .purchaseCycleDays(petItem.getPurchaseCycleDays())
                 .purchaseUrl(petItem.getPurchaseUrl())
                 .imageUrl(imageUrl)
