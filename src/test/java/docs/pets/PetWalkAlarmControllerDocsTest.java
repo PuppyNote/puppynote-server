@@ -6,6 +6,7 @@ import com.puppynoteserver.pet.petWalkAlarms.controller.request.PetWalkAlarmStat
 import com.puppynoteserver.pet.petWalkAlarms.controller.request.PetWalkAlarmUpdateRequest;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmDay;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmStatus;
+import com.puppynoteserver.pet.petWalkAlarms.service.PetWalkAlarmReadService;
 import com.puppynoteserver.pet.petWalkAlarms.service.PetWalkAlarmWriteService;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmCreateServiceRequest;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmStatusUpdateServiceRequest;
@@ -19,6 +20,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Set;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -37,10 +40,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PetWalkAlarmControllerDocsTest extends RestDocsSupport {
 
     private final PetWalkAlarmWriteService petWalkAlarmWriteService = mock(PetWalkAlarmWriteService.class);
+    private final PetWalkAlarmReadService petWalkAlarmReadService = mock(PetWalkAlarmReadService.class);
 
     @Override
     protected Object initController() {
-        return new PetWalkAlarmController(petWalkAlarmWriteService);
+        return new PetWalkAlarmController(petWalkAlarmWriteService, petWalkAlarmReadService);
     }
 
     @DisplayName("산책 알람 등록 API")
@@ -229,6 +233,57 @@ public class PetWalkAlarmControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("alarmId").description("삭제할 알람 ID")
+                        )
+                ));
+    }
+
+    @DisplayName("산책 알람 목록 조회 API")
+    @Test
+    void getAlarms() throws Exception {
+        PetWalkAlarmResponse response1 = mock(PetWalkAlarmResponse.class);
+        given(response1.getAlarmId()).willReturn(1L);
+        given(response1.getAlarmStatus()).willReturn(AlarmStatus.YES);
+        given(response1.getAlarmDays()).willReturn(Set.of(AlarmDay.MON, AlarmDay.WED, AlarmDay.FRI));
+        given(response1.getAlarmTime()).willReturn(LocalTime.of(8, 0));
+
+        PetWalkAlarmResponse response2 = mock(PetWalkAlarmResponse.class);
+        given(response2.getAlarmId()).willReturn(2L);
+        given(response2.getAlarmStatus()).willReturn(AlarmStatus.NO);
+        given(response2.getAlarmDays()).willReturn(Set.of(AlarmDay.SAT, AlarmDay.SUN));
+        given(response2.getAlarmTime()).willReturn(LocalTime.of(9, 30));
+
+        given(petWalkAlarmReadService.getAlarmsByPetId(anyLong()))
+                .willReturn(List.of(response1, response2));
+
+        mockMvc.perform(
+                        get("/api/v1/pet-walk-alarms")
+                                .param("petId", "1")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("pet-alarm-list",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("petId").description("조회할 펫 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data[].alarmId").type(JsonFieldType.NUMBER)
+                                        .description("알람 ID"),
+                                fieldWithPath("data[].alarmStatus").type(JsonFieldType.STRING)
+                                        .description("알람 활성화 여부"),
+                                fieldWithPath("data[].alarmDays").type(JsonFieldType.ARRAY)
+                                        .description("알람 요일"),
+                                fieldWithPath("data[].alarmTime").type(JsonFieldType.STRING)
+                                        .description("알람 시간 (HH:mm:ss)")
                         )
                 ));
     }

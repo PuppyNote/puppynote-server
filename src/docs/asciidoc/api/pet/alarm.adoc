@@ -1,3 +1,16 @@
+[[pet-alarm-list]]
+=== 산책 알람 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/pet-alarm-list/http-request.adoc[]
+include::{snippets}/pet-alarm-list/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-alarm-list/http-response.adoc[]
+include::{snippets}/pet-alarm-list/response-fields.adoc[]
+
 [[pet-alarm-create]]
 === 산책 알람 등록
 

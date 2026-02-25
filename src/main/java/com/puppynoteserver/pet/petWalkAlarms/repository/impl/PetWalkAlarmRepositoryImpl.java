@@ -6,6 +6,7 @@ import com.puppynoteserver.pet.petWalkAlarms.repository.PetWalkAlarmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +23,11 @@ public class PetWalkAlarmRepositoryImpl implements PetWalkAlarmRepository {
     @Override
     public Optional<PetWalkAlarm> findById(Long alarmId) {
         return petWalkAlarmJpaRepository.findById(alarmId);
+    }
+
+    @Override
+    public List<PetWalkAlarm> findByPetId(Long petId) {
+        return petWalkAlarmJpaRepository.findByPetId(petId);
     }
 
     @Override
