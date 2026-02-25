@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum BucketKind {
 
-    PUPPY_PROFILE
+    PUPPY_PROFILE,
+    WALK_PHOTO
 
 }
