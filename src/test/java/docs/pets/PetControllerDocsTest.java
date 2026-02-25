@@ -83,10 +83,8 @@ public class PetControllerDocsTest extends RestDocsSupport {
     void createPet() throws Exception {
         PetCreateRequest request = PetCreateRequest.builder()
                 .name("초코")
-                .breed("포메라니안")
                 .birthDate(LocalDate.of(2022, 3, 15))
-                .weight(new BigDecimal("3.50"))
-                .profileImageUrl("550e8400-e29b-41d4-a716-446655440000.jpg")
+                .profileImage("550e8400-e29b-41d4-a716-446655440000.jpg")
                 .build();
 
         given(petWriteService.createPet(any(PetCreateServiceRequest.class)))
@@ -111,13 +109,9 @@ public class PetControllerDocsTest extends RestDocsSupport {
                         requestFields(
                                 fieldWithPath("name").type(JsonFieldType.STRING)
                                         .description("펫 이름 (필수)"),
-                                fieldWithPath("breed").type(JsonFieldType.STRING)
-                                        .description("품종").optional(),
                                 fieldWithPath("birthDate").type(JsonFieldType.STRING)
                                         .description("생년월일 (yyyy-MM-dd)").optional(),
-                                fieldWithPath("weight").type(JsonFieldType.NUMBER)
-                                        .description("몸무게 (kg)").optional(),
-                                fieldWithPath("profileImageUrl").type(JsonFieldType.STRING)
+                                fieldWithPath("profileImage").type(JsonFieldType.STRING)
                                         .description("프로필 이미지 S3 Object Key (Storage API 업로드 후 반환값)").optional()
                         ),
                         responseFields(

@@ -16,28 +16,22 @@ public class PetCreateRequest {
     @NotBlank(message = "펫 이름은 필수입니다.")
     private String name;
 
-    private String breed;
-
     private LocalDate birthDate;
 
-    private BigDecimal weight;
-
-    private String profileImageUrl;
+    private String profileImage;
 
     @Builder
-    private PetCreateRequest(String name, String breed, LocalDate birthDate, BigDecimal weight, String profileImageUrl) {
+    private PetCreateRequest(String name, LocalDate birthDate,  String profileImage) {
         this.name = name;
-        this.breed = breed;
         this.birthDate = birthDate;
-        this.weight = weight;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImage = profileImage;
     }
 
     public PetCreateServiceRequest toServiceRequest() {
         return PetCreateServiceRequest.builder()
                 .name(name)
                 .birthDate(birthDate)
-                .profileImageUrl(profileImageUrl)
+                .profileImage(profileImage)
                 .build();
     }
 }

@@ -9,16 +9,16 @@ public class PetCreateServiceRequest {
 
     private final String name;
     private final LocalDate birthDate;
-    private final String profileImageUrl;
+    private final String profileImage;
 
     @Builder
-    private PetCreateServiceRequest(String name, LocalDate birthDate, String profileImageUrl) {
+    private PetCreateServiceRequest(String name, LocalDate birthDate, String profileImage) {
         this.name = name;
         this.birthDate = birthDate;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImage = profileImage;
     }
 
     public Pet toEntity() {
-        return Pet.of(name, birthDate, profileImageUrl);
+        return Pet.of(name, birthDate, profileImage);
     }
 }
