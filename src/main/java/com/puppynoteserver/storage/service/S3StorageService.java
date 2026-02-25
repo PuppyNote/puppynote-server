@@ -32,6 +32,9 @@ public class S3StorageService {
     @Value("${aws.s3.bucket.walk-photo}")
     private String walkPhotoBucketName;
 
+    @Value("${aws.s3.bucket.pet-item-image}")
+    private String petItemImageBucketName;
+
     /**
      * S3에 파일 업로드
      *
@@ -135,6 +138,7 @@ public class S3StorageService {
         return switch (bucketKind) {
             case PUPPY_PROFILE -> puppyProfileBucketName;
             case WALK_PHOTO -> walkPhotoBucketName;
+            case PET_ITEM_IMAGE -> petItemImageBucketName;
         };
     }
 

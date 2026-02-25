@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum BucketKind {
 
     PUPPY_PROFILE,
-    WALK_PHOTO
+    WALK_PHOTO,
+    PET_ITEM_IMAGE
 
 }

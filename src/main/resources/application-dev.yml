@@ -57,3 +57,4 @@ aws:
     bucket:
       puppy-profile: ${PUPPY_PROFILE_BUCKET}  # 사용자 관련 파일 버킷
       walk-photo: ${WALK_PHOTO_BUCKET}  # 산책 사진 버킷
+      pet-item-image: ${PET_ITEM_IMAGE_BUCKET}  # 용품 이미지 버킷
