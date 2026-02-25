@@ -38,6 +38,11 @@ include::api/pet/walk.adoc[]
 
 include::api/pet/pet-item.adoc[]
 
+[[UserItemCategory-API]]
+== UserItemCategory API
+
+include::api/pet/user-item-category.adoc[]
+
 [[Storage-API]]
 == Storage API
 

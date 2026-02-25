@@ -1,0 +1,26 @@
+[[user-item-category-save]]
+=== 사용자 카테고리 저장
+
+배열 순서가 정렬 순서가 됩니다. 기존 등록된 카테고리는 전체 교체됩니다.
+
+==== HTTP Request
+
+include::{snippets}/user-item-category-save/http-request.adoc[]
+include::{snippets}/user-item-category-save/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-item-category-save/http-response.adoc[]
+include::{snippets}/user-item-category-save/response-fields.adoc[]
+
+[[user-item-category-list]]
+=== 사용자 카테고리 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/user-item-category-list/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-item-category-list/http-response.adoc[]
+include::{snippets}/user-item-category-list/response-fields.adoc[]
