@@ -45,11 +45,13 @@ Each domain follows this strict structure with its own packages:
 
 1. **Request conversion**: Controller requests must have a `toServiceRequest()` method to convert to service-layer DTOs before passing to the service.
 
-2. **User identity**: Never pass `userId` directly from the controller. In the service layer, always use `SecurityService.getCurrentLoginUserInfo()` to get the current user.
+2. **Entity conversion**: Service requests must have a `toEntity()` method to convert to JPA entities. The service layer calls `request.toEntity()` — never calls individual getters on a service request to construct an entity.
 
-3. **Cross-service access**: A service can only call its own repository. To access another domain's data, call that domain's service — e.g., `UserService` must call `OrderService`, not `OrderRepository` directly.
+3. **User identity**: Never pass `userId` directly from the controller. In the service layer, always use `SecurityService.getCurrentLoginUserInfo()` to get the current user.
 
-4. **Language**: Comments and log/error messages are written in Korean.
+4. **Cross-service access**: A service can only call its own repository. To access another domain's data, call that domain's service — e.g., `UserService` must call `OrderService`, not `OrderRepository` directly.
+
+5. **Language**: Comments and log/error messages are written in Korean.
 
 ### API Response Format
 

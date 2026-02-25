@@ -24,32 +24,22 @@ public class Pet extends BaseTimeEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(length = 100)
-    private String breed;
-
     private LocalDate birthDate;
 
-    @Column(precision = 5, scale = 2)
-    private BigDecimal weight;
-
     @Column(length = 255)
-    private String profileImageUrl;
+    private String profileImage;
 
-    public static Pet of(String name, String breed, LocalDate birthDate, BigDecimal weight, String profileImageUrl) {
+    public static Pet of(String name, LocalDate birthDate, String profileImage) {
         Pet pet = new Pet();
         pet.name = name;
-        pet.breed = breed;
         pet.birthDate = birthDate;
-        pet.weight = weight;
-        pet.profileImageUrl = profileImageUrl;
+        pet.profileImage = profileImage;
         return pet;
     }
 
-    public void updateInfo(String name, String breed, LocalDate birthDate, BigDecimal weight, String profileImageUrl) {
+    public void updateInfo(String name, LocalDate birthDate, String profileImage) {
         this.name = name;
-        this.breed = breed;
         this.birthDate = birthDate;
-        this.weight = weight;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImage = profileImage;
     }
 }

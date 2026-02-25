@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.familyMembers.entity;
 
+import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
 import com.puppynoteserver.pet.pets.entity.Pet;
 import com.puppynoteserver.user.users.entity.User;
 import jakarta.persistence.*;
@@ -26,10 +27,11 @@ public class FamilyMember {
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 50)
-    private String role;
+    private RoleType role;
 
-    public static FamilyMember of(User user, Pet pet, String role) {
+    public static FamilyMember of(User user, Pet pet, RoleType role) {
         FamilyMember familyMember = new FamilyMember();
         familyMember.id = FamilyMemberId.of(user.getId(), pet.getId());
         familyMember.user = user;
@@ -38,7 +40,7 @@ public class FamilyMember {
         return familyMember;
     }
 
-    public void updateRole(String role) {
+    public void updateRole(RoleType role) {
         this.role = role;
     }
 }

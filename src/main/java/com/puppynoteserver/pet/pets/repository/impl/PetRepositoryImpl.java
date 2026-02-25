@@ -18,4 +18,9 @@ public class PetRepositoryImpl implements PetRepository {
     public List<Pet> findByUserId(Long userId) {
         return petJpaRepository.findByUserId(userId);
     }
+
+    @Override
+    public Pet save(Pet pet) {
+        return petJpaRepository.save(pet);
+    }
 }

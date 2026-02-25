@@ -9,3 +9,16 @@ include::{snippets}/pet-list/http-request.adoc[]
 
 include::{snippets}/pet-list/http-response.adoc[]
 include::{snippets}/pet-list/response-fields.adoc[]
+
+[[pet-create]]
+=== 펫 등록
+
+==== HTTP Request
+
+include::{snippets}/pet-create/http-request.adoc[]
+include::{snippets}/pet-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-create/http-response.adoc[]
+include::{snippets}/pet-create/response-fields.adoc[]
