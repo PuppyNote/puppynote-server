@@ -1,0 +1,11 @@
+[[pet-list]]
+=== 내 펫 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/pet-list/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-list/http-response.adoc[]
+include::{snippets}/pet-list/response-fields.adoc[]

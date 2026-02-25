@@ -20,3 +20,8 @@ include::api/user/email.adoc[]
 == Login API
 
 include::api/login/login.adoc[]
+
+[[Pet-API]]
+== Pet API
+
+include::api/pet/pet.adoc[]
