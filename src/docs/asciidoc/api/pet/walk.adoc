@@ -1,3 +1,16 @@
+[[walk-detail]]
+=== 산책 상세 조회
+
+==== HTTP Request
+
+include::{snippets}/walk-detail/http-request.adoc[]
+include::{snippets}/walk-detail/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/walk-detail/http-response.adoc[]
+include::{snippets}/walk-detail/response-fields.adoc[]
+
 [[walk-calendar]]
 === 산책 캘린더 조회
 
