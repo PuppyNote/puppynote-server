@@ -24,4 +24,9 @@ public class WalkRepositoryImpl implements WalkRepository {
     public List<Walk> findByPetIdAndStartTimeBetweenOrderByEndTimeDesc(Long petId, LocalDateTime startOfDay, LocalDateTime endOfDay) {
         return walkJpaRepository.findByPetIdAndStartTimeBetweenOrderByEndTimeDesc(petId, startOfDay, endOfDay);
     }
+
+    @Override
+    public List<Walk> findByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end) {
+        return walkJpaRepository.findByPetIdAndStartTimeBetween(petId, start, end);
+    }
 }

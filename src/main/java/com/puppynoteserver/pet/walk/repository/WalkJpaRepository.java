@@ -11,4 +11,6 @@ public interface WalkJpaRepository extends JpaRepository<Walk, Long> {
 
     @EntityGraph(attributePaths = {"photos"})
     List<Walk> findByPetIdAndStartTimeBetweenOrderByEndTimeDesc(Long petId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    List<Walk> findByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end);
 }

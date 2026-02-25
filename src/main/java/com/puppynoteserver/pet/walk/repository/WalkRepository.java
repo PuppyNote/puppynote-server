@@ -10,4 +10,6 @@ public interface WalkRepository {
     Walk save(Walk walk);
 
     List<Walk> findByPetIdAndStartTimeBetweenOrderByEndTimeDesc(Long petId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    List<Walk> findByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end);
 }
