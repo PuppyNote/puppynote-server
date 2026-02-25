@@ -2,11 +2,13 @@ package docs.pets;
 
 import com.puppynoteserver.pet.petWalkAlarms.controller.PetWalkAlarmController;
 import com.puppynoteserver.pet.petWalkAlarms.controller.request.PetWalkAlarmCreateRequest;
+import com.puppynoteserver.pet.petWalkAlarms.controller.request.PetWalkAlarmStatusUpdateRequest;
 import com.puppynoteserver.pet.petWalkAlarms.controller.request.PetWalkAlarmUpdateRequest;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmDay;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmStatus;
 import com.puppynoteserver.pet.petWalkAlarms.service.PetWalkAlarmWriteService;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmCreateServiceRequest;
+import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmStatusUpdateServiceRequest;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmUpdateServiceRequest;
 import com.puppynoteserver.pet.petWalkAlarms.service.response.PetWalkAlarmResponse;
 import docs.RestDocsSupport;
@@ -19,14 +21,16 @@ import java.util.Arrays;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -153,6 +157,78 @@ public class PetWalkAlarmControllerDocsTest extends RestDocsSupport {
                                         .description("알람 요일"),
                                 fieldWithPath("data.alarmTime").type(JsonFieldType.STRING)
                                         .description("알람 시간 (HH:mm:ss)")
+                        )
+                ));
+    }
+
+    @DisplayName("산책 알람 활성화 여부 수정 API")
+    @Test
+    void updateAlarmStatus() throws Exception {
+        PetWalkAlarmStatusUpdateRequest request = PetWalkAlarmStatusUpdateRequest.builder()
+                .alarmId(1L)
+                .alarmStatus(AlarmStatus.NO)
+                .build();
+
+        PetWalkAlarmResponse response = mock(PetWalkAlarmResponse.class);
+        given(response.getAlarmId()).willReturn(1L);
+        given(response.getAlarmStatus()).willReturn(AlarmStatus.NO);
+        given(response.getAlarmDays()).willReturn(Set.of(AlarmDay.MON, AlarmDay.WED, AlarmDay.FRI));
+        given(response.getAlarmTime()).willReturn(LocalTime.of(8, 0));
+        given(petWalkAlarmWriteService.updateStatus(any(PetWalkAlarmStatusUpdateServiceRequest.class)))
+                .willReturn(response);
+
+        mockMvc.perform(
+                        patch("/api/v1/pet-walk-alarms/status")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("pet-alarm-update-status",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("alarmId").type(JsonFieldType.NUMBER)
+                                        .description("수정할 알람 ID"),
+                                fieldWithPath("alarmStatus").type(JsonFieldType.STRING)
+                                        .description("알람 활성화 여부. 가능한 값: " + Arrays.toString(AlarmStatus.values()))
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.alarmId").type(JsonFieldType.NUMBER)
+                                        .description("알람 ID"),
+                                fieldWithPath("data.alarmStatus").type(JsonFieldType.STRING)
+                                        .description("알람 활성화 여부"),
+                                fieldWithPath("data.alarmDays").type(JsonFieldType.ARRAY)
+                                        .description("알람 요일"),
+                                fieldWithPath("data.alarmTime").type(JsonFieldType.STRING)
+                                        .description("알람 시간 (HH:mm:ss)")
+                        )
+                ));
+    }
+
+    @DisplayName("산책 알람 삭제 API")
+    @Test
+    void deleteAlarm() throws Exception {
+        willDoNothing().given(petWalkAlarmWriteService).delete(anyLong());
+
+        mockMvc.perform(
+                        delete("/api/v1/pet-walk-alarms/{alarmId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("pet-alarm-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("alarmId").description("삭제할 알람 ID")
                         )
                 ));
     }
