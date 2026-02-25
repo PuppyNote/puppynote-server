@@ -1,0 +1,50 @@
+[[pet-alarm-create]]
+=== 산책 알람 등록
+
+==== HTTP Request
+
+include::{snippets}/pet-alarm-create/http-request.adoc[]
+include::{snippets}/pet-alarm-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-alarm-create/http-response.adoc[]
+include::{snippets}/pet-alarm-create/response-fields.adoc[]
+
+[[pet-alarm-update]]
+=== 산책 알람 수정
+
+==== HTTP Request
+
+include::{snippets}/pet-alarm-update/http-request.adoc[]
+include::{snippets}/pet-alarm-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-alarm-update/http-response.adoc[]
+include::{snippets}/pet-alarm-update/response-fields.adoc[]
+
+[[pet-alarm-update-status]]
+=== 산책 알람 활성화 여부 수정
+
+==== HTTP Request
+
+include::{snippets}/pet-alarm-update-status/http-request.adoc[]
+include::{snippets}/pet-alarm-update-status/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-alarm-update-status/http-response.adoc[]
+include::{snippets}/pet-alarm-update-status/response-fields.adoc[]
+
+[[pet-alarm-delete]]
+=== 산책 알람 삭제
+
+==== HTTP Request
+
+include::{snippets}/pet-alarm-delete/http-request.adoc[]
+include::{snippets}/pet-alarm-delete/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-alarm-delete/http-response.adoc[]
