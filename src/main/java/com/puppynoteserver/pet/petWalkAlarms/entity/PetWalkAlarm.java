@@ -57,4 +57,8 @@ public class PetWalkAlarm extends BaseTimeEntity {
         this.alarmDays = alarmDays;
         this.alarmTime = alarmTime;
     }
+
+    public void updateStatus(AlarmStatus alarmStatus) {
+        this.alarmStatus = alarmStatus;
+    }
 }

@@ -23,4 +23,9 @@ public class PetWalkAlarmRepositoryImpl implements PetWalkAlarmRepository {
     public Optional<PetWalkAlarm> findById(Long alarmId) {
         return petWalkAlarmJpaRepository.findById(alarmId);
     }
+
+    @Override
+    public void delete(PetWalkAlarm petWalkAlarm) {
+        petWalkAlarmJpaRepository.delete(petWalkAlarm);
+    }
 }

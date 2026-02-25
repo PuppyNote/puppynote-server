@@ -9,4 +9,6 @@ public interface PetWalkAlarmRepository {
     PetWalkAlarm save(PetWalkAlarm petWalkAlarm);
 
     Optional<PetWalkAlarm> findById(Long alarmId);
+
+    void delete(PetWalkAlarm petWalkAlarm);
 }

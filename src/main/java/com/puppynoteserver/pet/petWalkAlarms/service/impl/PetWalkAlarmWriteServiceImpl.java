@@ -5,6 +5,7 @@ import com.puppynoteserver.pet.petWalkAlarms.entity.PetWalkAlarm;
 import com.puppynoteserver.pet.petWalkAlarms.repository.PetWalkAlarmRepository;
 import com.puppynoteserver.pet.petWalkAlarms.service.PetWalkAlarmWriteService;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmCreateServiceRequest;
+import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmStatusUpdateServiceRequest;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmUpdateServiceRequest;
 import com.puppynoteserver.pet.petWalkAlarms.service.response.PetWalkAlarmResponse;
 import com.puppynoteserver.pet.pets.entity.Pet;
@@ -34,5 +35,20 @@ public class PetWalkAlarmWriteServiceImpl implements PetWalkAlarmWriteService {
                 .orElseThrow(() -> new NotFoundException("알람을 찾을 수 없습니다."));
         request.applyTo(petWalkAlarm);
         return PetWalkAlarmResponse.from(petWalkAlarm);
+    }
+
+    @Override
+    public PetWalkAlarmResponse updateStatus(PetWalkAlarmStatusUpdateServiceRequest request) {
+        PetWalkAlarm petWalkAlarm = petWalkAlarmRepository.findById(request.getAlarmId())
+                .orElseThrow(() -> new NotFoundException("알람을 찾을 수 없습니다."));
+        request.applyTo(petWalkAlarm);
+        return PetWalkAlarmResponse.from(petWalkAlarm);
+    }
+
+    @Override
+    public void delete(Long alarmId) {
+        PetWalkAlarm petWalkAlarm = petWalkAlarmRepository.findById(alarmId)
+                .orElseThrow(() -> new NotFoundException("알람을 찾을 수 없습니다."));
+        petWalkAlarmRepository.delete(petWalkAlarm);
     }
 }
