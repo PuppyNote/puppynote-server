@@ -6,6 +6,7 @@ import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmStatus;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -27,7 +28,7 @@ public class PetWalkAlarmResponse {
         return new PetWalkAlarmResponse(
                 petWalkAlarm.getId(),
                 petWalkAlarm.getAlarmStatus(),
-                petWalkAlarm.getAlarmDays(),
+                new HashSet<>(petWalkAlarm.getAlarmDays()),
                 petWalkAlarm.getAlarmTime()
         );
     }
