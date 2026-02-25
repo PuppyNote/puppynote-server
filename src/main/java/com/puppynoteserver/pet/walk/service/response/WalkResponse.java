@@ -16,18 +16,20 @@ public class WalkResponse {
     private final LocalDateTime endTime;
     private final BigDecimal latitude;
     private final BigDecimal longitude;
+    private final String location;
     private final String memo;
     private final List<String> photoUrls;
 
     private WalkResponse(Long walkId, Long petId, LocalDateTime startTime, LocalDateTime endTime,
                          BigDecimal latitude, BigDecimal longitude,
-                         String memo, List<String> photoUrls) {
+                         String location, String memo, List<String> photoUrls) {
         this.walkId = walkId;
         this.petId = petId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.location = location;
         this.memo = memo;
         this.photoUrls = photoUrls;
     }
@@ -40,6 +42,7 @@ public class WalkResponse {
                 walk.getEndTime(),
                 walk.getLatitude(),
                 walk.getLongitude(),
+                walk.getLocation(),
                 walk.getMemo(),
                 photoUrls
         );

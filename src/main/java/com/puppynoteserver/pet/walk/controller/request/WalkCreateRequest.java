@@ -32,6 +32,8 @@ public class WalkCreateRequest {
     @NotNull(message = "경도는 필수입니다.")
     private BigDecimal longitude;
 
+    private String location;
+
     private String memo;
 
     // Storage API로 사전 업로드 후 받은 S3 Object Key 목록
@@ -40,12 +42,13 @@ public class WalkCreateRequest {
     @Builder
     private WalkCreateRequest(Long petId, LocalDateTime startTime, LocalDateTime endTime,
                               BigDecimal latitude, BigDecimal longitude,
-                              String memo, List<String> photoKeys) {
+                              String location, String memo, List<String> photoKeys) {
         this.petId = petId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.location = location;
         this.memo = memo;
         this.photoKeys = photoKeys;
     }
@@ -57,6 +60,7 @@ public class WalkCreateRequest {
                 .endTime(endTime)
                 .latitude(latitude)
                 .longitude(longitude)
+                .location(location)
                 .memo(memo)
                 .photoKeys(photoKeys)
                 .build();

@@ -98,6 +98,7 @@ public class WalkControllerDocsTest extends RestDocsSupport {
         given(response1.getEndTime()).willReturn(LocalDateTime.of(2026, 2, 25, 8, 30, 0));
         given(response1.getLatitude()).willReturn(new BigDecimal("37.5665000"));
         given(response1.getLongitude()).willReturn(new BigDecimal("126.9780000"));
+        given(response1.getLocation()).willReturn("한강공원 여의도");
         given(response1.getMemo()).willReturn("오늘 산책 날씨 맑음");
         given(response1.getPhotoUrls()).willReturn(List.of(
                 "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/abc123.jpg?X-Amz-Expires=3600"
@@ -140,6 +141,8 @@ public class WalkControllerDocsTest extends RestDocsSupport {
                                         .description("위도"),
                                 fieldWithPath("data[].longitude").type(JsonFieldType.NUMBER)
                                         .description("경도"),
+                                fieldWithPath("data[].location").type(JsonFieldType.STRING)
+                                        .description("위치명").optional(),
                                 fieldWithPath("data[].memo").type(JsonFieldType.STRING)
                                         .description("메모").optional(),
                                 fieldWithPath("data[].photoUrls").type(JsonFieldType.ARRAY)
@@ -157,6 +160,7 @@ public class WalkControllerDocsTest extends RestDocsSupport {
                 .endTime(LocalDateTime.of(2026, 2, 25, 8, 30, 0))
                 .latitude(new BigDecimal("37.5665000"))
                 .longitude(new BigDecimal("126.9780000"))
+                .location("한강공원 여의도")
                 .memo("오늘 산책 날씨 맑음")
                 .photoKeys(List.of("walk/abc123.jpg", "walk/def456.jpg"))
                 .build();
@@ -168,6 +172,7 @@ public class WalkControllerDocsTest extends RestDocsSupport {
         given(response.getEndTime()).willReturn(LocalDateTime.of(2026, 2, 25, 8, 30, 0));
         given(response.getLatitude()).willReturn(new BigDecimal("37.5665000"));
         given(response.getLongitude()).willReturn(new BigDecimal("126.9780000"));
+        given(response.getLocation()).willReturn("한강공원 여의도");
         given(response.getMemo()).willReturn("오늘 산책 날씨 맑음");
         given(response.getPhotoUrls()).willReturn(List.of(
                 "https://walk-photo.s3.ap-northeast-2.amazonaws.com/walk/abc123.jpg?X-Amz-Expires=3600",
@@ -196,6 +201,8 @@ public class WalkControllerDocsTest extends RestDocsSupport {
                                         .description("위도"),
                                 fieldWithPath("longitude").type(JsonFieldType.NUMBER)
                                         .description("경도"),
+                                fieldWithPath("location").type(JsonFieldType.STRING)
+                                        .description("위치명").optional(),
                                 fieldWithPath("memo").type(JsonFieldType.STRING)
                                         .description("메모").optional(),
                                 fieldWithPath("photoKeys").type(JsonFieldType.ARRAY)
@@ -222,6 +229,8 @@ public class WalkControllerDocsTest extends RestDocsSupport {
                                         .description("위도"),
                                 fieldWithPath("data.longitude").type(JsonFieldType.NUMBER)
                                         .description("경도"),
+                                fieldWithPath("data.location").type(JsonFieldType.STRING)
+                                        .description("위치명").optional(),
                                 fieldWithPath("data.memo").type(JsonFieldType.STRING)
                                         .description("메모").optional(),
                                 fieldWithPath("data.photoUrls").type(JsonFieldType.ARRAY)

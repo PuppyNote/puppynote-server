@@ -40,6 +40,9 @@ public class Walk extends BaseTimeEntity {
     @Column(precision = 11, scale = 7)
     private BigDecimal longitude;
 
+    @Column(length = 100)
+    private String location;
+
     @Column(length = 500)
     private String memo;
 
@@ -47,13 +50,14 @@ public class Walk extends BaseTimeEntity {
     private List<WalkPhoto> photos = new ArrayList<>();
 
     public static Walk of(Pet pet, LocalDateTime startTime, LocalDateTime endTime,
-                          BigDecimal latitude, BigDecimal longitude, String memo) {
+                          BigDecimal latitude, BigDecimal longitude, String location, String memo) {
         Walk walk = new Walk();
         walk.pet = pet;
         walk.startTime = startTime;
         walk.endTime = endTime;
         walk.latitude = latitude;
         walk.longitude = longitude;
+        walk.location = location;
         walk.memo = memo;
         return walk;
     }

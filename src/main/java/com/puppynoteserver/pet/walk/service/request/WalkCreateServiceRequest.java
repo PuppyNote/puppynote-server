@@ -15,18 +15,20 @@ public class WalkCreateServiceRequest {
     private final LocalDateTime endTime;
     private final BigDecimal latitude;
     private final BigDecimal longitude;
+    private final String location;
     private final String memo;
     private final List<String> photoKeys;
 
     @Builder
     private WalkCreateServiceRequest(Long petId, LocalDateTime startTime, LocalDateTime endTime,
                                      BigDecimal latitude, BigDecimal longitude,
-                                     String memo, List<String> photoKeys) {
+                                     String location, String memo, List<String> photoKeys) {
         this.petId = petId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.location = location;
         this.memo = memo;
         this.photoKeys = photoKeys;
     }
@@ -40,6 +42,6 @@ public class WalkCreateServiceRequest {
     }
 
     public Walk toEntity(Pet pet) {
-        return Walk.of(pet, startTime, endTime, latitude, longitude, memo);
+        return Walk.of(pet, startTime, endTime, latitude, longitude, location, memo);
     }
 }
