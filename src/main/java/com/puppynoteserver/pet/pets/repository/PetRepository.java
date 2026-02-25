@@ -7,4 +7,6 @@ import java.util.List;
 public interface PetRepository {
 
     List<Pet> findByUserId(Long userId);
+
+    Pet save(Pet pet);
 }

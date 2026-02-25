@@ -22,4 +22,10 @@ public class UserReadServiceImpl implements UserReadService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new PuppyNoteException(UNKNOWN_USER));
     }
+
+    @Override
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new PuppyNoteException(UNKNOWN_USER));
+    }
 }
