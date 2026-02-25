@@ -172,10 +172,7 @@ tasks.processResources {
                 EMAIL_PASSWORD: System.getenv('EMAIL_PASSWORD'),
                 AWS_ACCESS_KEY: System.getenv('AWS_ACCESS_KEY'),
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
-                USER_BUCKET: System.getenv('USER_BUCKET'),
-                CHALLENGE_BUCKET: System.getenv('CHALLENGE_BUCKET'),
-                CHALLENGE_BADGE_BUCKET: System.getenv('CHALLENGE_BADGE_BUCKET'),
-                SLACK_WEBHOOK: System.getenv('SLACK_WEBHOOK')
+                PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET')
         )
     }
 
@@ -190,10 +187,7 @@ tasks.processResources {
                 EMAIL_PASSWORD: System.getenv('EMAIL_PASSWORD'),
                 AWS_ACCESS_KEY: System.getenv('AWS_ACCESS_KEY'),
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
-                USER_BUCKET: System.getenv('USER_BUCKET'),
-                CHALLENGE_BUCKET: System.getenv('CHALLENGE_BUCKET'),
-                CHALLENGE_BADGE_BUCKET: System.getenv('CHALLENGE_BADGE_BUCKET'),
-                SLACK_WEBHOOK: System.getenv('SLACK_WEBHOOK')
+                PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET')
         )
     }
 }
