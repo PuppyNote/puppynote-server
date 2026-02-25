@@ -1,0 +1,14 @@
+[[walk-create]]
+=== 산책 이력 저장
+
+> 사진은 `POST /api/v1/storage/WALK_PHOTO` 로 먼저 업로드한 뒤 반환된 Object Key를 `photoKeys`에 담아 요청합니다.
+
+==== HTTP Request
+
+include::{snippets}/walk-create/http-request.adoc[]
+include::{snippets}/walk-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/walk-create/http-response.adoc[]
+include::{snippets}/walk-create/response-fields.adoc[]
