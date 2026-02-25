@@ -1,0 +1,25 @@
+[[pet-alarm-create]]
+=== 산책 알람 등록
+
+==== HTTP Request
+
+include::{snippets}/pet-alarm-create/http-request.adoc[]
+include::{snippets}/pet-alarm-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-alarm-create/http-response.adoc[]
+include::{snippets}/pet-alarm-create/response-fields.adoc[]
+
+[[pet-alarm-update]]
+=== 산책 알람 수정
+
+==== HTTP Request
+
+include::{snippets}/pet-alarm-update/http-request.adoc[]
+include::{snippets}/pet-alarm-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-alarm-update/http-response.adoc[]
+include::{snippets}/pet-alarm-update/response-fields.adoc[]
