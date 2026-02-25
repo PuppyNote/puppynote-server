@@ -47,8 +47,7 @@ public class PetWalkAlarmWriteServiceImpl implements PetWalkAlarmWriteService {
 
     @Override
     public void delete(Long alarmId) {
-        PetWalkAlarm petWalkAlarm = petWalkAlarmRepository.findById(alarmId)
-                .orElseThrow(() -> new NotFoundException("알람을 찾을 수 없습니다."));
-        petWalkAlarmRepository.delete(petWalkAlarm);
+        petWalkAlarmRepository.findById(alarmId)
+                .ifPresent(petWalkAlarmRepository::delete);
     }
 }

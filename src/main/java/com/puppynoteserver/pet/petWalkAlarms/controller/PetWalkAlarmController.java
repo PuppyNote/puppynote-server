@@ -43,9 +43,9 @@ public class PetWalkAlarmController {
         return ApiResponse.ok(petWalkAlarmWriteService.updateStatus(request.toServiceRequest()));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{alarmId}")
-    public void deleteAlarm(@PathVariable Long alarmId) {
+    public ApiResponse<Void> deleteAlarm(@PathVariable Long alarmId) {
         petWalkAlarmWriteService.delete(alarmId);
+        return ApiResponse.ok(null);
     }
 }
