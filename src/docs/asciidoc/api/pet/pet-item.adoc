@@ -1,0 +1,38 @@
+[[pet-item-create]]
+=== 용품 등록
+
+==== HTTP Request
+
+include::{snippets}/pet-item-create/http-request.adoc[]
+include::{snippets}/pet-item-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-create/http-response.adoc[]
+include::{snippets}/pet-item-create/response-fields.adoc[]
+
+[[pet-item-list]]
+=== 용품 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/pet-item-list/http-request.adoc[]
+include::{snippets}/pet-item-list/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-list/http-response.adoc[]
+include::{snippets}/pet-item-list/response-fields.adoc[]
+
+[[pet-item-detail]]
+=== 용품 상세 조회
+
+==== HTTP Request
+
+include::{snippets}/pet-item-detail/http-request.adoc[]
+include::{snippets}/pet-item-detail/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-detail/http-response.adoc[]
+include::{snippets}/pet-item-detail/response-fields.adoc[]
