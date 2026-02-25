@@ -1,0 +1,40 @@
+[[walk-calendar]]
+=== 산책 캘린더 조회
+
+==== HTTP Request
+
+include::{snippets}/walk-calendar/http-request.adoc[]
+include::{snippets}/walk-calendar/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/walk-calendar/http-response.adoc[]
+include::{snippets}/walk-calendar/response-fields.adoc[]
+
+[[walk-list]]
+=== 산책 이력 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/walk-list/http-request.adoc[]
+include::{snippets}/walk-list/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/walk-list/http-response.adoc[]
+include::{snippets}/walk-list/response-fields.adoc[]
+
+[[walk-create]]
+=== 산책 이력 저장
+
+> 사진은 `POST /api/v1/storage/WALK_PHOTO` 로 먼저 업로드한 뒤 반환된 Object Key를 `photoKeys`에 담아 요청합니다.
+
+==== HTTP Request
+
+include::{snippets}/walk-create/http-request.adoc[]
+include::{snippets}/walk-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/walk-create/http-response.adoc[]
+include::{snippets}/walk-create/response-fields.adoc[]

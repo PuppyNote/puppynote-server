@@ -28,6 +28,11 @@ include::api/pet/pet.adoc[]
 
 include::api/pet/alarm.adoc[]
 
+[[Walk-API]]
+== Walk API
+
+include::api/pet/walk.adoc[]
+
 [[Storage-API]]
 == Storage API
 
