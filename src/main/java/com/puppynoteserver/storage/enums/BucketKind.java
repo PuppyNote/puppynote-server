@@ -7,6 +7,6 @@ public enum BucketKind {
 
     PUPPY_PROFILE,
     WALK_PHOTO,
-    PET_ITEM_IMAGE
+    PET_ITEM_PHOTO
 
 }

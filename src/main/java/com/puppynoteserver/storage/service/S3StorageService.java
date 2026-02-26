@@ -138,7 +138,7 @@ public class S3StorageService {
         return switch (bucketKind) {
             case PUPPY_PROFILE -> puppyProfileBucketName;
             case WALK_PHOTO -> walkPhotoBucketName;
-            case PET_ITEM_IMAGE -> petItemImageBucketName;
+            case PET_ITEM_PHOTO -> petItemImageBucketName;
         };
     }
 

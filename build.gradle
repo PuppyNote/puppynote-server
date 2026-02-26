@@ -174,7 +174,7 @@ tasks.processResources {
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
                 PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
                 WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
-                PET_ITEM_IMAGE_BUCKET: System.getenv('PET_ITEM_IMAGE_BUCKET')
+                PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET')
         )
     }
 
@@ -191,7 +191,7 @@ tasks.processResources {
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
                 PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
                 WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
-                PET_ITEM_IMAGE_BUCKET: System.getenv('PET_ITEM_IMAGE_BUCKET')
+                PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET')
         )
     }
 }
