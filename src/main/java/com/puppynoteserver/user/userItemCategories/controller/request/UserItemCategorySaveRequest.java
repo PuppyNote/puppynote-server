@@ -1,7 +1,7 @@
-package com.puppynoteserver.pet.userItemCategories.controller.request;
+package com.puppynoteserver.user.userItemCategories.controller.request;
 
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 

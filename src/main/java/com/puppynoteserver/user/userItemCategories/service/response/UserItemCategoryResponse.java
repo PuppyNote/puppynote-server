@@ -1,9 +1,9 @@
-package com.puppynoteserver.pet.userItemCategories.service.response;
+package com.puppynoteserver.user.userItemCategories.service.response;
 
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
 import com.puppynoteserver.pet.petItems.entity.enums.MajorCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.UserItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.entity.UserItemCategory;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
 import lombok.Builder;
 import lombok.Getter;
 

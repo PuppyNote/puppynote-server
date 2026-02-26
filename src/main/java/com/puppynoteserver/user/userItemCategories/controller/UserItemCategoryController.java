@@ -1,11 +1,11 @@
-package com.puppynoteserver.pet.userItemCategories.controller;
+package com.puppynoteserver.user.userItemCategories.controller;
 
 import com.puppynoteserver.global.ApiResponse;
-import com.puppynoteserver.pet.userItemCategories.controller.request.UserItemCategorySaveRequest;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
-import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryReadService;
-import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryWriteService;
-import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
+import com.puppynoteserver.user.userItemCategories.controller.request.UserItemCategorySaveRequest;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.service.UserItemCategoryReadService;
+import com.puppynoteserver.user.userItemCategories.service.UserItemCategoryWriteService;
+import com.puppynoteserver.user.userItemCategories.service.response.UserItemCategoryResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

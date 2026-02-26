@@ -1,8 +1,8 @@
-package com.puppynoteserver.pet.userItemCategories.entity;
+package com.puppynoteserver.user.userItemCategories.entity;
 
 import com.puppynoteserver.global.BaseTimeEntity;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
 import com.puppynoteserver.user.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

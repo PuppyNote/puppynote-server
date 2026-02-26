@@ -1,7 +1,7 @@
-package com.puppynoteserver.pet.userItemCategories.repository;
+package com.puppynoteserver.user.userItemCategories.repository;
 
-import com.puppynoteserver.pet.userItemCategories.entity.UserItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.entity.UserItemCategory;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

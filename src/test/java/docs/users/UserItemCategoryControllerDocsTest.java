@@ -1,12 +1,10 @@
-package docs.pets;
+package docs.users;
 
-import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
-import com.puppynoteserver.pet.userItemCategories.controller.UserItemCategoryController;
-import com.puppynoteserver.pet.userItemCategories.controller.request.UserItemCategorySaveRequest;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
-import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryReadService;
-import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryWriteService;
-import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
+import com.puppynoteserver.user.userItemCategories.controller.UserItemCategoryController;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.service.UserItemCategoryReadService;
+import com.puppynoteserver.user.userItemCategories.service.UserItemCategoryWriteService;
+import com.puppynoteserver.user.userItemCategories.service.response.UserItemCategoryResponse;
 import docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,12 +1,12 @@
-package com.puppynoteserver.pet.userItemCategories.service.impl;
+package com.puppynoteserver.user.userItemCategories.service.impl;
 
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.UserItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
-import com.puppynoteserver.pet.userItemCategories.repository.UserItemCategoryRepository;
-import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryWriteService;
-import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
+import com.puppynoteserver.user.userItemCategories.entity.UserItemCategory;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.repository.UserItemCategoryRepository;
+import com.puppynoteserver.user.userItemCategories.service.UserItemCategoryWriteService;
+import com.puppynoteserver.user.userItemCategories.service.response.UserItemCategoryResponse;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
 import lombok.RequiredArgsConstructor;

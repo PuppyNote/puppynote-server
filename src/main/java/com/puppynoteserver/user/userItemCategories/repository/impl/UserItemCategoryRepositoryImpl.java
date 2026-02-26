@@ -1,9 +1,9 @@
-package com.puppynoteserver.pet.userItemCategories.repository.impl;
+package com.puppynoteserver.user.userItemCategories.repository.impl;
 
-import com.puppynoteserver.pet.userItemCategories.entity.UserItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
-import com.puppynoteserver.pet.userItemCategories.repository.UserItemCategoryJpaRepository;
-import com.puppynoteserver.pet.userItemCategories.repository.UserItemCategoryRepository;
+import com.puppynoteserver.user.userItemCategories.entity.UserItemCategory;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.repository.UserItemCategoryJpaRepository;
+import com.puppynoteserver.user.userItemCategories.repository.UserItemCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

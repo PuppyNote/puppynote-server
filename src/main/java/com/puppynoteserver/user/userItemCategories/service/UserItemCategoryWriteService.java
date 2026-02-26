@@ -1,8 +1,8 @@
-package com.puppynoteserver.pet.userItemCategories.service;
+package com.puppynoteserver.user.userItemCategories.service;
 
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
-import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
-import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
+import com.puppynoteserver.user.userItemCategories.entity.enums.CategoryType;
+import com.puppynoteserver.user.userItemCategories.service.response.UserItemCategoryResponse;
 
 import java.util.List;
 

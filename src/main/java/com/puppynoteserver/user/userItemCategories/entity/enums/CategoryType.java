@@ -1,4 +1,4 @@
-package com.puppynoteserver.pet.userItemCategories.entity.enums;
+package com.puppynoteserver.user.userItemCategories.entity.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
