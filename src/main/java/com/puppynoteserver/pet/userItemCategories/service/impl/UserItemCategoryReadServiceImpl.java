@@ -1,6 +1,7 @@
 package com.puppynoteserver.pet.userItemCategories.service.impl;
 
 import com.puppynoteserver.global.security.SecurityService;
+import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
 import com.puppynoteserver.pet.userItemCategories.repository.UserItemCategoryRepository;
 import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryReadService;
 import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
@@ -19,10 +20,10 @@ public class UserItemCategoryReadServiceImpl implements UserItemCategoryReadServ
     private final SecurityService securityService;
 
     @Override
-    public List<UserItemCategoryResponse> getMyCategories() {
+    public List<UserItemCategoryResponse> getMyCategories(CategoryType categoryType) {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
 
-        return userItemCategoryRepository.findByUserIdOrderBySort(userId).stream()
+        return userItemCategoryRepository.findByUserIdAndCategoryTypeOrderBySort(userId, categoryType).stream()
                 .map(UserItemCategoryResponse::from)
                 .toList();
     }

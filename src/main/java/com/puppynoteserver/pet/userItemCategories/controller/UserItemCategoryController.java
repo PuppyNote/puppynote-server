@@ -2,6 +2,7 @@ package com.puppynoteserver.pet.userItemCategories.controller;
 
 import com.puppynoteserver.global.ApiResponse;
 import com.puppynoteserver.pet.userItemCategories.controller.request.UserItemCategorySaveRequest;
+import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
 import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryReadService;
 import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryWriteService;
 import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
@@ -22,11 +23,14 @@ public class UserItemCategoryController {
     @PostMapping
     public ApiResponse<List<UserItemCategoryResponse>> saveCategories(
             @Valid @RequestBody UserItemCategorySaveRequest request) {
-        return ApiResponse.ok(userItemCategoryWriteService.saveCategories(request.getCategories()));
+        return ApiResponse.ok(
+                userItemCategoryWriteService.saveCategories(request.getCategoryType(), request.getCategories())
+        );
     }
 
     @GetMapping
-    public ApiResponse<List<UserItemCategoryResponse>> getMyCategories() {
-        return ApiResponse.ok(userItemCategoryReadService.getMyCategories());
+    public ApiResponse<List<UserItemCategoryResponse>> getMyCategories(
+            @RequestParam CategoryType categoryType) {
+        return ApiResponse.ok(userItemCategoryReadService.getMyCategories(categoryType));
     }
 }

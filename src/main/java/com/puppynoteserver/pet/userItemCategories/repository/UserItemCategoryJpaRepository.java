@@ -1,13 +1,14 @@
 package com.puppynoteserver.pet.userItemCategories.repository;
 
 import com.puppynoteserver.pet.userItemCategories.entity.UserItemCategory;
+import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface UserItemCategoryJpaRepository extends JpaRepository<UserItemCategory, Long> {
 
-    List<UserItemCategory> findByUserIdOrderBySort(Long userId);
+    List<UserItemCategory> findByUserIdAndCategoryTypeOrderBySort(Long userId, CategoryType categoryType);
 
-    void deleteByUserId(Long userId);
+    void deleteByUserIdAndCategoryType(Long userId, CategoryType categoryType);
 }

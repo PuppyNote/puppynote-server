@@ -1,6 +1,7 @@
 package com.puppynoteserver.pet.userItemCategories.repository.impl;
 
 import com.puppynoteserver.pet.userItemCategories.entity.UserItemCategory;
+import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
 import com.puppynoteserver.pet.userItemCategories.repository.UserItemCategoryJpaRepository;
 import com.puppynoteserver.pet.userItemCategories.repository.UserItemCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,12 @@ public class UserItemCategoryRepositoryImpl implements UserItemCategoryRepositor
     }
 
     @Override
-    public List<UserItemCategory> findByUserIdOrderBySort(Long userId) {
-        return userItemCategoryJpaRepository.findByUserIdOrderBySort(userId);
+    public List<UserItemCategory> findByUserIdAndCategoryTypeOrderBySort(Long userId, CategoryType categoryType) {
+        return userItemCategoryJpaRepository.findByUserIdAndCategoryTypeOrderBySort(userId, categoryType);
     }
 
     @Override
-    public void deleteByUserId(Long userId) {
-        userItemCategoryJpaRepository.deleteByUserId(userId);
+    public void deleteByUserIdAndCategoryType(Long userId, CategoryType categoryType) {
+        userItemCategoryJpaRepository.deleteByUserIdAndCategoryType(userId, categoryType);
     }
 }

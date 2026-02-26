@@ -2,6 +2,7 @@ package com.puppynoteserver.pet.userItemCategories.entity;
 
 import com.puppynoteserver.global.BaseTimeEntity;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
+import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
 import com.puppynoteserver.user.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -14,10 +15,10 @@ import lombok.NoArgsConstructor;
 @Table(
         name = "user_item_categories",
         uniqueConstraints = @UniqueConstraint(
-                name = "uq_user_item_categories_user_category",
-                columnNames = {"user_id", "category"}
+                name = "uq_user_item_categories_user_type_category",
+                columnNames = {"user_id", "category_type", "category"}
         ),
-        indexes = @Index(name = "idx_user_item_categories_user_id_sort", columnList = "user_id, sort")
+        indexes = @Index(name = "idx_user_item_categories_user_id_type_sort", columnList = "user_id, category_type, sort")
 )
 public class UserItemCategory extends BaseTimeEntity {
 
@@ -30,15 +31,20 @@ public class UserItemCategory extends BaseTimeEntity {
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "category_type", nullable = false, length = 20)
+    private CategoryType categoryType;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private ItemCategory category;
 
     @Column(nullable = false)
     private int sort;
 
-    public static UserItemCategory of(User user, ItemCategory category, int sort) {
+    public static UserItemCategory of(User user, CategoryType categoryType, ItemCategory category, int sort) {
         UserItemCategory userItemCategory = new UserItemCategory();
         userItemCategory.user = user;
+        userItemCategory.categoryType = categoryType;
         userItemCategory.category = category;
         userItemCategory.sort = sort;
         return userItemCategory;
