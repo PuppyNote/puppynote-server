@@ -3,6 +3,7 @@ package docs.pets;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
 import com.puppynoteserver.pet.userItemCategories.controller.UserItemCategoryController;
 import com.puppynoteserver.pet.userItemCategories.controller.request.UserItemCategorySaveRequest;
+import com.puppynoteserver.pet.userItemCategories.entity.enums.CategoryType;
 import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryReadService;
 import com.puppynoteserver.pet.userItemCategories.service.UserItemCategoryWriteService;
 import com.puppynoteserver.pet.userItemCategories.service.response.UserItemCategoryResponse;
@@ -21,6 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,12 +43,15 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
     void saveCategories() throws Exception {
         String requestBody = """
                 {
+                  "categoryType": "ITEM",
                   "categories": ["FOOD", "SNACK", "TOY", "SHAMPOO"]
                 }
                 """;
 
         UserItemCategoryResponse response1 = mock(UserItemCategoryResponse.class);
         given(response1.getUserItemCategoryId()).willReturn(1L);
+        given(response1.getCategoryType()).willReturn("ITEM");
+        given(response1.getCategoryTypeDescription()).willReturn("용품");
         given(response1.getMajorCategory()).willReturn("FOOD_NUTRITION");
         given(response1.getMajorCategoryName()).willReturn("식품/영양");
         given(response1.getMajorCategoryEmoji()).willReturn("🍖");
@@ -57,6 +62,8 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
 
         UserItemCategoryResponse response2 = mock(UserItemCategoryResponse.class);
         given(response2.getUserItemCategoryId()).willReturn(2L);
+        given(response2.getCategoryType()).willReturn("ITEM");
+        given(response2.getCategoryTypeDescription()).willReturn("용품");
         given(response2.getMajorCategory()).willReturn("FOOD_NUTRITION");
         given(response2.getMajorCategoryName()).willReturn("식품/영양");
         given(response2.getMajorCategoryEmoji()).willReturn("🍖");
@@ -65,7 +72,7 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
         given(response2.getCategoryEmoji()).willReturn("🦴");
         given(response2.getSort()).willReturn(2);
 
-        given(userItemCategoryWriteService.saveCategories(anyList()))
+        given(userItemCategoryWriteService.saveCategories(any(CategoryType.class), anyList()))
                 .willReturn(List.of(response1, response2));
 
         mockMvc.perform(
@@ -79,6 +86,8 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
+                                fieldWithPath("categoryType").type(JsonFieldType.STRING)
+                                        .description("카테고리 타입 (ITEM: 용품, ACTIVITY: 활동)"),
                                 fieldWithPath("categories").type(JsonFieldType.ARRAY)
                                         .description("저장할 카테고리 코드 목록 (배열 순서가 정렬 순서가 됩니다)")
                         ),
@@ -93,6 +102,10 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
                                         .description("저장된 카테고리 목록"),
                                 fieldWithPath("data[].userItemCategoryId").type(JsonFieldType.NUMBER)
                                         .description("사용자 카테고리 ID"),
+                                fieldWithPath("data[].categoryType").type(JsonFieldType.STRING)
+                                        .description("카테고리 타입 코드 (ITEM / ACTIVITY)"),
+                                fieldWithPath("data[].categoryTypeDescription").type(JsonFieldType.STRING)
+                                        .description("카테고리 타입명"),
                                 fieldWithPath("data[].majorCategory").type(JsonFieldType.STRING)
                                         .description("대분류 코드"),
                                 fieldWithPath("data[].majorCategoryName").type(JsonFieldType.STRING)
@@ -116,6 +129,8 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
     void getMyCategories() throws Exception {
         UserItemCategoryResponse response1 = mock(UserItemCategoryResponse.class);
         given(response1.getUserItemCategoryId()).willReturn(1L);
+        given(response1.getCategoryType()).willReturn("ITEM");
+        given(response1.getCategoryTypeDescription()).willReturn("용품");
         given(response1.getMajorCategory()).willReturn("FOOD_NUTRITION");
         given(response1.getMajorCategoryName()).willReturn("식품/영양");
         given(response1.getMajorCategoryEmoji()).willReturn("🍖");
@@ -126,6 +141,8 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
 
         UserItemCategoryResponse response2 = mock(UserItemCategoryResponse.class);
         given(response2.getUserItemCategoryId()).willReturn(2L);
+        given(response2.getCategoryType()).willReturn("ITEM");
+        given(response2.getCategoryTypeDescription()).willReturn("용품");
         given(response2.getMajorCategory()).willReturn("PLAY");
         given(response2.getMajorCategoryName()).willReturn("장난감/훈련");
         given(response2.getMajorCategoryEmoji()).willReturn("🎾");
@@ -134,16 +151,21 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
         given(response2.getCategoryEmoji()).willReturn("🎾");
         given(response2.getSort()).willReturn(2);
 
-        given(userItemCategoryReadService.getMyCategories()).willReturn(List.of(response1, response2));
+        given(userItemCategoryReadService.getMyCategories(any(CategoryType.class)))
+                .willReturn(List.of(response1, response2));
 
         mockMvc.perform(
                         get("/api/v1/user-item-categories")
+                                .param("categoryType", "ITEM")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("user-item-category-list",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("categoryType").description("카테고리 타입 (ITEM: 용품, ACTIVITY: 활동)")
+                        ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
                                         .description("코드"),
@@ -155,6 +177,10 @@ public class UserItemCategoryControllerDocsTest extends RestDocsSupport {
                                         .description("사용자 카테고리 목록 (sort 순으로 정렬)"),
                                 fieldWithPath("data[].userItemCategoryId").type(JsonFieldType.NUMBER)
                                         .description("사용자 카테고리 ID"),
+                                fieldWithPath("data[].categoryType").type(JsonFieldType.STRING)
+                                        .description("카테고리 타입 코드 (ITEM / ACTIVITY)"),
+                                fieldWithPath("data[].categoryTypeDescription").type(JsonFieldType.STRING)
+                                        .description("카테고리 타입명"),
                                 fieldWithPath("data[].majorCategory").type(JsonFieldType.STRING)
                                         .description("대분류 코드"),
                                 fieldWithPath("data[].majorCategoryName").type(JsonFieldType.STRING)

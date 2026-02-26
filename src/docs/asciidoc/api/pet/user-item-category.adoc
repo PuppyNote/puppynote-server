@@ -1,7 +1,7 @@
 [[user-item-category-save]]
 === 사용자 카테고리 저장
 
-배열 순서가 정렬 순서가 됩니다. 기존 등록된 카테고리는 전체 교체됩니다.
+배열 순서가 정렬 순서가 됩니다. 해당 타입(ITEM/ACTIVITY)의 기존 카테고리는 전체 교체됩니다.
 
 ==== HTTP Request
 
@@ -19,6 +19,7 @@ include::{snippets}/user-item-category-save/response-fields.adoc[]
 ==== HTTP Request
 
 include::{snippets}/user-item-category-list/http-request.adoc[]
+include::{snippets}/user-item-category-list/query-parameters.adoc[]
 
 ==== HTTP Response
 

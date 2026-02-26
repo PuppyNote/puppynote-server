@@ -5,11 +5,15 @@ import com.puppynoteserver.pet.petItems.service.request.PetItemCreateServiceRequ
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PetItemCreateRequest {
 
     @NotNull(message = "펫 ID는 필수입니다.")
