@@ -14,35 +14,24 @@ public class AlertSettingUpdateRequest {
 	@NotNull(message = "전체 알림 설정은 필수입니다.")
 	private AlertType all;
 
-	@NotNull(message = "흡연 주의 알림 설정은 필수입니다.")
-	private AlertType smokingWarning;
+	@NotNull(message = "산책 알림 설정은 필수입니다.")
+	private AlertType walk;
 
-	@NotNull(message = "리더보드 순위 알림 설정은 필수입니다.")
-	private AlertType leaderboardRank;
-
-	@NotNull(message = "챌린지 알림 설정은 필수입니다.")
-	private AlertType challenge;
-
-	@NotNull(message = "리포트 알림 설정은 필수입니다.")
-	private AlertType report;
+	@NotNull(message = "친구 알림 설정은 필수입니다.")
+	private AlertType friend;
 
 	@Builder
-	public AlertSettingUpdateRequest(AlertType all, AlertType smokingWarning,
-		AlertType leaderboardRank, AlertType challenge, AlertType report) {
+	public AlertSettingUpdateRequest(AlertType all, AlertType walk, AlertType friend) {
 		this.all = all;
-		this.smokingWarning = smokingWarning;
-		this.leaderboardRank = leaderboardRank;
-		this.challenge = challenge;
-		this.report = report;
+		this.walk = walk;
+		this.friend = friend;
 	}
 
 	public AlertSettingUpdateServiceRequest toServiceRequest() {
 		return AlertSettingUpdateServiceRequest.builder()
 			.all(all)
-			.smokingWarning(smokingWarning)
-			.leaderboardRank(leaderboardRank)
-			.challenge(challenge)
-			.report(report)
+			.walk(walk)
+			.friend(friend)
 			.build();
 	}
 }

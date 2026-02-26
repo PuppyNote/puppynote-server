@@ -9,28 +9,21 @@ import lombok.Getter;
 public class AlertSettingResponse {
 
 	private final AlertType all;
-	private final AlertType smokingWarning;
-	private final AlertType leaderboardRank;
-	private final AlertType challenge;
-	private final AlertType report;
+	private final AlertType walk;
+	private final AlertType friend;
 
 	@Builder
-	private AlertSettingResponse(AlertType all, AlertType smokingWarning,
-		AlertType leaderboardRank, AlertType challenge, AlertType report) {
+	private AlertSettingResponse(AlertType all, AlertType walk, AlertType friend) {
 		this.all = all;
-		this.smokingWarning = smokingWarning;
-		this.leaderboardRank = leaderboardRank;
-		this.challenge = challenge;
-		this.report = report;
+		this.walk = walk;
+		this.friend = friend;
 	}
 
 	public static AlertSettingResponse createResponse(AlertSetting alertSetting) {
 		return AlertSettingResponse.builder()
 			.all(alertSetting.getAll())
-			.smokingWarning(alertSetting.getSmokingWarning())
-			.leaderboardRank(alertSetting.getLeaderboardRank())
-			.challenge(alertSetting.getChallenge())
-			.report(alertSetting.getReport())
+			.walk(alertSetting.getWalk())
+			.friend(alertSetting.getFriend())
 			.build();
 	}
 }

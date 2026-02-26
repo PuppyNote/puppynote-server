@@ -28,10 +28,8 @@ public class AlertSettingServiceImpl implements AlertSettingService {
 
 		alertSetting.updateAlertSettings(
 			request.getAll(),
-			request.getSmokingWarning(),
-			request.getLeaderboardRank(),
-			request.getChallenge(),
-			request.getReport()
+			request.getWalk(),
+			request.getFriend()
 		);
 
 		return AlertSettingResponse.createResponse(alertSetting);

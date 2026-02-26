@@ -8,18 +8,13 @@ import lombok.Getter;
 public class AlertSettingUpdateServiceRequest {
 
 	private final AlertType all;
-	private final AlertType smokingWarning;
-	private final AlertType leaderboardRank;
-	private final AlertType challenge;
-	private final AlertType report;
+	private final AlertType walk;
+	private final AlertType friend;
 
 	@Builder
-	public AlertSettingUpdateServiceRequest(AlertType all, AlertType smokingWarning,
-		AlertType leaderboardRank, AlertType challenge, AlertType report) {
+	public AlertSettingUpdateServiceRequest(AlertType all, AlertType walk, AlertType friend) {
 		this.all = all;
-		this.smokingWarning = smokingWarning;
-		this.leaderboardRank = leaderboardRank;
-		this.challenge = challenge;
-		this.report = report;
+		this.walk = walk;
+		this.friend = friend;
 	}
 }

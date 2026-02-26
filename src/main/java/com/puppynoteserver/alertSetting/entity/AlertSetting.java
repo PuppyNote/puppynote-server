@@ -26,45 +26,31 @@ public class AlertSetting extends BaseTimeEntity {
 	private AlertType all;
 
 	@Enumerated(EnumType.STRING)
-	private AlertType smokingWarning;
+	private AlertType walk;
 
 	@Enumerated(EnumType.STRING)
-	private AlertType leaderboardRank;
-
-	@Enumerated(EnumType.STRING)
-	private AlertType challenge;
-
-	@Enumerated(EnumType.STRING)
-	private AlertType report;
+	private AlertType friend;
 
 	@Builder
-	private AlertSetting(User user, AlertType all, AlertType smokingWarning,
-		AlertType leaderboardRank, AlertType challenge, AlertType report) {
+	private AlertSetting(User user, AlertType all, AlertType walk, AlertType friend) {
 		this.user = user;
 		this.all = all;
-		this.smokingWarning = smokingWarning;
-		this.leaderboardRank = leaderboardRank;
-		this.challenge = challenge;
-		this.report = report;
+		this.walk = walk;
+		this.friend = friend;
 	}
 
 	public static AlertSetting createDefault(User user) {
 		return AlertSetting.builder()
 			.user(user)
 			.all(AlertType.ON)
-			.smokingWarning(AlertType.ON)
-			.leaderboardRank(AlertType.ON)
-			.challenge(AlertType.ON)
-			.report(AlertType.ON)
+			.walk(AlertType.ON)
+			.friend(AlertType.ON)
 			.build();
 	}
 
-	public void updateAlertSettings(AlertType all, AlertType smokingWarning,
-		AlertType leaderboardRank, AlertType challenge, AlertType report) {
+	public void updateAlertSettings(AlertType all, AlertType walk, AlertType friend) {
 		this.all = all;
-		this.smokingWarning = smokingWarning;
-		this.leaderboardRank = leaderboardRank;
-		this.challenge = challenge;
-		this.report = report;
+		this.walk = walk;
+		this.friend = friend;
 	}
 }
