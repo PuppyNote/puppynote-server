@@ -20,7 +20,6 @@ public class PetItemWriteServiceImpl implements PetItemWriteService {
 
     private final PetItemRepository petItemRepository;
     private final PetReadService petReadService;
-    private final S3StorageService s3StorageService;
 
     @Override
     public PetItemResponse create(PetItemCreateServiceRequest request) {
@@ -28,8 +27,6 @@ public class PetItemWriteServiceImpl implements PetItemWriteService {
         PetItem petItem = request.toEntity(pet);
         PetItem savedItem = petItemRepository.save(petItem);
 
-        String imageUrl = s3StorageService.createPresignedUrl(savedItem.getImageKey(), BucketKind.PET_ITEM_IMAGE);
-
-        return PetItemResponse.of(savedItem, imageUrl, null);
+        return PetItemResponse.of(savedItem, null, null);
     }
 }

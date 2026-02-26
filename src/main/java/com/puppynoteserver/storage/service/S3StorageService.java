@@ -32,7 +32,7 @@ public class S3StorageService {
     @Value("${aws.s3.bucket.walk-photo}")
     private String walkPhotoBucketName;
 
-    @Value("${aws.s3.bucket.pet-item-image}")
+    @Value("${aws.s3.bucket.pet-item-photo}")
     private String petItemImageBucketName;
 
     /**
