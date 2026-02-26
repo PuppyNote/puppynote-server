@@ -33,6 +33,16 @@ include::api/pet/alarm.adoc[]
 
 include::api/pet/walk.adoc[]
 
+[[PetItem-API]]
+== PetItem API
+
+include::api/pet/pet-item.adoc[]
+
+[[UserItemCategory-API]]
+== UserItemCategory API
+
+include::api/pet/user-item-category.adoc[]
+
 [[Storage-API]]
 == Storage API
 
