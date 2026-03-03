@@ -39,10 +39,12 @@ public class FirebaseService {
                                 e -> e.getValue() == null ? "" : e.getValue().toString()
                         ));
 
+                String title = PushMessage.from(sendPushServiceRequest.getSendFirebaseDataDto().getAlert_destination_type()).getText();
+
                 Message message = Message.builder()
                         // iOS/Android 공통 알림
                         .setNotification(Notification.builder()
-                                .setTitle(PushMessage.TITLE.getText())
+                                .setTitle(title)
                                 .setBody(sendPushServiceRequest.getBody())
                                 .build())
                         // iOS 전용 설정
