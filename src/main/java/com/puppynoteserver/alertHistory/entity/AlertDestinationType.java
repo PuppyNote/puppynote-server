@@ -9,7 +9,9 @@ public enum AlertDestinationType {
 
     DAILY_REPORT("일일 리포트"),
 	FRIEND("친구 추가 알림"),
-	FRIEND_CODE("친구 추가요청 수신알림");
+	FRIEND_CODE("친구 추가요청 수신알림"),
+	WALK("산책 알림"),
+	PET_ITEM("구매용품 알림");
 
 	private final String text;
 }

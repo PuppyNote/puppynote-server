@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,5 +28,10 @@ public class PushRepositoryImpl implements PushRepository {
     @Override
     public void saveAll(List<Push> pushes) {
         pushJpaRepository.saveAll(pushes);
+    }
+
+    @Override
+    public Optional<Push> findByUserId(Long userId) {
+        return pushJpaRepository.findByUserId(userId);
     }
 }

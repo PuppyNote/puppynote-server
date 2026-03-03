@@ -22,4 +22,15 @@ public interface PetItemPurchaseJpaRepository extends JpaRepository<PetItemPurch
     List<PetItemPurchase> findLatestByPetItemIds(@Param("petItemIds") List<Long> petItemIds);
 
     Optional<PetItemPurchase> findTopByPetItemIdOrderByPurchasedAtDesc(Long petItemId);
+
+    // 모든 petItem의 가장 최근 구매이력 조회 (구매주기 알림 배치용)
+    @Query("""
+            SELECT p FROM PetItemPurchase p
+            JOIN FETCH p.petItem pi
+            JOIN FETCH pi.pet
+            WHERE p.purchasedAt = (
+                SELECT MAX(p2.purchasedAt) FROM PetItemPurchase p2 WHERE p2.petItem.id = pi.id
+            )
+            """)
+    List<PetItemPurchase> findAllLatestPurchases();
 }
