@@ -63,6 +63,15 @@ public class WalkReadServiceImpl implements WalkReadService {
     }
 
     @Override
+    public long countRecentWalks(Long petId, LocalDate from, LocalDate to) {
+        return walkRepository.countByPetIdAndStartTimeBetween(
+                petId,
+                from.atStartOfDay(),
+                to.plusDays(1).atStartOfDay().minusNanos(1)
+        );
+    }
+
+    @Override
     public WalkDetailResponse getWalkDetail(Long walkId) {
         Walk walk = walkRepository.findById(walkId)
                 .orElseThrow(() -> new NotFoundException("산책 기록을 찾을 수 없습니다."));
