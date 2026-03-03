@@ -58,6 +58,11 @@ include::api/alert/alert-history.adoc[]
 
 include::api/alert/alert-setting.adoc[]
 
+[[PetTip-API]]
+== PetTip API
+
+include::api/petTip/pet-tip.adoc[]
+
 [[Storage-API]]
 == Storage API
 
