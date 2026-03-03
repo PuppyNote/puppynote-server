@@ -43,6 +43,16 @@ include::api/pet/pet-item.adoc[]
 
 include::api/pet/user-item-category.adoc[]
 
+[[AlertHistory-API]]
+== AlertHistory API
+
+include::api/alert/alert-history.adoc[]
+
+[[AlertSetting-API]]
+== AlertSetting API
+
+include::api/alert/alert-setting.adoc[]
+
 [[Storage-API]]
 == Storage API
 
