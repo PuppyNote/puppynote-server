@@ -1,0 +1,25 @@
+[[alert-history-list]]
+=== 알림 내역 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/alert-history-list/http-request.adoc[]
+include::{snippets}/alert-history-list/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/alert-history-list/http-response.adoc[]
+include::{snippets}/alert-history-list/response-fields.adoc[]
+
+[[alert-history-check]]
+=== 알림 확인 처리
+
+==== HTTP Request
+
+include::{snippets}/alert-history-check/http-request.adoc[]
+include::{snippets}/alert-history-check/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/alert-history-check/http-response.adoc[]
+include::{snippets}/alert-history-check/response-fields.adoc[]
