@@ -7,4 +7,6 @@ import java.util.List;
 public interface PetWalkAlarmReadService {
 
     List<PetWalkAlarmResponse> getAlarmsByPetId(Long petId);
+
+    List<java.time.LocalTime> getTodayAlarmTimes(Long petId);
 }

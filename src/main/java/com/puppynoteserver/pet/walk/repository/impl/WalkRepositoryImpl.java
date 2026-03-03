@@ -40,4 +40,9 @@ public class WalkRepositoryImpl implements WalkRepository {
     public long countByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end) {
         return walkJpaRepository.countByPetIdAndStartTimeBetween(petId, start, end);
     }
+
+    @Override
+    public Optional<Walk> findTopByPetIdOrderByStartTimeDesc(Long petId) {
+        return walkJpaRepository.findTopByPetIdOrderByStartTimeDesc(petId);
+    }
 }

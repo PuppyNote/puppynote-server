@@ -12,4 +12,5 @@ public interface PetItemReadService {
     PetItemResponse getItemDetail(Long petItemId);
 
     long countItemsByPetId(Long petId);
+
 }

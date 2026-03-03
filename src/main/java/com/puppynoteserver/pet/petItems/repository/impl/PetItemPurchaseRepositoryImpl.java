@@ -37,4 +37,9 @@ public class PetItemPurchaseRepositoryImpl implements PetItemPurchaseRepository 
     public List<PetItemPurchase> findAllLatestPurchases() {
         return petItemPurchaseJpaRepository.findAllLatestPurchases();
     }
+
+    @Override
+    public List<PetItemPurchase> findLatestPurchasesByPetId(Long petId) {
+        return petItemPurchaseJpaRepository.findLatestPurchasesByPetId(petId);
+    }
 }

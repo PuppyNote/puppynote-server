@@ -13,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,6 +71,36 @@ public class WalkReadServiceImpl implements WalkReadService {
                 from.atStartOfDay(),
                 to.plusDays(1).atStartOfDay().minusNanos(1)
         );
+    }
+
+    @Override
+    public boolean walkedToday(Long petId) {
+        LocalDate today = LocalDate.now();
+        return walkRepository.countByPetIdAndStartTimeBetween(
+                petId,
+                today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay().minusNanos(1)
+        ) > 0;
+    }
+
+    @Override
+    public Integer daysSinceLastWalk(Long petId) {
+        return walkRepository.findTopByPetIdOrderByStartTimeDesc(petId)
+                .map(walk -> (int) ChronoUnit.DAYS.between(walk.getStartTime().toLocalDate(), LocalDate.now()))
+                .orElse(null);
+    }
+
+    @Override
+    public long monthlyWalkMinutes(Long petId) {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDay = today.withDayOfMonth(1);
+        return walkRepository.findByPetIdAndStartTimeBetween(
+                        petId,
+                        firstDay.atStartOfDay(),
+                        today.plusDays(1).atStartOfDay().minusNanos(1)
+                ).stream()
+                .mapToLong(walk -> Duration.between(walk.getStartTime(), walk.getEndTime()).toMinutes())
+                .sum();
     }
 
     @Override
