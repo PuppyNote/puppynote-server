@@ -8,6 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalTime;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
@@ -32,12 +35,18 @@ public class HomeControllerDocsTest extends RestDocsSupport {
     @Test
     void getHomeInfo() throws Exception {
         given(homeReadService.getHomeInfo(anyLong()))
-                .willReturn(HomeResponse.of(
-                        "뽀삐",
-                        "https://puppy-profile.s3.ap-northeast-2.amazonaws.com/profile/abc123.jpg?X-Amz-Expires=3600",
-                        5L,
-                        12L
-                ));
+                .willReturn(HomeResponse.builder()
+                        .petName("뽀삐")
+                        .petProfileImageUrl("https://puppy-profile.s3.ap-northeast-2.amazonaws.com/profile/abc123.jpg?X-Amz-Expires=3600")
+                        .petAge("3살")
+                        .birthdayDday(12)
+                        .walkedToday(true)
+                        .daysSinceLastWalk(0)
+                        .monthlyWalkMinutes(320L)
+                        .recentWalkCount(5L)
+                        .petItemCount(12L)
+                        .todayWalkAlarmTimes(List.of(LocalTime.of(8, 0), LocalTime.of(18, 30)))
+                        .build());
 
         mockMvc.perform(
                         get("/api/v1/home")
@@ -64,10 +73,22 @@ public class HomeControllerDocsTest extends RestDocsSupport {
                                         .description("펫 이름"),
                                 fieldWithPath("data.petProfileImageUrl").type(JsonFieldType.STRING)
                                         .description("펫 프로필 사진 Presigned URL (유효시간 1시간)").optional(),
+                                fieldWithPath("data.petAge").type(JsonFieldType.STRING)
+                                        .description("펫 나이 (예: '3살', '8개월'). 생일 미등록 시 null").optional(),
+                                fieldWithPath("data.birthdayDday").type(JsonFieldType.NUMBER)
+                                        .description("생일까지 남은 일수 (0 = 오늘 생일). 생일 미등록 시 null").optional(),
+                                fieldWithPath("data.walkedToday").type(JsonFieldType.BOOLEAN)
+                                        .description("오늘 산책 여부"),
+                                fieldWithPath("data.daysSinceLastWalk").type(JsonFieldType.NUMBER)
+                                        .description("마지막 산책 후 경과 일수 (산책 이력 없으면 null)").optional(),
+                                fieldWithPath("data.monthlyWalkMinutes").type(JsonFieldType.NUMBER)
+                                        .description("이번 달 총 산책 시간 (분)"),
                                 fieldWithPath("data.recentWalkCount").type(JsonFieldType.NUMBER)
                                         .description("최근 7일 산책 횟수"),
                                 fieldWithPath("data.petItemCount").type(JsonFieldType.NUMBER)
-                                        .description("관리용품 개수")
+                                        .description("관리용품 개수"),
+                                fieldWithPath("data.todayWalkAlarmTimes").type(JsonFieldType.ARRAY)
+                                        .description("오늘 설정된 산책 알람 시간 목록 (HH:mm:ss)")
                         )
                 ));
     }
