@@ -23,6 +23,11 @@ public class AlertHistoryController {
 		return ApiResponse.ok(alertHistoryReadService.getAlertHistory(request.toServiceRequest()));
 	}
 
+	@GetMapping("/unchecked")
+	public ApiResponse<Boolean> hasUncheckedAlerts() {
+		return ApiResponse.ok(alertHistoryReadService.hasUncheckedAlerts());
+	}
+
 	@PatchMapping("/{id}")
 	public ApiResponse<AlertHistoryStatusResponse> updateAlertHistoryStatus(@PathVariable Long id) {
 		return ApiResponse.ok(alertHistoryService.updateAlertHistoryStatus(id));
