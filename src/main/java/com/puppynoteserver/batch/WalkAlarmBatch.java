@@ -55,20 +55,29 @@ public class WalkAlarmBatch {
                 User user = fm.getUser();
                 AlertSetting alertSetting = alertSettingReadService.findByUserOrCreateDefault(user);
 
-                if (alertSetting.getWalk() != AlertType.ON) continue;
+                log.info("산책 알림 대상 - userId: {}, walkAlertSetting: {}", user.getId(), alertSetting.getWalk());
 
-                pushRepository.findByUserId(user.getId()).ifPresent(push ->
-                        firebaseService.sendPushNotification(
-                                SendFirebaseServiceRequest.builder()
-                                        .push(push)
-                                        .sound("default")
-                                        .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
-                                        .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                                                .alert_destination_type(AlertDestinationType.WALK)
-                                                .alert_destination_info(String.valueOf(alarm.getPet().getId()))
-                                                .build())
-                                        .build()
-                        )
+                if (alertSetting.getWalk() != AlertType.ON) {
+                    log.info("산책 알림 스킵 - userId: {}, walk 설정이 OFF", user.getId());
+                    continue;
+                }
+
+                pushRepository.findByUserId(user.getId()).ifPresentOrElse(
+                        push -> {
+                            log.info("산책 알림 전송 시도 - userId: {}, pushToken: {}", user.getId(), push.getPushToken());
+                            firebaseService.sendPushNotification(
+                                    SendFirebaseServiceRequest.builder()
+                                            .push(push)
+                                            .sound("default")
+                                            .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
+                                            .sendFirebaseDataDto(SendFirebaseDataDto.builder()
+                                                    .alert_destination_type(AlertDestinationType.WALK)
+                                                    .alert_destination_info(String.valueOf(alarm.getPet().getId()))
+                                                    .build())
+                                            .build()
+                            );
+                        },
+                        () -> log.warn("산책 알림 스킵 - userId: {}, 등록된 pushToken 없음", user.getId())
                 );
             }
         }
