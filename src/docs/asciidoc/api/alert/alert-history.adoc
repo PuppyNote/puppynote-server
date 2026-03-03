@@ -11,6 +11,18 @@ include::{snippets}/alert-history-list/query-parameters.adoc[]
 include::{snippets}/alert-history-list/http-response.adoc[]
 include::{snippets}/alert-history-list/response-fields.adoc[]
 
+[[alert-history-unchecked]]
+=== 읽지 않은 알림 존재 여부 조회
+
+==== HTTP Request
+
+include::{snippets}/alert-history-unchecked/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/alert-history-unchecked/http-response.adoc[]
+include::{snippets}/alert-history-unchecked/response-fields.adoc[]
+
 [[alert-history-check]]
 === 알림 확인 처리
 
