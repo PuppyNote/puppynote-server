@@ -1,11 +1,14 @@
 package com.puppynoteserver.pet.petWalkAlarms.repository.impl;
 
 import com.puppynoteserver.pet.petWalkAlarms.entity.PetWalkAlarm;
+import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmDay;
+import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmStatus;
 import com.puppynoteserver.pet.petWalkAlarms.repository.PetWalkAlarmJpaRepository;
 import com.puppynoteserver.pet.petWalkAlarms.repository.PetWalkAlarmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +36,10 @@ public class PetWalkAlarmRepositoryImpl implements PetWalkAlarmRepository {
     @Override
     public void delete(PetWalkAlarm petWalkAlarm) {
         petWalkAlarmJpaRepository.delete(petWalkAlarm);
+    }
+
+    @Override
+    public List<PetWalkAlarm> findActiveAlarmsAtTimeAndDay(AlarmStatus status, LocalTime time, AlarmDay day) {
+        return petWalkAlarmJpaRepository.findActiveAlarmsAtTimeAndDay(status, time, day);
     }
 }

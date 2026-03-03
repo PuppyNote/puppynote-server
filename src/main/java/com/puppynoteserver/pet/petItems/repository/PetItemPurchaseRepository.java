@@ -12,4 +12,6 @@ public interface PetItemPurchaseRepository {
     List<PetItemPurchase> findLatestByPetItemIds(List<Long> petItemIds);
 
     Optional<PetItemPurchase> findLatestByPetItemId(Long petItemId);
+
+    List<PetItemPurchase> findAllLatestPurchases();
 }

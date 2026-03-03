@@ -6,6 +6,8 @@ import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class FamilyMemberRepositoryImpl implements FamilyMemberRepository {
@@ -15,5 +17,10 @@ public class FamilyMemberRepositoryImpl implements FamilyMemberRepository {
     @Override
     public FamilyMember save(FamilyMember familyMember) {
         return familyMemberJpaRepository.save(familyMember);
+    }
+
+    @Override
+    public List<FamilyMember> findByPetIdWithUser(Long petId) {
+        return familyMemberJpaRepository.findByPetIdWithUser(petId);
     }
 }
