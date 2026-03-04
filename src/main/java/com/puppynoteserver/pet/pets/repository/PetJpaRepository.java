@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PetJpaRepository extends JpaRepository<Pet, Long> {
 
-    @Query("SELECT p FROM Pet p INNER JOIN FamilyMember fm ON fm.pet = p WHERE fm.user.id = :userId")
+    @Query("SELECT p FROM Pet p INNER JOIN FamilyMember fm ON fm.pet = p WHERE fm.user.id = :userId and fm.status = 'DONE'")
     List<Pet> findByUserId(@Param("userId") Long userId);
 }

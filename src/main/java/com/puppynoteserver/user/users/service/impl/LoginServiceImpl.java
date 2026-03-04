@@ -83,6 +83,7 @@ public class LoginServiceImpl implements LoginService {
                                 .email(email)
                                 .snsType(snsType)
                                 .role(Role.USER)
+                                .useYn("Y")
                                 .build()
                 ));
 
