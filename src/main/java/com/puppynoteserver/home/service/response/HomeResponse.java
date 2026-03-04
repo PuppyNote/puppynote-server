@@ -3,6 +3,7 @@ package com.puppynoteserver.home.service.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class HomeResponse {
 
     private final String petName;
     private final String petProfileImageUrl;
+    private final LocalDate birthDate;
     private final String petAge;
     private final Integer birthdayDday;
     private final boolean walkedToday;
@@ -21,12 +23,13 @@ public class HomeResponse {
     private final List<LocalTime> todayWalkAlarmTimes;
 
     @Builder
-    private HomeResponse(String petName, String petProfileImageUrl, String petAge, Integer birthdayDday,
-                         boolean walkedToday, Integer daysSinceLastWalk, long monthlyWalkMinutes,
-                         long recentWalkCount, long petItemCount,
+    private HomeResponse(String petName, String petProfileImageUrl, LocalDate birthDate, String petAge,
+                         Integer birthdayDday, boolean walkedToday, Integer daysSinceLastWalk,
+                         long monthlyWalkMinutes, long recentWalkCount, long petItemCount,
                          List<LocalTime> todayWalkAlarmTimes) {
         this.petName = petName;
         this.petProfileImageUrl = petProfileImageUrl;
+        this.birthDate = birthDate;
         this.petAge = petAge;
         this.birthdayDday = birthdayDday;
         this.walkedToday = walkedToday;

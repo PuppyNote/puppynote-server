@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class HomeControllerDocsTest extends RestDocsSupport {
                 .willReturn(HomeResponse.builder()
                         .petName("뽀삐")
                         .petProfileImageUrl("https://puppy-profile.s3.ap-northeast-2.amazonaws.com/profile/abc123.jpg?X-Amz-Expires=3600")
+                        .birthDate(LocalDate.of(2021, 3, 15))
                         .petAge("3살")
                         .birthdayDday(12)
                         .walkedToday(true)
@@ -73,6 +75,8 @@ public class HomeControllerDocsTest extends RestDocsSupport {
                                         .description("펫 이름"),
                                 fieldWithPath("data.petProfileImageUrl").type(JsonFieldType.STRING)
                                         .description("펫 프로필 사진 Presigned URL (유효시간 1시간)").optional(),
+                                fieldWithPath("data.birthDate").type(JsonFieldType.STRING)
+                                        .description("반려견 생일 (yyyy-MM-dd). 생일 미등록 시 null").optional(),
                                 fieldWithPath("data.petAge").type(JsonFieldType.STRING)
                                         .description("펫 나이 (예: '3살', '8개월'). 생일 미등록 시 null").optional(),
                                 fieldWithPath("data.birthdayDday").type(JsonFieldType.NUMBER)

@@ -54,6 +54,7 @@ public class HomeReadServiceImpl implements HomeReadService {
         return HomeResponse.builder()
                 .petName(pet.getName())
                 .petProfileImageUrl(petProfileImageUrl)
+                .birthDate(pet.getBirthDate())
                 .petAge(petAge)
                 .birthdayDday(birthdayDday)
                 .walkedToday(walkedToday)
