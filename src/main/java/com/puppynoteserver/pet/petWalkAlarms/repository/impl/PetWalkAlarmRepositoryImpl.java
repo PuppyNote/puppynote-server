@@ -42,4 +42,9 @@ public class PetWalkAlarmRepositoryImpl implements PetWalkAlarmRepository {
     public List<PetWalkAlarm> findActiveAlarmsAtTimeAndDay(AlarmStatus status, LocalTime time, AlarmDay day) {
         return petWalkAlarmJpaRepository.findActiveAlarmsAtTimeAndDay(status, time, day);
     }
+
+    @Override
+    public List<PetWalkAlarm> findTodayAlarmsByPetId(Long petId, AlarmStatus status, AlarmDay day) {
+        return petWalkAlarmJpaRepository.findTodayAlarmsByPetId(petId, status, day);
+    }
 }

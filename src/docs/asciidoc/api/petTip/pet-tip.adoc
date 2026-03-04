@@ -1,0 +1,11 @@
+[[pet-tip-random]]
+=== 랜덤 반려견 팁 조회
+
+==== HTTP Request
+
+include::{snippets}/pet-tip-random/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-tip-random/http-response.adoc[]
+include::{snippets}/pet-tip-random/response-fields.adoc[]

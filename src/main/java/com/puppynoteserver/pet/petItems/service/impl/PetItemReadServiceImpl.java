@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.petItems.service.impl;
 
+import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.pet.petItems.entity.PetItem;
 import com.puppynoteserver.pet.petItems.entity.PetItemPurchase;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
@@ -7,7 +8,6 @@ import com.puppynoteserver.pet.petItems.repository.PetItemPurchaseRepository;
 import com.puppynoteserver.pet.petItems.repository.PetItemRepository;
 import com.puppynoteserver.pet.petItems.service.PetItemReadService;
 import com.puppynoteserver.pet.petItems.service.response.PetItemResponse;
-import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.storage.enums.BucketKind;
 import com.puppynoteserver.storage.service.S3StorageService;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +63,11 @@ public class PetItemReadServiceImpl implements PetItemReadService {
                                 : Long.MIN_VALUE
                 ))
                 .toList();
+    }
+
+    @Override
+    public long countItemsByPetId(Long petId) {
+        return petItemRepository.countByPetId(petId);
     }
 
     @Override

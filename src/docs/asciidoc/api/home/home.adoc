@@ -1,0 +1,12 @@
+[[home-info]]
+=== 메인화면 기본정보 조회
+
+==== HTTP Request
+
+include::{snippets}/home-info/http-request.adoc[]
+include::{snippets}/home-info/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/home-info/http-response.adoc[]
+include::{snippets}/home-info/response-fields.adoc[]

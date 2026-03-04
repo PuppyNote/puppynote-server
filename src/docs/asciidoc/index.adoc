@@ -28,6 +28,11 @@ include::api/pet/pet.adoc[]
 
 include::api/pet/alarm.adoc[]
 
+[[Home-API]]
+== Home API
+
+include::api/home/home.adoc[]
+
 [[Walk-API]]
 == Walk API
 
@@ -52,6 +57,11 @@ include::api/alert/alert-history.adoc[]
 == AlertSetting API
 
 include::api/alert/alert-setting.adoc[]
+
+[[PetTip-API]]
+== PetTip API
+
+include::api/petTip/pet-tip.adoc[]
 
 [[Storage-API]]
 == Storage API

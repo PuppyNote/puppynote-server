@@ -35,4 +35,14 @@ public class WalkRepositoryImpl implements WalkRepository {
     public Optional<Walk> findById(Long walkId) {
         return walkJpaRepository.findWithPhotosById(walkId);
     }
+
+    @Override
+    public long countByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end) {
+        return walkJpaRepository.countByPetIdAndStartTimeBetween(petId, start, end);
+    }
+
+    @Override
+    public Optional<Walk> findTopByPetIdOrderByStartTimeDesc(Long petId) {
+        return walkJpaRepository.findTopByPetIdOrderByStartTimeDesc(petId);
+    }
 }

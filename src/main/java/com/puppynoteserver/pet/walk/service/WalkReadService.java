@@ -15,4 +15,12 @@ public interface WalkReadService {
     List<WalkCalendarResponse> getWalkCalendar(Long petId, YearMonth yearMonth);
 
     WalkDetailResponse getWalkDetail(Long walkId);
+
+    long countRecentWalks(Long petId, LocalDate from, LocalDate to);
+
+    boolean walkedToday(Long petId);
+
+    Integer daysSinceLastWalk(Long petId);
+
+    long monthlyWalkMinutes(Long petId);
 }

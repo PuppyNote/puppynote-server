@@ -19,4 +19,6 @@ public interface PetWalkAlarmRepository {
     void delete(PetWalkAlarm petWalkAlarm);
 
     List<PetWalkAlarm> findActiveAlarmsAtTimeAndDay(AlarmStatus status, LocalTime time, AlarmDay day);
+
+    List<PetWalkAlarm> findTodayAlarmsByPetId(Long petId, AlarmStatus status, AlarmDay day);
 }

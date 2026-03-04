@@ -10,4 +10,7 @@ public interface PetItemReadService {
     List<PetItemResponse> getItemsByPetId(Long petId, ItemCategory category);
 
     PetItemResponse getItemDetail(Long petItemId);
+
+    long countItemsByPetId(Long petId);
+
 }

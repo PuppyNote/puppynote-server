@@ -35,4 +35,9 @@ public class PetItemRepositoryImpl implements PetItemRepository {
     public List<PetItem> findByPetIdAndCategory(Long petId, ItemCategory category) {
         return petItemJpaRepository.findByPetIdAndCategory(petId, category);
     }
+
+    @Override
+    public long countByPetId(Long petId) {
+        return petItemJpaRepository.countByPetId(petId);
+    }
 }

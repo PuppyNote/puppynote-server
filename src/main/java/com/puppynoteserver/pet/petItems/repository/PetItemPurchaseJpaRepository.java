@@ -33,4 +33,14 @@ public interface PetItemPurchaseJpaRepository extends JpaRepository<PetItemPurch
             )
             """)
     List<PetItemPurchase> findAllLatestPurchases();
+
+    @Query("""
+            SELECT p FROM PetItemPurchase p
+            JOIN FETCH p.petItem pi
+            WHERE pi.pet.id = :petId
+              AND p.purchasedAt = (
+                  SELECT MAX(p2.purchasedAt) FROM PetItemPurchase p2 WHERE p2.petItem.id = pi.id
+              )
+            """)
+    List<PetItemPurchase> findLatestPurchasesByPetId(@Param("petId") Long petId);
 }

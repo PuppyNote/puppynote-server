@@ -114,6 +114,32 @@ public class AlertHistoryControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
+    @DisplayName("읽지 않은 알림 존재 여부 API")
+    @Test
+    void hasUncheckedAlerts() throws Exception {
+        given(alertHistoryReadService.hasUncheckedAlerts()).willReturn(true);
+
+        mockMvc.perform(
+                        get("/api/v1/alertHistories/unchecked")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("alert-history-unchecked",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.BOOLEAN)
+                                        .description("읽지 않은 알림 존재 여부 (true: 있음, false: 없음)")
+                        )
+                ));
+    }
+
     @DisplayName("알림 확인 처리 API")
     @Test
     void updateAlertHistoryStatus() throws Exception {

@@ -16,4 +16,7 @@ public interface PetWalkAlarmJpaRepository extends JpaRepository<PetWalkAlarm, L
 
     @Query("SELECT DISTINCT a FROM PetWalkAlarm a JOIN FETCH a.pet WHERE a.alarmStatus = :status AND a.alarmTime = :time AND :day MEMBER OF a.alarmDays")
     List<PetWalkAlarm> findActiveAlarmsAtTimeAndDay(@Param("status") AlarmStatus status, @Param("time") LocalTime time, @Param("day") AlarmDay day);
+
+    @Query("SELECT a FROM PetWalkAlarm a WHERE a.pet.id = :petId AND a.alarmStatus = :status AND :day MEMBER OF a.alarmDays ORDER BY a.alarmTime ASC")
+    List<PetWalkAlarm> findTodayAlarmsByPetId(@Param("petId") Long petId, @Param("status") AlarmStatus status, @Param("day") AlarmDay day);
 }

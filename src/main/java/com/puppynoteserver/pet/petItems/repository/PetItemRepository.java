@@ -15,4 +15,6 @@ public interface PetItemRepository {
     List<PetItem> findByPetId(Long petId);
 
     List<PetItem> findByPetIdAndCategory(Long petId, ItemCategory category);
+
+    long countByPetId(Long petId);
 }
