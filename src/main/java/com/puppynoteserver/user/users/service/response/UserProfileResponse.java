@@ -16,7 +16,7 @@ public class UserProfileResponse {
         this.profileUrl = profileUrl;
     }
 
-    public static UserProfileResponse of(User user) {
-        return new UserProfileResponse(user.getEmail(), user.getNickName(), user.getProfileUrl());
+    public static UserProfileResponse of(User user, String profileUrl) {
+        return new UserProfileResponse(user.getEmail(), user.getNickName(), profileUrl);
     }
 }

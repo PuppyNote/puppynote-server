@@ -2,6 +2,8 @@ package com.puppynoteserver.user.users.service.impl;
 
 import com.puppynoteserver.global.exception.PuppyNoteException;
 import com.puppynoteserver.global.security.SecurityService;
+import com.puppynoteserver.storage.enums.BucketKind;
+import com.puppynoteserver.storage.service.S3StorageService;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.repository.UserRepository;
 import com.puppynoteserver.user.users.service.UserReadService;
@@ -21,6 +23,7 @@ public class UserReadServiceImpl implements UserReadService {
 
     private final UserRepository userRepository;
     private final SecurityService securityService;
+    private final S3StorageService s3StorageService;
 
     @Override
     public User findByEmail(String email) {
@@ -44,6 +47,7 @@ public class UserReadServiceImpl implements UserReadService {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new PuppyNoteException(UNKNOWN_USER));
-        return UserProfileResponse.of(user);
+        String profileUrl = s3StorageService.createPresignedUrl(user.getProfileUrl(), BucketKind.USER_PROFILE);
+        return UserProfileResponse.of(user, profileUrl);
     }
 }
