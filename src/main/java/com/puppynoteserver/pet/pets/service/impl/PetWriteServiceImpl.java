@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.pets.service.impl;
 
+import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
 import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
@@ -9,6 +10,7 @@ import com.puppynoteserver.pet.pets.entity.Pet;
 import com.puppynoteserver.pet.pets.repository.PetRepository;
 import com.puppynoteserver.pet.pets.service.PetWriteService;
 import com.puppynoteserver.pet.pets.service.request.PetCreateServiceRequest;
+import com.puppynoteserver.pet.pets.service.request.PetUpdateServiceRequest;
 import com.puppynoteserver.pet.pets.service.response.PetCreateResponse;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
@@ -38,5 +40,12 @@ public class PetWriteServiceImpl implements PetWriteService {
         familyMemberService.save(familyMember);
 
         return PetCreateResponse.from(savedPet);
+    }
+
+    @Override
+    public void updatePet(Long petId, PetUpdateServiceRequest request) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new NotFoundException("펫을 찾을 수 없습니다."));
+        pet.updateInfo(request.getName(), request.getBirthDate(), request.getProfileImage());
     }
 }

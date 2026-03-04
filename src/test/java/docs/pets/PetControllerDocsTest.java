@@ -2,9 +2,11 @@ package docs.pets;
 
 import com.puppynoteserver.pet.pets.controller.PetController;
 import com.puppynoteserver.pet.pets.controller.request.PetCreateRequest;
+import com.puppynoteserver.pet.pets.controller.request.PetUpdateRequest;
 import com.puppynoteserver.pet.pets.service.PetReadService;
 import com.puppynoteserver.pet.pets.service.PetWriteService;
 import com.puppynoteserver.pet.pets.service.request.PetCreateServiceRequest;
+import com.puppynoteserver.pet.pets.service.request.PetUpdateServiceRequest;
 import com.puppynoteserver.pet.pets.service.response.PetCreateResponse;
 import com.puppynoteserver.pet.pets.service.response.PetResponse;
 import docs.RestDocsSupport;
@@ -17,14 +19,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -74,6 +78,47 @@ public class PetControllerDocsTest extends RestDocsSupport {
                                         .description("펫 이름"),
                                 fieldWithPath("data[].petProfileUrl").type(JsonFieldType.STRING)
                                         .description("펫 프로필 이미지 Presigned URL (유효시간 1시간)").optional()
+                        )
+                ));
+    }
+
+    @DisplayName("펫 프로필 수정 API")
+    @Test
+    void updatePet() throws Exception {
+        PetUpdateRequest request = PetUpdateRequest.builder()
+                .name("초코")
+                .birthDate(LocalDate.of(2022, 3, 15))
+                .profileImage("550e8400-e29b-41d4-a716-446655440000.jpg")
+                .build();
+
+        doNothing().when(petWriteService).updatePet(anyLong(), any(PetUpdateServiceRequest.class));
+
+        mockMvc.perform(
+                        patch("/api/v1/pets/{petId}", 1L)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("pet-update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("petId").description("수정할 펫 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("name").type(JsonFieldType.STRING)
+                                        .description("펫 이름 (필수)"),
+                                fieldWithPath("birthDate").type(JsonFieldType.STRING)
+                                        .description("생년월일 (yyyy-MM-dd)").optional(),
+                                fieldWithPath("profileImage").type(JsonFieldType.STRING)
+                                        .description("프로필 이미지 S3 Object Key").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터 없음")
                         )
                 ));
     }

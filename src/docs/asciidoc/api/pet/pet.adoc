@@ -22,3 +22,17 @@ include::{snippets}/pet-create/request-fields.adoc[]
 
 include::{snippets}/pet-create/http-response.adoc[]
 include::{snippets}/pet-create/response-fields.adoc[]
+
+[[pet-update]]
+=== 펫 프로필 수정
+
+==== HTTP Request
+
+include::{snippets}/pet-update/http-request.adoc[]
+include::{snippets}/pet-update/path-parameters.adoc[]
+include::{snippets}/pet-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-update/http-response.adoc[]
+include::{snippets}/pet-update/response-fields.adoc[]

@@ -16,6 +16,8 @@ include::api/user/signup.adoc[]
 
 include::api/user/email.adoc[]
 
+include::api/user/profile.adoc[]
+
 [[Login-API]]
 == Login API
 

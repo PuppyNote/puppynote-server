@@ -2,6 +2,7 @@ package com.puppynoteserver.pet.pets.controller;
 
 import com.puppynoteserver.global.ApiResponse;
 import com.puppynoteserver.pet.pets.controller.request.PetCreateRequest;
+import com.puppynoteserver.pet.pets.controller.request.PetUpdateRequest;
 import com.puppynoteserver.pet.pets.service.PetReadService;
 import com.puppynoteserver.pet.pets.service.PetWriteService;
 import com.puppynoteserver.pet.pets.service.response.PetCreateResponse;
@@ -30,5 +31,11 @@ public class PetController {
     @PostMapping
     public ApiResponse<PetCreateResponse> createPet(@Valid @RequestBody PetCreateRequest request) {
         return ApiResponse.created(petWriteService.createPet(request.toServiceRequest()));
+    }
+
+    @PatchMapping("/{petId}")
+    public ApiResponse<Void> updatePet(@PathVariable Long petId, @Valid @RequestBody PetUpdateRequest request) {
+        petWriteService.updatePet(petId, request.toServiceRequest());
+        return ApiResponse.ok(null);
     }
 }

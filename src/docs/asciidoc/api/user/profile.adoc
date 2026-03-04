@@ -1,0 +1,28 @@
+[[user-profile-get]]
+=== 내 프로필 조회
+
+현재 로그인한 사용자의 닉네임과 프로필 이미지 URL을 조회합니다.
+
+==== HTTP Request
+
+include::{snippets}/user-profile-get/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-profile-get/http-response.adoc[]
+include::{snippets}/user-profile-get/response-fields.adoc[]
+
+[[user-profile-update]]
+=== 내 프로필 수정
+
+현재 로그인한 사용자의 닉네임과 프로필 이미지 URL을 수정합니다.
+
+==== HTTP Request
+
+include::{snippets}/user-profile-update/http-request.adoc[]
+include::{snippets}/user-profile-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-profile-update/http-response.adoc[]
+include::{snippets}/user-profile-update/response-fields.adoc[]
