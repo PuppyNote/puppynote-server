@@ -46,8 +46,11 @@ public class FamilyMemberReadServiceImpl implements FamilyMemberReadService {
 
     @Override
     public List<UserSearchResponse> searchUsersByEmail(String email) {
+        Long currentUserId = securityService.getCurrentLoginUserInfo().getUserId();
+
         return userReadService.findAllByEmailLike(email)
                 .stream()
+                .filter(user -> !user.getId().equals(currentUserId))
                 .map(UserSearchResponse::of)
                 .toList();
     }
