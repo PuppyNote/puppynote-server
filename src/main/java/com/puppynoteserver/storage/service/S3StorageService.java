@@ -35,6 +35,9 @@ public class S3StorageService {
     @Value("${aws.s3.bucket.pet-item-photo}")
     private String petItemImageBucketName;
 
+    @Value("${aws.s3.bucket.user-profile}")
+    private String userProfileBucketName;
+
     /**
      * S3에 파일 업로드
      *
@@ -139,6 +142,7 @@ public class S3StorageService {
             case PUPPY_PROFILE -> puppyProfileBucketName;
             case WALK_PHOTO -> walkPhotoBucketName;
             case PET_ITEM_PHOTO -> petItemImageBucketName;
+            case USER_PROFILE -> userProfileBucketName;
         };
     }
 
