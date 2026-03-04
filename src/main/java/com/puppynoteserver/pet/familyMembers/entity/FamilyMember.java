@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.familyMembers.entity;
 
+import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
 import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
 import com.puppynoteserver.pet.pets.entity.Pet;
 import com.puppynoteserver.user.users.entity.User;
@@ -31,16 +32,25 @@ public class FamilyMember {
     @Column(length = 50)
     private RoleType role;
 
-    public static FamilyMember of(User user, Pet pet, RoleType role) {
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private FamilyMemberStatus status;
+
+    public static FamilyMember of(User user, Pet pet, RoleType role, FamilyMemberStatus status) {
         FamilyMember familyMember = new FamilyMember();
         familyMember.id = FamilyMemberId.of(user.getId(), pet.getId());
         familyMember.user = user;
         familyMember.pet = pet;
         familyMember.role = role;
+        familyMember.status = status;
         return familyMember;
     }
 
     public void updateRole(RoleType role) {
         this.role = role;
+    }
+
+    public void updateStatus(FamilyMemberStatus status) {
+        this.status = status;
     }
 }

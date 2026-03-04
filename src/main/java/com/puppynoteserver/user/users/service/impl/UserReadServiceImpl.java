@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,5 +29,10 @@ public class UserReadServiceImpl implements UserReadService {
     public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new PuppyNoteException(UNKNOWN_USER));
+    }
+
+    @Override
+    public List<User> findAllByEmailLike(String email) {
+        return userRepository.findAllByEmailLike(email);
     }
 }

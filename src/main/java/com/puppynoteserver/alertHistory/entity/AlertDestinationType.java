@@ -11,7 +11,8 @@ public enum AlertDestinationType {
 	FRIEND("친구 추가 알림"),
 	FRIEND_CODE("친구 추가요청 수신알림"),
 	WALK("산책 알림"),
-	PET_ITEM("구매용품 알림");
+	PET_ITEM("구매용품 알림"),
+	FAMILY_INVITE("가족 초대 알림");
 
 	private final String text;
 }

@@ -2,6 +2,7 @@ package com.puppynoteserver.pet.pets.service.impl;
 
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
+import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
 import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
 import com.puppynoteserver.pet.familyMembers.service.FamilyMemberService;
 import com.puppynoteserver.pet.pets.entity.Pet;
@@ -33,7 +34,7 @@ public class PetWriteServiceImpl implements PetWriteService {
 
         Pet savedPet = petRepository.save(request.toEntity());
 
-        FamilyMember familyMember = FamilyMember.of(user, savedPet, RoleType.OWNER);
+        FamilyMember familyMember = FamilyMember.of(user, savedPet, RoleType.OWNER, FamilyMemberStatus.DONE);
         familyMemberService.save(familyMember);
 
         return PetCreateResponse.from(savedPet);
