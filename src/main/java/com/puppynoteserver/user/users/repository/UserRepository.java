@@ -23,4 +23,6 @@ public interface UserRepository {
 	void saveAll(List<User> users);
 
     boolean existsByEmail(String email);
+
+    List<User> findAllByEmailLike(String email);
 }
