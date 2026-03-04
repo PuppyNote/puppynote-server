@@ -13,6 +13,8 @@ public interface PetItemPurchaseRepository {
 
     Optional<PetItemPurchase> findLatestByPetItemId(Long petItemId);
 
+    List<PetItemPurchase> findAllByPetItemId(Long petItemId);
+
     List<PetItemPurchase> findAllLatestPurchases();
 
     List<PetItemPurchase> findLatestPurchasesByPetId(Long petId);

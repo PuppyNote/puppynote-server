@@ -23,6 +23,8 @@ public interface PetItemPurchaseJpaRepository extends JpaRepository<PetItemPurch
 
     Optional<PetItemPurchase> findTopByPetItemIdOrderByPurchasedAtDesc(Long petItemId);
 
+    List<PetItemPurchase> findAllByPetItemIdOrderByPurchasedAtDesc(Long petItemId);
+
     // 모든 petItem의 가장 최근 구매이력 조회 (구매주기 알림 배치용)
     @Query("""
             SELECT p FROM PetItemPurchase p
