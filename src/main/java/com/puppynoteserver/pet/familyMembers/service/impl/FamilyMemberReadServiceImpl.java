@@ -1,7 +1,6 @@
 package com.puppynoteserver.pet.familyMembers.service.impl;
 
 import com.puppynoteserver.global.security.SecurityService;
-import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
 import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
 import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberRepository;
 import com.puppynoteserver.pet.familyMembers.service.FamilyMemberReadService;
@@ -29,17 +28,13 @@ public class FamilyMemberReadServiceImpl implements FamilyMemberReadService {
     public List<FamilyMemberResponse> getFamilyMembers() {
         Long currentUserId = securityService.getCurrentLoginUserInfo().getUserId();
 
-        // 내 강아지 목록 조회
-        List<FamilyMember> ownerPets = familyMemberRepository.findAllOwnerPetsOf(currentUserId);
-        if (ownerPets.isEmpty()) {
+        // 내가 속한 모든 펫 ID 조회 (OWNER/FAMILY 역할 무관)
+        List<Long> petIds = familyMemberRepository.findAllPetIdsByUserId(currentUserId);
+        if (petIds.isEmpty()) {
             return List.of();
         }
 
-        List<Long> petIds = ownerPets.stream()
-                .map(fm -> fm.getId().getPetId())
-                .toList();
-
-        // 해당 강아지들의 DONE 가족 목록 조회 후 유저 기준 중복 제거 (본인 제외)
+        // 해당 펫들의 DONE 가족 목록 조회 후 유저 기준 중복 제거 (본인 제외)
         Map<Long, FamilyMemberResponse> uniqueMembers = new LinkedHashMap<>();
         familyMemberRepository.findAllByPetIdsAndStatus(petIds, FamilyMemberStatus.DONE)
                 .stream()

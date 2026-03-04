@@ -18,6 +18,8 @@ public interface FamilyMemberRepository {
 
     List<FamilyMember> findAllOwnerPetsOf(Long userId);
 
+    List<Long> findAllPetIdsByUserId(Long userId);
+
     List<FamilyMember> findAllPendingByUserIdAndPetIds(Long userId, List<Long> petIds);
 
     boolean existsByUserIdAndPetIds(Long userId, List<Long> petIds);

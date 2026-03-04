@@ -40,6 +40,14 @@ public class FamilyMemberRepositoryImpl implements FamilyMemberRepository {
     }
 
     @Override
+    public List<Long> findAllPetIdsByUserId(Long userId) {
+        return familyMemberJpaRepository.findAllByUserIdAndStatus(userId, FamilyMemberStatus.DONE)
+                .stream()
+                .map(fm -> fm.getId().getPetId())
+                .toList();
+    }
+
+    @Override
     public List<FamilyMember> findAllOwnerPetsOf(Long userId) {
         return familyMemberJpaRepository.findAllByUserIdAndRoleAndStatusWithPet(userId, RoleType.OWNER, FamilyMemberStatus.DONE);
     }

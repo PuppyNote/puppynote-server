@@ -92,7 +92,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
         // 현재 유저의 PENDING 레코드 조회 후 DONE으로 변경
         List<FamilyMember> pendingRecords = familyMemberRepository.findAllPendingByUserIdAndPetIds(currentUserId, petIds);
         if (pendingRecords.isEmpty()) {
-            throw new NotFoundException("유효한 가족 초대 정보를 찾을 수 없습니다.");
+            throw new PuppyNoteException("이미 가족으로 등록되어 있거나 초대받은 내역이 없습니다.");
         }
 
         pendingRecords.forEach(fm -> fm.updateStatus(FamilyMemberStatus.DONE));

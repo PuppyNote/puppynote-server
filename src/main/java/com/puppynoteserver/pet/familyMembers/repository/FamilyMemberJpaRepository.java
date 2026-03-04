@@ -22,6 +22,10 @@ public interface FamilyMemberJpaRepository extends JpaRepository<FamilyMember, F
     @Query("SELECT fm FROM FamilyMember fm JOIN FETCH fm.pet WHERE fm.id.userId = :userId AND fm.role = :role AND fm.status = :status")
     List<FamilyMember> findAllByUserIdAndRoleAndStatusWithPet(@Param("userId") Long userId, @Param("role") RoleType role, @Param("status") FamilyMemberStatus status);
 
+    // 특정 유저가 속한 모든 펫 목록 (역할 무관, 가족 목록 조회 시 사용)
+    @Query("SELECT fm FROM FamilyMember fm WHERE fm.id.userId = :userId AND fm.status = :status")
+    List<FamilyMember> findAllByUserIdAndStatus(@Param("userId") Long userId, @Param("status") FamilyMemberStatus status);
+
     // 특정 유저의 특정 펫들에 대한 레코드 (등록 시 PENDING → DONE)
     @Query("SELECT fm FROM FamilyMember fm WHERE fm.id.userId = :userId AND fm.id.petId IN :petIds AND fm.status = :status")
     List<FamilyMember> findAllByUserIdAndPetIdInAndStatus(@Param("userId") Long userId, @Param("petIds") List<Long> petIds, @Param("status") FamilyMemberStatus status);
