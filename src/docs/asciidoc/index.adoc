@@ -28,6 +28,11 @@ include::api/pet/pet.adoc[]
 
 include::api/pet/alarm.adoc[]
 
+[[FamilyMember-API]]
+== FamilyMember API
+
+include::api/pet/family-member.adoc[]
+
 [[Home-API]]
 == Home API
 
