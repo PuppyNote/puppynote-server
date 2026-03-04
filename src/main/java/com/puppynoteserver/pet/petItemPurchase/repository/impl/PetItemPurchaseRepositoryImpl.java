@@ -1,8 +1,8 @@
-package com.puppynoteserver.pet.petItems.repository.impl;
+package com.puppynoteserver.pet.petItemPurchase.repository.impl;
 
-import com.puppynoteserver.pet.petItems.entity.PetItemPurchase;
-import com.puppynoteserver.pet.petItems.repository.PetItemPurchaseJpaRepository;
-import com.puppynoteserver.pet.petItems.repository.PetItemPurchaseRepository;
+import com.puppynoteserver.pet.petItemPurchase.entity.PetItemPurchase;
+import com.puppynoteserver.pet.petItemPurchase.repository.PetItemPurchaseJpaRepository;
+import com.puppynoteserver.pet.petItemPurchase.repository.PetItemPurchaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

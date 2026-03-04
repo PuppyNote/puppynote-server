@@ -1,6 +1,6 @@
-package com.puppynoteserver.pet.petItems.repository;
+package com.puppynoteserver.pet.petItemPurchase.repository;
 
-import com.puppynoteserver.pet.petItems.entity.PetItemPurchase;
+import com.puppynoteserver.pet.petItemPurchase.entity.PetItemPurchase;
 
 import java.util.List;
 import java.util.Optional;

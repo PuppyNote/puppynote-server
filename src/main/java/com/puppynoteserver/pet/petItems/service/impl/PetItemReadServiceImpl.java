@@ -1,10 +1,10 @@
 package com.puppynoteserver.pet.petItems.service.impl;
 
 import com.puppynoteserver.global.exception.NotFoundException;
+import com.puppynoteserver.pet.petItemPurchase.entity.PetItemPurchase;
+import com.puppynoteserver.pet.petItemPurchase.repository.PetItemPurchaseRepository;
 import com.puppynoteserver.pet.petItems.entity.PetItem;
-import com.puppynoteserver.pet.petItems.entity.PetItemPurchase;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
-import com.puppynoteserver.pet.petItems.repository.PetItemPurchaseRepository;
 import com.puppynoteserver.pet.petItems.repository.PetItemRepository;
 import com.puppynoteserver.pet.petItems.service.PetItemReadService;
 import com.puppynoteserver.pet.petItems.service.response.PetItemResponse;

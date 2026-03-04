@@ -1,6 +1,7 @@
-package com.puppynoteserver.pet.petItems.entity;
+package com.puppynoteserver.pet.petItemPurchase.entity;
 
 import com.puppynoteserver.global.BaseTimeEntity;
+import com.puppynoteserver.pet.petItems.entity.PetItem;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

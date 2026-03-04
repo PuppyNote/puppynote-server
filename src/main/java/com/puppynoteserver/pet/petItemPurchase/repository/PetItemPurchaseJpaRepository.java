@@ -1,6 +1,6 @@
-package com.puppynoteserver.pet.petItems.repository;
+package com.puppynoteserver.pet.petItemPurchase.repository;
 
-import com.puppynoteserver.pet.petItems.entity.PetItemPurchase;
+import com.puppynoteserver.pet.petItemPurchase.entity.PetItemPurchase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -7,8 +7,6 @@ import com.puppynoteserver.pet.petItems.service.request.PetItemCreateServiceRequ
 import com.puppynoteserver.pet.petItems.service.response.PetItemResponse;
 import com.puppynoteserver.pet.pets.entity.Pet;
 import com.puppynoteserver.pet.pets.service.PetReadService;
-import com.puppynoteserver.storage.enums.BucketKind;
-import com.puppynoteserver.storage.service.S3StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

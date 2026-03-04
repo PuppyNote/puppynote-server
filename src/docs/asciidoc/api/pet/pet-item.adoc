@@ -48,3 +48,17 @@ include::{snippets}/pet-item-detail/path-parameters.adoc[]
 
 include::{snippets}/pet-item-detail/http-response.adoc[]
 include::{snippets}/pet-item-detail/response-fields.adoc[]
+
+[[pet-item-purchase-create]]
+=== 용품 구매 이력 등록
+
+==== HTTP Request
+
+include::{snippets}/pet-item-purchase-create/http-request.adoc[]
+include::{snippets}/pet-item-purchase-create/path-parameters.adoc[]
+include::{snippets}/pet-item-purchase-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-purchase-create/http-response.adoc[]
+include::{snippets}/pet-item-purchase-create/response-fields.adoc[]
