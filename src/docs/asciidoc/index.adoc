@@ -8,6 +8,7 @@ endif::[]
 :toc: left
 :toclevels: 2
 :sectlinks:
+:favicon: favicon.png
 
 [[User-API]]
 == User API
