@@ -86,6 +86,31 @@ public class PetControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
+    @DisplayName("펫 삭제 API")
+    @Test
+    void deletePet() throws Exception {
+        doNothing().when(petWriteService).deletePet(anyLong());
+
+        mockMvc.perform(
+                        delete("/api/v1/pets/{petId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("pet-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("petId").description("삭제할 펫 ID (OWNER만 삭제 가능)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터 없음")
+                        )
+                ));
+    }
+
     @DisplayName("펫 프로필 수정 API")
     @Test
     void updatePet() throws Exception {
