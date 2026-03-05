@@ -21,4 +21,7 @@ public interface WalkJpaRepository extends JpaRepository<Walk, Long> {
     long countByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end);
 
     Optional<Walk> findTopByPetIdOrderByStartTimeDesc(Long petId);
+
+    @EntityGraph(attributePaths = {"photos"})
+    List<Walk> findAllByPetId(Long petId);
 }

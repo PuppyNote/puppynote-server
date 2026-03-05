@@ -35,4 +35,9 @@ public class PetRepositoryImpl implements PetRepository {
     public Optional<Pet> findById(Long petId) {
         return petJpaRepository.findById(petId);
     }
+
+    @Override
+    public void deleteById(Long petId) {
+        petJpaRepository.deleteById(petId);
+    }
 }

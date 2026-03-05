@@ -45,4 +45,10 @@ public class WalkRepositoryImpl implements WalkRepository {
     public Optional<Walk> findTopByPetIdOrderByStartTimeDesc(Long petId) {
         return walkJpaRepository.findTopByPetIdOrderByStartTimeDesc(petId);
     }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        List<Walk> walks = walkJpaRepository.findAllByPetId(petId);
+        walkJpaRepository.deleteAll(walks);
+    }
 }

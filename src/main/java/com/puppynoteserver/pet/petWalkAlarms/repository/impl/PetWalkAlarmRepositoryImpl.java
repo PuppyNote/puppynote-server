@@ -47,4 +47,9 @@ public class PetWalkAlarmRepositoryImpl implements PetWalkAlarmRepository {
     public List<PetWalkAlarm> findTodayAlarmsByPetId(Long petId, AlarmStatus status, AlarmDay day) {
         return petWalkAlarmJpaRepository.findTodayAlarmsByPetId(petId, status, day);
     }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        petWalkAlarmJpaRepository.deleteAllByPetId(petId);
+    }
 }

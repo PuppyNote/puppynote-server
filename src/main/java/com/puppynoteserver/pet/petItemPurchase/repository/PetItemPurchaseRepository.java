@@ -20,4 +20,6 @@ public interface PetItemPurchaseRepository {
     List<PetItemPurchase> findLatestPurchasesByPetId(Long petId);
 
     void deleteAllByPetItemId(Long petItemId);
+
+    void deleteAllByPetId(Long petId);
 }
