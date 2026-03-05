@@ -8,6 +8,7 @@ import com.puppynoteserver.pet.pets.service.PetWriteService;
 import com.puppynoteserver.pet.pets.service.request.PetCreateServiceRequest;
 import com.puppynoteserver.pet.pets.service.request.PetUpdateServiceRequest;
 import com.puppynoteserver.pet.pets.service.response.PetCreateResponse;
+import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
 import com.puppynoteserver.pet.pets.service.response.PetResponse;
 import docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -51,6 +52,7 @@ public class PetControllerDocsTest extends RestDocsSupport {
         given(petResponse.getPetProfileUrl()).willReturn(
                 "https://puppy-profile.s3.ap-northeast-2.amazonaws.com/550e8400.jpg?X-Amz-Expires=3600"
         );
+        given(petResponse.getRoleType()).willReturn(RoleType.OWNER);
 
         given(petReadService.getMyPets())
                 .willReturn(List.of(petResponse));
@@ -77,7 +79,9 @@ public class PetControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].petName").type(JsonFieldType.STRING)
                                         .description("펫 이름"),
                                 fieldWithPath("data[].petProfileUrl").type(JsonFieldType.STRING)
-                                        .description("펫 프로필 이미지 Presigned URL (유효시간 1시간)").optional()
+                                        .description("펫 프로필 이미지 Presigned URL (유효시간 1시간)").optional(),
+                                fieldWithPath("data[].roleType").type(JsonFieldType.STRING)
+                                        .description("현재 사용자의 역할 (OWNER: 주인, FAMILY: 가족)")
                         )
                 ));
     }

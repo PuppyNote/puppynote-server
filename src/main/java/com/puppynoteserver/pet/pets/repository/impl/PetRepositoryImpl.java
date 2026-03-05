@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.pets.repository.impl;
 
+import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
 import com.puppynoteserver.pet.pets.entity.Pet;
 import com.puppynoteserver.pet.pets.repository.PetJpaRepository;
 import com.puppynoteserver.pet.pets.repository.PetRepository;
@@ -18,6 +19,11 @@ public class PetRepositoryImpl implements PetRepository {
     @Override
     public List<Pet> findByUserId(Long userId) {
         return petJpaRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<FamilyMember> findFamilyMembersByUserId(Long userId) {
+        return petJpaRepository.findFamilyMembersByUserId(userId);
     }
 
     @Override

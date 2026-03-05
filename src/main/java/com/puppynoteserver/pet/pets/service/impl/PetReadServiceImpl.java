@@ -2,6 +2,7 @@ package com.puppynoteserver.pet.pets.service.impl;
 
 import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.global.security.SecurityService;
+import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
 import com.puppynoteserver.pet.pets.entity.Pet;
 import com.puppynoteserver.pet.pets.repository.PetRepository;
 import com.puppynoteserver.pet.pets.service.PetReadService;
@@ -26,10 +27,11 @@ public class PetReadServiceImpl implements PetReadService {
     @Override
     public List<PetResponse> getMyPets() {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
-        return petRepository.findByUserId(userId).stream()
-                .map(pet -> PetResponse.of(
-                        pet,
-                        s3StorageService.createPresignedUrl(pet.getProfileImage(), BucketKind.PUPPY_PROFILE)
+        return petRepository.findFamilyMembersByUserId(userId).stream()
+                .map(fm -> PetResponse.of(
+                        fm.getPet(),
+                        s3StorageService.createPresignedUrl(fm.getPet().getProfileImage(), BucketKind.PUPPY_PROFILE),
+                        fm.getRole()
                 ))
                 .toList();
     }
