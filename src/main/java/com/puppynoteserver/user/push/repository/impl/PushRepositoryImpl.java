@@ -34,4 +34,9 @@ public class PushRepositoryImpl implements PushRepository {
     public Optional<Push> findByUserId(Long userId) {
         return pushJpaRepository.findByUserId(userId);
     }
+
+    @Override
+    public List<Push> findAllByUserId(Long userId) {
+        return pushJpaRepository.findAllByUserId(userId);
+    }
 }

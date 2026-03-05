@@ -9,6 +9,7 @@ import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberRepository;
 import com.puppynoteserver.pet.petItemPurchase.entity.PetItemPurchase;
 import com.puppynoteserver.pet.petItemPurchase.repository.PetItemPurchaseRepository;
 import com.puppynoteserver.pet.petItems.entity.PetItem;
+import com.puppynoteserver.user.push.entity.Push;
 import com.puppynoteserver.user.push.repository.PushRepository;
 import com.puppynoteserver.user.users.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -54,19 +55,25 @@ public class PetItemPurchaseBatch {
             for (FamilyMember fm : familyMembers) {
                 User user = fm.getUser();
 
-                pushRepository.findByUserId(user.getId()).ifPresent(push ->
-                        firebaseService.sendPushNotification(
-                                SendFirebaseServiceRequest.builder()
-                                        .push(push)
-                                        .sound("default")
-                                        .body(petItem.getName() + " 구매 예정일이 내일입니다!")
-                                        .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                                                .alert_destination_type(AlertDestinationType.PET_ITEM)
-                                                .alert_destination_info(String.valueOf(petItem.getId()))
-                                                .build())
-                                        .build()
-                        )
-                );
+                List<Push> pushes = pushRepository.findAllByUserId(user.getId());
+                if (pushes.isEmpty()) {
+                    log.warn("구매용품 알림 스킵 - userId: {}, 등록된 pushToken 없음", user.getId());
+                    continue;
+                }
+                for (Push push : pushes) {
+                    log.info("구매용품 알림 전송 시도 - userId: {}, deviceId: {}, pushToken: {}", user.getId(), push.getDeviceId(), push.getPushToken());
+                    firebaseService.sendPushNotification(
+                            SendFirebaseServiceRequest.builder()
+                                    .push(push)
+                                    .sound("default")
+                                    .body(petItem.getName() + " 구매 예정일이 내일입니다!")
+                                    .sendFirebaseDataDto(SendFirebaseDataDto.builder()
+                                            .alert_destination_type(AlertDestinationType.PET_ITEM)
+                                            .alert_destination_info(String.valueOf(petItem.getId()))
+                                            .build())
+                                    .build()
+                    );
+                }
             }
         }
     }

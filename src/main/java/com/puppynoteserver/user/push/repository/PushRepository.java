@@ -11,4 +11,6 @@ public interface PushRepository {
 	Push save(Push push);
 	void saveAll(List<Push> pushes);
 	Optional<Push> findByUserId(Long userId);
+
+	List<Push> findAllByUserId(Long userId);
 }

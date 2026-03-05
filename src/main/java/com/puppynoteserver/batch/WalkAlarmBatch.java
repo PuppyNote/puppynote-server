@@ -13,6 +13,7 @@ import com.puppynoteserver.pet.petWalkAlarms.entity.PetWalkAlarm;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmDay;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmStatus;
 import com.puppynoteserver.pet.petWalkAlarms.repository.PetWalkAlarmRepository;
+import com.puppynoteserver.user.push.entity.Push;
 import com.puppynoteserver.user.push.repository.PushRepository;
 import com.puppynoteserver.user.users.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -62,23 +63,25 @@ public class WalkAlarmBatch {
                     continue;
                 }
 
-                pushRepository.findByUserId(user.getId()).ifPresentOrElse(
-                        push -> {
-                            log.info("산책 알림 전송 시도 - userId: {}, pushToken: {}", user.getId(), push.getPushToken());
-                            firebaseService.sendPushNotification(
-                                    SendFirebaseServiceRequest.builder()
-                                            .push(push)
-                                            .sound("default")
-                                            .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
-                                            .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                                                    .alert_destination_type(AlertDestinationType.WALK)
-                                                    .alert_destination_info(String.valueOf(alarm.getPet().getId()))
-                                                    .build())
-                                            .build()
-                            );
-                        },
-                        () -> log.warn("산책 알림 스킵 - userId: {}, 등록된 pushToken 없음", user.getId())
-                );
+                List<Push> pushes = pushRepository.findAllByUserId(user.getId());
+                if (pushes.isEmpty()) {
+                    log.warn("산책 알림 스킵 - userId: {}, 등록된 pushToken 없음", user.getId());
+                    continue;
+                }
+                for (Push push : pushes) {
+                    log.info("산책 알림 전송 시도 - userId: {}, deviceId: {}, pushToken: {}", user.getId(), push.getDeviceId(), push.getPushToken());
+                    firebaseService.sendPushNotification(
+                            SendFirebaseServiceRequest.builder()
+                                    .push(push)
+                                    .sound("default")
+                                    .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
+                                    .sendFirebaseDataDto(SendFirebaseDataDto.builder()
+                                            .alert_destination_type(AlertDestinationType.WALK)
+                                            .alert_destination_info(String.valueOf(alarm.getPet().getId()))
+                                            .build())
+                                    .build()
+                    );
+                }
             }
         }
     }
