@@ -15,16 +15,19 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.puppynoteserver.pet.petItems.controller.request.PetItemUpdateRequest;
+import com.puppynoteserver.pet.petItems.service.request.PetItemUpdateServiceRequest;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -246,6 +249,121 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
                                         .description("최근 구매일 (yyyy-MM-dd)").optional(),
                                 fieldWithPath("data[].nextPurchaseAt").type(JsonFieldType.STRING)
                                         .description("다음 구매 예정일 (yyyy-MM-dd)").optional()
+                        )
+                ));
+    }
+
+    @DisplayName("용품 수정 API")
+    @Test
+    void updatePetItem() throws Exception {
+        PetItemUpdateRequest request = PetItemUpdateRequest.builder()
+                .name("로얄캐닌 미니 어덜트 2kg")
+                .category(ItemCategory.FOOD)
+                .purchaseCycleDays(45)
+                .purchaseUrl("https://www.coupang.com/vp/products/updated")
+                .imageKey("pet-item-image/updated123.jpg")
+                .build();
+
+        PetItemResponse response = mock(PetItemResponse.class);
+        given(response.getPetItemId()).willReturn(1L);
+        given(response.getPetId()).willReturn(1L);
+        given(response.getName()).willReturn("로얄캐닌 미니 어덜트 2kg");
+        given(response.getMajorCategory()).willReturn("FOOD_NUTRITION");
+        given(response.getMajorCategoryName()).willReturn("식품/영양");
+        given(response.getMajorCategoryEmoji()).willReturn("🍖");
+        given(response.getCategory()).willReturn(ItemCategory.FOOD);
+        given(response.getCategoryName()).willReturn("사료");
+        given(response.getCategoryEmoji()).willReturn("🍚");
+        given(response.getPurchaseCycleDays()).willReturn(45);
+        given(response.getPurchaseUrl()).willReturn("https://www.coupang.com/vp/products/updated");
+        given(response.getImageUrl()).willReturn(
+                "https://pet-item-image.s3.ap-northeast-2.amazonaws.com/updated123.jpg?X-Amz-Expires=3600"
+        );
+        given(response.getLastPurchasedAt()).willReturn(null);
+        given(response.getNextPurchaseAt()).willReturn(null);
+        given(petItemWriteService.update(anyLong(), any(PetItemUpdateServiceRequest.class))).willReturn(response);
+
+        mockMvc.perform(
+                        patch("/api/v1/pet-items/{petItemId}", 1L)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("pet-item-update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("petItemId").description("수정할 용품 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("name").type(JsonFieldType.STRING)
+                                        .description("용품명"),
+                                fieldWithPath("category").type(JsonFieldType.STRING)
+                                        .description("소분류 카테고리 코드 (공통코드 조회 API 참고)"),
+                                fieldWithPath("purchaseCycleDays").type(JsonFieldType.NUMBER)
+                                        .description("구매 주기 (일 단위, 최소 1)"),
+                                fieldWithPath("purchaseUrl").type(JsonFieldType.STRING)
+                                        .description("구매 링크 URL").optional(),
+                                fieldWithPath("imageKey").type(JsonFieldType.STRING)
+                                        .description("용품 이미지 S3 Object Key (Storage API 업로드 후 반환값)").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.petItemId").type(JsonFieldType.NUMBER)
+                                        .description("용품 ID"),
+                                fieldWithPath("data.petId").type(JsonFieldType.NUMBER)
+                                        .description("펫 ID"),
+                                fieldWithPath("data.name").type(JsonFieldType.STRING)
+                                        .description("용품명"),
+                                fieldWithPath("data.majorCategory").type(JsonFieldType.STRING)
+                                        .description("대분류 코드"),
+                                fieldWithPath("data.majorCategoryName").type(JsonFieldType.STRING)
+                                        .description("대분류명"),
+                                fieldWithPath("data.majorCategoryEmoji").type(JsonFieldType.STRING)
+                                        .description("대분류 이모지"),
+                                fieldWithPath("data.category").type(JsonFieldType.STRING)
+                                        .description("소분류 코드"),
+                                fieldWithPath("data.categoryName").type(JsonFieldType.STRING)
+                                        .description("소분류명"),
+                                fieldWithPath("data.categoryEmoji").type(JsonFieldType.STRING)
+                                        .description("소분류 이모지"),
+                                fieldWithPath("data.purchaseCycleDays").type(JsonFieldType.NUMBER)
+                                        .description("구매 주기 (일)"),
+                                fieldWithPath("data.purchaseUrl").type(JsonFieldType.STRING)
+                                        .description("구매 링크 URL").optional(),
+                                fieldWithPath("data.imageUrl").type(JsonFieldType.STRING)
+                                        .description("용품 이미지 Presigned URL (유효시간 1시간)").optional(),
+                                fieldWithPath("data.lastPurchasedAt").type(JsonFieldType.STRING)
+                                        .description("최근 구매일 (yyyy-MM-dd)").optional(),
+                                fieldWithPath("data.nextPurchaseAt").type(JsonFieldType.STRING)
+                                        .description("다음 구매 예정일 (yyyy-MM-dd)").optional()
+                        )
+                ));
+    }
+
+    @DisplayName("용품 삭제 API")
+    @Test
+    void deletePetItem() throws Exception {
+        doNothing().when(petItemWriteService).delete(anyLong());
+
+        mockMvc.perform(
+                        delete("/api/v1/pet-items/{petItemId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("pet-item-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("petItemId").description("삭제할 용품 ID")
                         )
                 ));
     }
