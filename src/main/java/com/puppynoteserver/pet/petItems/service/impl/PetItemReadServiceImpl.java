@@ -71,8 +71,7 @@ public class PetItemReadServiceImpl implements PetItemReadService {
 
     @Override
     public PetItemResponse getItemDetail(Long petItemId) {
-        PetItem petItem = petItemRepository.findById(petItemId)
-                .orElseThrow(() -> new NotFoundException("용품 정보를 찾을 수 없습니다."));
+        PetItem petItem = findById(petItemId);
 
         LocalDate lastPurchasedAt = petItemPurchaseReadService.findLatestPurchaseDateByPetItemId(petItemId)
                 .orElse(null);

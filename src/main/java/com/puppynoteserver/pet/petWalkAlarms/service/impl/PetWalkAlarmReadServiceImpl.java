@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.petWalkAlarms.service.impl;
 
+import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.pet.petWalkAlarms.entity.PetWalkAlarm;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmDay;
 import com.puppynoteserver.pet.petWalkAlarms.entity.enums.AlarmStatus;
@@ -21,6 +22,12 @@ import java.util.List;
 public class PetWalkAlarmReadServiceImpl implements PetWalkAlarmReadService {
 
     private final PetWalkAlarmRepository petWalkAlarmRepository;
+
+    @Override
+    public PetWalkAlarm findById(Long alarmId) {
+        return petWalkAlarmRepository.findById(alarmId)
+                .orElseThrow(() -> new NotFoundException("알람을 찾을 수 없습니다."));
+    }
 
     @Override
     public List<PetWalkAlarmResponse> getAlarmsByPetId(Long petId) {

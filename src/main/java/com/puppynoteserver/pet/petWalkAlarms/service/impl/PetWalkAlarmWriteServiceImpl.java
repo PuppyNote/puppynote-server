@@ -1,8 +1,8 @@
 package com.puppynoteserver.pet.petWalkAlarms.service.impl;
 
-import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.pet.petWalkAlarms.entity.PetWalkAlarm;
 import com.puppynoteserver.pet.petWalkAlarms.repository.PetWalkAlarmRepository;
+import com.puppynoteserver.pet.petWalkAlarms.service.PetWalkAlarmReadService;
 import com.puppynoteserver.pet.petWalkAlarms.service.PetWalkAlarmWriteService;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmCreateServiceRequest;
 import com.puppynoteserver.pet.petWalkAlarms.service.request.PetWalkAlarmStatusUpdateServiceRequest;
@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PetWalkAlarmWriteServiceImpl implements PetWalkAlarmWriteService {
 
     private final PetWalkAlarmRepository petWalkAlarmRepository;
+    private final PetWalkAlarmReadService petWalkAlarmReadService;
     private final PetReadService petReadService;
 
     @Override
@@ -31,16 +32,14 @@ public class PetWalkAlarmWriteServiceImpl implements PetWalkAlarmWriteService {
 
     @Override
     public PetWalkAlarmResponse update(PetWalkAlarmUpdateServiceRequest request) {
-        PetWalkAlarm petWalkAlarm = petWalkAlarmRepository.findById(request.getAlarmId())
-                .orElseThrow(() -> new NotFoundException("알람을 찾을 수 없습니다."));
+        PetWalkAlarm petWalkAlarm = petWalkAlarmReadService.findById(request.getAlarmId());
         request.applyTo(petWalkAlarm);
         return PetWalkAlarmResponse.from(petWalkAlarm);
     }
 
     @Override
     public PetWalkAlarmResponse updateStatus(PetWalkAlarmStatusUpdateServiceRequest request) {
-        PetWalkAlarm petWalkAlarm = petWalkAlarmRepository.findById(request.getAlarmId())
-                .orElseThrow(() -> new NotFoundException("알람을 찾을 수 없습니다."));
+        PetWalkAlarm petWalkAlarm = petWalkAlarmReadService.findById(request.getAlarmId());
         request.applyTo(petWalkAlarm);
         return PetWalkAlarmResponse.from(petWalkAlarm);
     }

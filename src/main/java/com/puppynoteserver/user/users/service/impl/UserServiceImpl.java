@@ -7,6 +7,7 @@ import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.entity.enums.Role;
 import com.puppynoteserver.user.users.entity.enums.SnsType;
 import com.puppynoteserver.user.users.repository.UserRepository;
+import com.puppynoteserver.user.users.service.UserReadService;
 import com.puppynoteserver.user.users.service.UserService;
 import com.puppynoteserver.user.users.service.request.EmailSendServiceRequest;
 import com.puppynoteserver.user.users.service.request.SignUpServiceRequest;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserReadService userReadService;
     private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final SecurityService securityService;
@@ -51,8 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfile(UserProfileUpdateServiceRequest request) {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new PuppyNoteException("해당 회원은 존재하지 않습니다."));
+        User user = userReadService.findById(userId);
         user.updateNickName(request.getNickName());
         user.updateProfileUrl(request.getProfileUrl());
     }

@@ -104,9 +104,14 @@ public class WalkReadServiceImpl implements WalkReadService {
     }
 
     @Override
-    public WalkDetailResponse getWalkDetail(Long walkId) {
-        Walk walk = walkRepository.findById(walkId)
+    public Walk findById(Long walkId) {
+        return walkRepository.findById(walkId)
                 .orElseThrow(() -> new NotFoundException("산책 기록을 찾을 수 없습니다."));
+    }
+
+    @Override
+    public WalkDetailResponse getWalkDetail(Long walkId) {
+        Walk walk = findById(walkId);
 
         List<String> photoUrls = walk.getPhotos().stream()
                 .map(photo -> s3StorageService.createPresignedUrl(photo.getImageKey(), BucketKind.WALK_PHOTO))

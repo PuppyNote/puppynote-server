@@ -12,6 +12,7 @@ import com.puppynoteserver.pet.petItems.service.PetItemWriteService;
 import com.puppynoteserver.pet.petWalkAlarms.service.PetWalkAlarmWriteService;
 import com.puppynoteserver.pet.pets.entity.Pet;
 import com.puppynoteserver.pet.pets.repository.PetRepository;
+import com.puppynoteserver.pet.pets.service.PetReadService;
 import com.puppynoteserver.pet.pets.service.PetWriteService;
 import com.puppynoteserver.pet.pets.service.request.PetCreateServiceRequest;
 import com.puppynoteserver.pet.pets.service.request.PetUpdateServiceRequest;
@@ -30,6 +31,7 @@ public class PetWriteServiceImpl implements PetWriteService {
 
 
     private final PetRepository petRepository;
+    private final PetReadService petReadService;
     private final FamilyMemberService familyMemberService;
     private final FamilyMemberWriteService familyMemberWriteService;
     private final PetItemWriteService petItemWriteService;
@@ -53,15 +55,13 @@ public class PetWriteServiceImpl implements PetWriteService {
 
     @Override
     public void updatePet(Long petId, PetUpdateServiceRequest request) {
-        Pet pet = petRepository.findById(petId)
-                .orElseThrow(() -> new NotFoundException("펫을 찾을 수 없습니다."));
+        Pet pet = petReadService.findById(petId);
         pet.updateInfo(request.getName(), request.getBirthDate(), request.getProfileImage());
     }
 
     @Override
     public void deletePet(Long petId) {
-        petRepository.findById(petId)
-                .orElseThrow(() -> new NotFoundException("펫을 찾을 수 없습니다."));
+        petReadService.findById(petId);
 
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
         FamilyMember familyMember = familyMemberService.findByUserIdAndPetId(userId, petId)
