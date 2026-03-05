@@ -68,20 +68,19 @@ public class WalkAlarmBatch {
                     log.warn("산책 알림 스킵 - userId: {}, 등록된 pushToken 없음", user.getId());
                     continue;
                 }
-                for (Push push : pushes) {
-                    log.info("산책 알림 전송 시도 - userId: {}, deviceId: {}, pushToken: {}", user.getId(), push.getDeviceId(), push.getPushToken());
-                    firebaseService.sendPushNotification(
-                            SendFirebaseServiceRequest.builder()
-                                    .push(push)
-                                    .sound("default")
-                                    .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
-                                    .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                                            .alert_destination_type(AlertDestinationType.WALK)
-                                            .alert_destination_info(String.valueOf(alarm.getPet().getId()))
-                                            .build())
-                                    .build()
-                    );
-                }
+                log.info("산책 알림 전송 시도 - userId: {}, 디바이스 수: {}", user.getId(), pushes.size());
+                firebaseService.sendPushNotificationToAll(
+                        pushes,
+                        SendFirebaseServiceRequest.builder()
+                                .push(pushes.get(0))
+                                .sound("default")
+                                .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
+                                .sendFirebaseDataDto(SendFirebaseDataDto.builder()
+                                        .alert_destination_type(AlertDestinationType.WALK)
+                                        .alert_destination_info(String.valueOf(alarm.getPet().getId()))
+                                        .build())
+                                .build()
+                );
             }
         }
     }

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,57 +28,73 @@ public class FirebaseService {
     private final ObjectMapper objectMapper;
 
     public void sendPushNotification(SendFirebaseServiceRequest sendPushServiceRequest) {
+        sendFcm(sendPushServiceRequest.getPush(), sendPushServiceRequest);
+        // AlertHistory 저장
+        alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
+    }
+
+    // 여러 디바이스에 발송하되 AlertHistory는 사용자당 한 번만 저장
+    public void sendPushNotificationToAll(List<Push> pushes, SendFirebaseServiceRequest baseRequest) {
+        for (Push push : pushes) {
+            sendFcm(push, baseRequest);
+        }
+        // AlertHistory는 첫 번째 push의 User 기준으로 한 번만 저장
+        if (!pushes.isEmpty()) {
+            SendFirebaseServiceRequest requestForHistory = SendFirebaseServiceRequest.builder()
+                    .push(pushes.get(0))
+                    .sound(baseRequest.getSound())
+                    .body(baseRequest.getBody())
+                    .sendFirebaseDataDto(baseRequest.getSendFirebaseDataDto())
+                    .build();
+            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(requestForHistory));
+        }
+    }
+
+    private void sendFcm(Push push, SendFirebaseServiceRequest sendPushServiceRequest) {
         try {
-            // PushToken이 있으면 푸시전송
-            Push push = sendPushServiceRequest.getPush();
-            if (push != null) {
-                Map<String, Object> customData = ObjectToMap(sendPushServiceRequest.getSendFirebaseDataDto());
-                // String으로 변환하여 Android data payload에도 사용
-                Map<String, String> stringData = customData.entrySet().stream()
-                        .collect(java.util.stream.Collectors.toMap(
-                                Map.Entry::getKey,
-                                e -> e.getValue() == null ? "" : e.getValue().toString()
-                        ));
+            if (push == null) return;
 
-                String title = PushMessage.from(sendPushServiceRequest.getSendFirebaseDataDto().getAlert_destination_type()).getText();
+            Map<String, Object> customData = ObjectToMap(sendPushServiceRequest.getSendFirebaseDataDto());
+            Map<String, String> stringData = customData.entrySet().stream()
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            e -> e.getValue() == null ? "" : e.getValue().toString()
+                    ));
 
-                Message message = Message.builder()
-                        // iOS/Android 공통 알림
-                        .setNotification(Notification.builder()
-                                .setTitle(title)
-                                .setBody(sendPushServiceRequest.getBody())
-                                .build())
-                        // iOS 전용 설정
-                        .setApnsConfig(ApnsConfig.builder()
-                                .setAps(Aps.builder()
-                                        .putAllCustomData(customData)
-                                        .setSound(sendPushServiceRequest.getSound())
-                                        .build())
-                                .build())
-                        // Android 전용 설정
-                        .setAndroidConfig(AndroidConfig.builder()
-                                .putAllData(stringData)
-                                .setNotification(AndroidNotification.builder()
-                                        .setSound(sendPushServiceRequest.getSound())
-                                        .build())
-                                .build())
-                        .setToken(push.getPushToken())
-                        .build();
+            String title = PushMessage.from(sendPushServiceRequest.getSendFirebaseDataDto().getAlert_destination_type()).getText();
 
-                String messageId = firebaseMessaging.send(message);
-                log.info("푸시 전송 성공 - token: {}, messageId: {}", push.getPushToken(), messageId);
-            }
+            Message message = Message.builder()
+                    // iOS/Android 공통 알림
+                    .setNotification(Notification.builder()
+                            .setTitle(title)
+                            .setBody(sendPushServiceRequest.getBody())
+                            .build())
+                    // iOS 전용 설정
+                    .setApnsConfig(ApnsConfig.builder()
+                            .setAps(Aps.builder()
+                                    .putAllCustomData(customData)
+                                    .setSound(sendPushServiceRequest.getSound())
+                                    .build())
+                            .build())
+                    // Android 전용 설정
+                    .setAndroidConfig(AndroidConfig.builder()
+                            .putAllData(stringData)
+                            .setNotification(AndroidNotification.builder()
+                                    .setSound(sendPushServiceRequest.getSound())
+                                    .build())
+                            .build())
+                    .setToken(push.getPushToken())
+                    .build();
+
+            String messageId = firebaseMessaging.send(message);
+            log.info("푸시 전송 성공 - token: {}, messageId: {}", push.getPushToken(), messageId);
         } catch (FirebaseMessagingException e) {
             log.error("푸시 전송 실패 (FCM) - token: {}, errorCode: {}, message: {}",
-                    sendPushServiceRequest.getPush().getPushToken(), e.getMessagingErrorCode(), e.getMessage());
+                    push.getPushToken(), e.getMessagingErrorCode(), e.getMessage());
         } catch (Exception e) {
             log.error("푸시 전송 실패 (기타 예외) - token: {}, exceptionType: {}, message: {}",
-                    sendPushServiceRequest.getPush().getPushToken(), e.getClass().getName(), e.getMessage());
-        } finally {
-            //히스토리는 무조건 쌓는걸로
-            alertHistoryService.createAlertHistory(AlertHistoryServiceRequest.of(sendPushServiceRequest));
+                    push.getPushToken(), e.getClass().getName(), e.getMessage());
         }
-
     }
 
     private Map<String, Object> ObjectToMap(SendFirebaseDataDto sendFirebaseDataDto) {

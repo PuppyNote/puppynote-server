@@ -60,20 +60,19 @@ public class PetItemPurchaseBatch {
                     log.warn("구매용품 알림 스킵 - userId: {}, 등록된 pushToken 없음", user.getId());
                     continue;
                 }
-                for (Push push : pushes) {
-                    log.info("구매용품 알림 전송 시도 - userId: {}, deviceId: {}, pushToken: {}", user.getId(), push.getDeviceId(), push.getPushToken());
-                    firebaseService.sendPushNotification(
-                            SendFirebaseServiceRequest.builder()
-                                    .push(push)
-                                    .sound("default")
-                                    .body(petItem.getName() + " 구매 예정일이 내일입니다!")
-                                    .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                                            .alert_destination_type(AlertDestinationType.PET_ITEM)
-                                            .alert_destination_info(String.valueOf(petItem.getId()))
-                                            .build())
-                                    .build()
-                    );
-                }
+                log.info("구매용품 알림 전송 시도 - userId: {}, 디바이스 수: {}", user.getId(), pushes.size());
+                firebaseService.sendPushNotificationToAll(
+                        pushes,
+                        SendFirebaseServiceRequest.builder()
+                                .push(pushes.get(0))
+                                .sound("default")
+                                .body(petItem.getName() + " 구매 예정일이 내일입니다!")
+                                .sendFirebaseDataDto(SendFirebaseDataDto.builder()
+                                        .alert_destination_type(AlertDestinationType.PET_ITEM)
+                                        .alert_destination_info(String.valueOf(petItem.getId()))
+                                        .build())
+                                .build()
+                );
             }
         }
     }
