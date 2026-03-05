@@ -358,12 +358,22 @@ public class PetItemControllerDocsTest extends RestDocsSupport {
                         delete("/api/v1/pet-items/{petItemId}", 1L)
                 )
                 .andDo(print())
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andDo(document("pet-item-delete",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("petItemId").description("삭제할 용품 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL)
+                                        .description("응답 데이터 (없음)")
                         )
                 ));
     }

@@ -74,6 +74,7 @@ include::{snippets}/pet-item-delete/path-parameters.adoc[]
 ==== HTTP Response
 
 include::{snippets}/pet-item-delete/http-response.adoc[]
+include::{snippets}/pet-item-delete/response-fields.adoc[]
 
 [[pet-item-purchase-create]]
 === 용품 구매 이력 등록

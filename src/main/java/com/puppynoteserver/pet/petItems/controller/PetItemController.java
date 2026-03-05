@@ -53,9 +53,9 @@ public class PetItemController {
         return ApiResponse.ok(petItemWriteService.update(petItemId, request.toServiceRequest()));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{petItemId}")
-    public void deletePetItem(@PathVariable Long petItemId) {
+    public ApiResponse<Void> deletePetItem(@PathVariable Long petItemId) {
         petItemWriteService.delete(petItemId);
+        return ApiResponse.ok(null);
     }
 }
