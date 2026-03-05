@@ -17,4 +17,6 @@ public interface PetItemRepository {
     List<PetItem> findByPetIdAndCategory(Long petId, ItemCategory category);
 
     long countByPetId(Long petId);
+
+    void deleteById(Long id);
 }
