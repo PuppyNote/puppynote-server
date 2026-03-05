@@ -45,4 +45,6 @@ public interface PetItemPurchaseJpaRepository extends JpaRepository<PetItemPurch
               )
             """)
     List<PetItemPurchase> findLatestPurchasesByPetId(@Param("petId") Long petId);
+
+    void deleteAllByPetItemId(Long petItemId);
 }

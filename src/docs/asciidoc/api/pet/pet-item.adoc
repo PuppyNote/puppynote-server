@@ -49,6 +49,33 @@ include::{snippets}/pet-item-detail/path-parameters.adoc[]
 include::{snippets}/pet-item-detail/http-response.adoc[]
 include::{snippets}/pet-item-detail/response-fields.adoc[]
 
+[[pet-item-update]]
+=== 용품 수정
+
+==== HTTP Request
+
+include::{snippets}/pet-item-update/http-request.adoc[]
+include::{snippets}/pet-item-update/path-parameters.adoc[]
+include::{snippets}/pet-item-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-update/http-response.adoc[]
+include::{snippets}/pet-item-update/response-fields.adoc[]
+
+[[pet-item-delete]]
+=== 용품 삭제
+
+==== HTTP Request
+
+include::{snippets}/pet-item-delete/http-request.adoc[]
+include::{snippets}/pet-item-delete/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-delete/http-response.adoc[]
+include::{snippets}/pet-item-delete/response-fields.adoc[]
+
 [[pet-item-purchase-create]]
 === 용품 구매 이력 등록
 

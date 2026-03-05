@@ -40,4 +40,9 @@ public class PetItemRepositoryImpl implements PetItemRepository {
     public long countByPetId(Long petId) {
         return petItemJpaRepository.countByPetId(petId);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        petItemJpaRepository.deleteById(id);
+    }
 }

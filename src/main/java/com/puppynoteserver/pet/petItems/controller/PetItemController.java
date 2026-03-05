@@ -2,6 +2,7 @@ package com.puppynoteserver.pet.petItems.controller;
 
 import com.puppynoteserver.global.ApiResponse;
 import com.puppynoteserver.pet.petItems.controller.request.PetItemCreateRequest;
+import com.puppynoteserver.pet.petItems.controller.request.PetItemUpdateRequest;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
 import com.puppynoteserver.pet.petItems.service.PetItemReadService;
 import com.puppynoteserver.pet.petItems.service.PetItemWriteService;
@@ -43,5 +44,18 @@ public class PetItemController {
     @GetMapping("/categories")
     public ApiResponse<List<ItemCategoryGroupResponse>> getCategories() {
         return ApiResponse.ok(ItemCategoryGroupResponse.ofAll());
+    }
+
+    @PatchMapping("/{petItemId}")
+    public ApiResponse<PetItemResponse> updatePetItem(
+            @PathVariable Long petItemId,
+            @Valid @RequestBody PetItemUpdateRequest request) {
+        return ApiResponse.ok(petItemWriteService.update(petItemId, request.toServiceRequest()));
+    }
+
+    @DeleteMapping("/{petItemId}")
+    public ApiResponse<Void> deletePetItem(@PathVariable Long petItemId) {
+        petItemWriteService.delete(petItemId);
+        return ApiResponse.ok(null);
     }
 }

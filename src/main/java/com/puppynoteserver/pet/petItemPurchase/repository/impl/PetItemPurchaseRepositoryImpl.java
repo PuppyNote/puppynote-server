@@ -47,4 +47,9 @@ public class PetItemPurchaseRepositoryImpl implements PetItemPurchaseRepository 
     public List<PetItemPurchase> findLatestPurchasesByPetId(Long petId) {
         return petItemPurchaseJpaRepository.findLatestPurchasesByPetId(petId);
     }
+
+    @Override
+    public void deleteAllByPetItemId(Long petItemId) {
+        petItemPurchaseJpaRepository.deleteAllByPetItemId(petItemId);
+    }
 }
