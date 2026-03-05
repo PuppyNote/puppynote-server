@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.petItems.service;
 
+import com.puppynoteserver.pet.petItems.entity.PetItem;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
 import com.puppynoteserver.pet.petItems.service.response.PetItemResponse;
 
@@ -13,4 +14,5 @@ public interface PetItemReadService {
 
     long countItemsByPetId(Long petId);
 
+    PetItem findById(Long petItemId);
 }

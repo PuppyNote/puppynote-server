@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -17,5 +19,10 @@ public class FamilyMemberServiceImpl implements FamilyMemberService {
     @Override
     public FamilyMember save(FamilyMember familyMember) {
         return familyMemberRepository.save(familyMember);
+    }
+
+    @Override
+    public Optional<FamilyMember> findByUserIdAndPetId(Long userId, Long petId) {
+        return familyMemberRepository.findByUserIdAndPetId(userId, petId);
     }
 }

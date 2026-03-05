@@ -6,4 +6,6 @@ import com.puppynoteserver.pet.walk.service.response.WalkResponse;
 public interface WalkWriteService {
 
     WalkResponse create(WalkCreateServiceRequest request);
+
+    void deleteAllByPetId(Long petId);
 }

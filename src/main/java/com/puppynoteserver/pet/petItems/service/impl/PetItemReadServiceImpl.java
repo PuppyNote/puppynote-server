@@ -1,8 +1,7 @@
 package com.puppynoteserver.pet.petItems.service.impl;
 
 import com.puppynoteserver.global.exception.NotFoundException;
-import com.puppynoteserver.pet.petItemPurchase.entity.PetItemPurchase;
-import com.puppynoteserver.pet.petItemPurchase.repository.PetItemPurchaseRepository;
+import com.puppynoteserver.pet.petItemPurchase.service.PetItemPurchaseReadService;
 import com.puppynoteserver.pet.petItems.entity.PetItem;
 import com.puppynoteserver.pet.petItems.entity.enums.ItemCategory;
 import com.puppynoteserver.pet.petItems.repository.PetItemRepository;
@@ -18,7 +17,6 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 public class PetItemReadServiceImpl implements PetItemReadService {
 
     private final PetItemRepository petItemRepository;
-    private final PetItemPurchaseRepository petItemPurchaseRepository;
+    private final PetItemPurchaseReadService petItemPurchaseReadService;
     private final S3StorageService s3StorageService;
 
     @Override
@@ -41,12 +39,7 @@ public class PetItemReadServiceImpl implements PetItemReadService {
 
         // 최근 구매일 배치 조회 (N+1 방지)
         List<Long> petItemIds = items.stream().map(PetItem::getId).toList();
-        Map<Long, LocalDate> latestPurchaseDateMap = petItemPurchaseRepository.findLatestByPetItemIds(petItemIds)
-                .stream()
-                .collect(Collectors.toMap(
-                        purchase -> purchase.getPetItem().getId(),
-                        PetItemPurchase::getPurchasedAt
-                ));
+        Map<Long, LocalDate> latestPurchaseDateMap = petItemPurchaseReadService.findLatestPurchaseDatesByPetItemIds(petItemIds);
 
         LocalDate today = LocalDate.now();
 
@@ -71,12 +64,17 @@ public class PetItemReadServiceImpl implements PetItemReadService {
     }
 
     @Override
+    public PetItem findById(Long petItemId) {
+        return petItemRepository.findById(petItemId)
+                .orElseThrow(() -> new NotFoundException("용품 정보를 찾을 수 없습니다."));
+    }
+
+    @Override
     public PetItemResponse getItemDetail(Long petItemId) {
         PetItem petItem = petItemRepository.findById(petItemId)
                 .orElseThrow(() -> new NotFoundException("용품 정보를 찾을 수 없습니다."));
 
-        LocalDate lastPurchasedAt = petItemPurchaseRepository.findLatestByPetItemId(petItemId)
-                .map(PetItemPurchase::getPurchasedAt)
+        LocalDate lastPurchasedAt = petItemPurchaseReadService.findLatestPurchaseDateByPetItemId(petItemId)
                 .orElse(null);
 
         String imageUrl = s3StorageService.createPresignedUrl(petItem.getImageKey(), BucketKind.PET_ITEM_PHOTO);

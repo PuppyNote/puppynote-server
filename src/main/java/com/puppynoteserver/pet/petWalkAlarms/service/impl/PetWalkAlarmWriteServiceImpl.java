@@ -50,4 +50,9 @@ public class PetWalkAlarmWriteServiceImpl implements PetWalkAlarmWriteService {
         petWalkAlarmRepository.findById(alarmId)
                 .ifPresent(petWalkAlarmRepository::delete);
     }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        petWalkAlarmRepository.deleteAllByPetId(petId);
+    }
 }

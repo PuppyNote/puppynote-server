@@ -11,4 +11,6 @@ public interface PetItemWriteService {
     PetItemResponse update(Long petItemId, PetItemUpdateServiceRequest request);
 
     void delete(Long petItemId);
+
+    void deleteAllByPetId(Long petId);
 }

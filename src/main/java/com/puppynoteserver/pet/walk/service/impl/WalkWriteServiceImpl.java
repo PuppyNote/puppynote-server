@@ -42,4 +42,9 @@ public class WalkWriteServiceImpl implements WalkWriteService {
 
         return WalkResponse.of(savedWalk, photoUrl);
     }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        walkRepository.deleteAllByPetId(petId);
+    }
 }

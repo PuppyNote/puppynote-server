@@ -1,7 +1,7 @@
 package com.puppynoteserver.pet.petItems.service.impl;
 
 import com.puppynoteserver.global.exception.NotFoundException;
-import com.puppynoteserver.pet.petItemPurchase.repository.PetItemPurchaseRepository;
+import com.puppynoteserver.pet.petItemPurchase.service.PetItemPurchaseWriteService;
 import com.puppynoteserver.pet.petItems.entity.PetItem;
 import com.puppynoteserver.pet.petItems.repository.PetItemRepository;
 import com.puppynoteserver.pet.petItems.service.PetItemWriteService;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PetItemWriteServiceImpl implements PetItemWriteService {
 
     private final PetItemRepository petItemRepository;
-    private final PetItemPurchaseRepository petItemPurchaseRepository;
+    private final PetItemPurchaseWriteService petItemPurchaseWriteService;
     private final PetReadService petReadService;
 
     @Override
@@ -48,7 +48,13 @@ public class PetItemWriteServiceImpl implements PetItemWriteService {
         if (petItemRepository.findById(petItemId).isEmpty()) {
             throw new NotFoundException("용품 정보를 찾을 수 없습니다.");
         }
-        petItemPurchaseRepository.deleteAllByPetItemId(petItemId);
+        petItemPurchaseWriteService.deleteAllByPetItemId(petItemId);
         petItemRepository.deleteById(petItemId);
+    }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        petItemPurchaseWriteService.deleteAllByPetId(petId);
+        petItemRepository.deleteAllByPetId(petId);
     }
 }

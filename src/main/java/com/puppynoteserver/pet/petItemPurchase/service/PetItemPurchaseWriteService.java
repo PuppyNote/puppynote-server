@@ -6,4 +6,8 @@ import com.puppynoteserver.pet.petItemPurchase.service.response.PetItemPurchaseR
 public interface PetItemPurchaseWriteService {
 
     PetItemPurchaseResponse recordPurchase(PetItemPurchaseCreateServiceRequest request);
+
+    void deleteAllByPetItemId(Long petItemId);
+
+    void deleteAllByPetId(Long petId);
 }
