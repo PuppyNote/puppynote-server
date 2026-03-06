@@ -52,4 +52,9 @@ public class PetItemPurchaseRepositoryImpl implements PetItemPurchaseRepository 
     public void deleteAllByPetItemId(Long petItemId) {
         petItemPurchaseJpaRepository.deleteAllByPetItemId(petItemId);
     }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        petItemPurchaseJpaRepository.deleteAllByPetItemPetId(petId);
+    }
 }

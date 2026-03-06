@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -66,5 +67,15 @@ public class FamilyMemberRepositoryImpl implements FamilyMemberRepository {
             return false;
         }
         return familyMemberJpaRepository.countByUserIdAndPetIdIn(userId, petIds) > 0;
+    }
+
+    @Override
+    public Optional<FamilyMember> findByUserIdAndPetId(Long userId, Long petId) {
+        return familyMemberJpaRepository.findByIdUserIdAndIdPetId(userId, petId);
+    }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        familyMemberJpaRepository.deleteAllByIdPetId(petId);
     }
 }

@@ -23,6 +23,21 @@ include::{snippets}/pet-create/request-fields.adoc[]
 include::{snippets}/pet-create/http-response.adoc[]
 include::{snippets}/pet-create/response-fields.adoc[]
 
+[[pet-delete]]
+=== 펫 삭제
+
+NOTE: OWNER만 삭제 가능합니다. 삭제 시 해당 펫의 모든 연관 데이터(산책, 산책알람, 용품, 구매이력, 가족구성원)가 함께 삭제됩니다.
+
+==== HTTP Request
+
+include::{snippets}/pet-delete/http-request.adoc[]
+include::{snippets}/pet-delete/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-delete/http-response.adoc[]
+include::{snippets}/pet-delete/response-fields.adoc[]
+
 [[pet-update]]
 === 펫 프로필 수정
 

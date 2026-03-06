@@ -8,4 +8,6 @@ public interface FamilyMemberWriteService {
     void invite(FamilyMemberInviteServiceRequest request);
 
     void register(FamilyMemberRegisterServiceRequest request);
+
+    void deleteAllByPetId(Long petId);
 }

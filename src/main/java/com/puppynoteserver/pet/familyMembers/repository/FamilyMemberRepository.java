@@ -5,6 +5,7 @@ import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
 import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FamilyMemberRepository {
 
@@ -23,4 +24,8 @@ public interface FamilyMemberRepository {
     List<FamilyMember> findAllPendingByUserIdAndPetIds(Long userId, List<Long> petIds);
 
     boolean existsByUserIdAndPetIds(Long userId, List<Long> petIds);
+
+    Optional<FamilyMember> findByUserIdAndPetId(Long userId, Long petId);
+
+    void deleteAllByPetId(Long petId);
 }

@@ -1,5 +1,6 @@
 package com.puppynoteserver.pet.walk.service;
 
+import com.puppynoteserver.pet.walk.entity.Walk;
 import com.puppynoteserver.pet.walk.service.response.WalkCalendarResponse;
 import com.puppynoteserver.pet.walk.service.response.WalkDetailResponse;
 import com.puppynoteserver.pet.walk.service.response.WalkResponse;
@@ -9,6 +10,8 @@ import java.time.YearMonth;
 import java.util.List;
 
 public interface WalkReadService {
+
+    Walk findById(Long walkId);
 
     List<WalkResponse> getWalksByPetId(Long petId, LocalDate date);
 

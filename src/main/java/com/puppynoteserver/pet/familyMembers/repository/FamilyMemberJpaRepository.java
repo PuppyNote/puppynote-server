@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FamilyMemberJpaRepository extends JpaRepository<FamilyMember, FamilyMemberId> {
 
@@ -37,4 +38,8 @@ public interface FamilyMemberJpaRepository extends JpaRepository<FamilyMember, F
     // 여러 펫에 대한 DONE 가족 목록 조회 (가족 목록 API용)
     @Query("SELECT fm FROM FamilyMember fm JOIN FETCH fm.user WHERE fm.id.petId IN :petIds AND fm.status = :status")
     List<FamilyMember> findAllByPetIdInAndStatusWithUser(@Param("petIds") List<Long> petIds, @Param("status") FamilyMemberStatus status);
+
+    Optional<FamilyMember> findByIdUserIdAndIdPetId(Long userId, Long petId);
+
+    void deleteAllByIdPetId(Long petId);
 }

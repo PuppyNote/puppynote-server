@@ -15,7 +15,7 @@ import com.puppynoteserver.pet.familyMembers.service.FamilyMemberWriteService;
 import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberInviteServiceRequest;
 import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberRegisterServiceRequest;
 import com.puppynoteserver.pet.pets.entity.Pet;
-import com.puppynoteserver.user.push.repository.PushRepository;
+import com.puppynoteserver.user.push.service.PushReadService;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
 
     private final FamilyMemberRepository familyMemberRepository;
     private final UserReadService userReadService;
-    private final PushRepository pushRepository;
+    private final PushReadService pushReadService;
     private final FirebaseService firebaseService;
     private final SecurityService securityService;
 
@@ -64,7 +64,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
         }
 
         // 초대 대상에게 Push 발송
-        pushRepository.findByUserId(invitee.getId()).ifPresent(push ->
+        pushReadService.findByUserId(invitee.getId()).ifPresent(push ->
                 firebaseService.sendPushNotification(
                         SendFirebaseServiceRequest.builder()
                                 .push(push)
@@ -96,5 +96,10 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
         }
 
         pendingRecords.forEach(fm -> fm.updateStatus(FamilyMemberStatus.DONE));
+    }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        familyMemberRepository.deleteAllByPetId(petId);
     }
 }

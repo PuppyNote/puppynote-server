@@ -14,4 +14,6 @@ public interface PetWalkAlarmWriteService {
     PetWalkAlarmResponse updateStatus(PetWalkAlarmStatusUpdateServiceRequest request);
 
     void delete(Long alarmId);
+
+    void deleteAllByPetId(Long petId);
 }

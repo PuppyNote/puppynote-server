@@ -38,4 +38,10 @@ public class PetController {
         petWriteService.updatePet(petId, request.toServiceRequest());
         return ApiResponse.ok(null);
     }
+
+    @DeleteMapping("/{petId}")
+    public ApiResponse<Void> deletePet(@PathVariable Long petId) {
+        petWriteService.deletePet(petId);
+        return ApiResponse.ok(null);
+    }
 }

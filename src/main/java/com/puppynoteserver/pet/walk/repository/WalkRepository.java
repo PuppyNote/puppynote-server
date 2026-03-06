@@ -19,4 +19,6 @@ public interface WalkRepository {
     long countByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end);
 
     Optional<Walk> findTopByPetIdOrderByStartTimeDesc(Long petId);
+
+    void deleteAllByPetId(Long petId);
 }

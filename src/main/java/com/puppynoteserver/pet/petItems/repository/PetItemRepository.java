@@ -19,4 +19,6 @@ public interface PetItemRepository {
     long countByPetId(Long petId);
 
     void deleteById(Long id);
+
+    void deleteAllByPetId(Long petId);
 }

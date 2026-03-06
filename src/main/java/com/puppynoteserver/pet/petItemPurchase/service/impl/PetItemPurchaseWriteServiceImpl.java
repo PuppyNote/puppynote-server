@@ -7,7 +7,7 @@ import com.puppynoteserver.pet.petItemPurchase.service.PetItemPurchaseWriteServi
 import com.puppynoteserver.pet.petItemPurchase.service.request.PetItemPurchaseCreateServiceRequest;
 import com.puppynoteserver.pet.petItemPurchase.service.response.PetItemPurchaseResponse;
 import com.puppynoteserver.pet.petItems.entity.PetItem;
-import com.puppynoteserver.pet.petItems.repository.PetItemRepository;
+import com.puppynoteserver.pet.petItems.service.PetItemReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +18,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class PetItemPurchaseWriteServiceImpl implements PetItemPurchaseWriteService {
 
     private final PetItemPurchaseRepository petItemPurchaseRepository;
-    private final PetItemRepository petItemRepository;
+    private final PetItemReadService petItemReadService;
 
     @Override
     public PetItemPurchaseResponse recordPurchase(PetItemPurchaseCreateServiceRequest request) {
-        PetItem petItem = petItemRepository.findById(request.getPetItemId())
-                .orElseThrow(() -> new NotFoundException("용품 정보를 찾을 수 없습니다."));
+        PetItem petItem = petItemReadService.findById(request.getPetItemId());
         PetItemPurchase saved = petItemPurchaseRepository.save(request.toEntity(petItem));
         return PetItemPurchaseResponse.of(saved);
+    }
+
+    @Override
+    public void deleteAllByPetItemId(Long petItemId) {
+        petItemPurchaseRepository.deleteAllByPetItemId(petItemId);
+    }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        petItemPurchaseRepository.deleteAllByPetId(petId);
     }
 }
