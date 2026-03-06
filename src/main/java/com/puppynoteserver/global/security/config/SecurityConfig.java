@@ -78,7 +78,8 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/api/v1/user/**"),
                 new AntPathRequestMatcher("/docs/**"),
                 new AntPathRequestMatcher("/health-check"),
-                new AntPathRequestMatcher("/actuator/**")
+                new AntPathRequestMatcher("/actuator/**"),
+                new AntPathRequestMatcher("/api/v1/test/**")
         };
     }
 }
