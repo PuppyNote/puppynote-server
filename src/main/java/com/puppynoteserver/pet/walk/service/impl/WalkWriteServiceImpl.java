@@ -44,6 +44,11 @@ public class WalkWriteServiceImpl implements WalkWriteService {
     }
 
     @Override
+    public void delete(Long walkId) {
+        walkRepository.deleteById(walkId);
+    }
+
+    @Override
     public void deleteAllByPetId(Long petId) {
         walkRepository.deleteAllByPetId(petId);
     }

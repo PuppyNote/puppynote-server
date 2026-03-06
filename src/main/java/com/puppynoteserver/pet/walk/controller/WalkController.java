@@ -49,4 +49,10 @@ public class WalkController {
     public ApiResponse<WalkResponse> createWalk(@Valid @RequestBody WalkCreateRequest request) {
         return ApiResponse.created(walkWriteService.create(request.toServiceRequest()));
     }
+
+    @DeleteMapping("/{walkId}")
+    public ApiResponse<Void> deleteWalk(@PathVariable Long walkId) {
+        walkWriteService.delete(walkId);
+        return ApiResponse.ok(null);
+    }
 }

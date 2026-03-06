@@ -29,6 +29,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -208,6 +210,35 @@ public class WalkControllerDocsTest extends RestDocsSupport {
                                         .description("메모").optional(),
                                 fieldWithPath("data[].photoUrl").type(JsonFieldType.STRING)
                                         .description("산책 사진 Presigned URL (유효시간 1시간)").optional()
+                        )
+                ));
+    }
+
+    @DisplayName("산책 삭제 API")
+    @Test
+    void deleteWalk() throws Exception {
+        doNothing().when(walkWriteService).delete(anyLong());
+
+        mockMvc.perform(
+                        delete("/api/v1/walks/{walkId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("walk-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("walkId").description("삭제할 산책 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL)
+                                        .description("응답 데이터 (없음)")
                         )
                 ));
     }

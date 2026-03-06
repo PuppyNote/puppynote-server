@@ -47,6 +47,11 @@ public class WalkRepositoryImpl implements WalkRepository {
     }
 
     @Override
+    public void deleteById(Long walkId) {
+        walkJpaRepository.deleteById(walkId);
+    }
+
+    @Override
     public void deleteAllByPetId(Long petId) {
         List<Walk> walks = walkJpaRepository.findAllByPetId(petId);
         walkJpaRepository.deleteAll(walks);

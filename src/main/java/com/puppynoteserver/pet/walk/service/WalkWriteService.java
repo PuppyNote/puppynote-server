@@ -7,5 +7,7 @@ public interface WalkWriteService {
 
     WalkResponse create(WalkCreateServiceRequest request);
 
+    void delete(Long walkId);
+
     void deleteAllByPetId(Long petId);
 }

@@ -20,5 +20,7 @@ public interface WalkRepository {
 
     Optional<Walk> findTopByPetIdOrderByStartTimeDesc(Long petId);
 
+    void deleteById(Long walkId);
+
     void deleteAllByPetId(Long petId);
 }

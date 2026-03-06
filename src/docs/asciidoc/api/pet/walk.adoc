@@ -37,6 +37,19 @@ include::{snippets}/walk-list/query-parameters.adoc[]
 include::{snippets}/walk-list/http-response.adoc[]
 include::{snippets}/walk-list/response-fields.adoc[]
 
+[[walk-delete]]
+=== 산책 삭제
+
+==== HTTP Request
+
+include::{snippets}/walk-delete/http-request.adoc[]
+include::{snippets}/walk-delete/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/walk-delete/http-response.adoc[]
+include::{snippets}/walk-delete/response-fields.adoc[]
+
 [[walk-create]]
 === 산책 이력 저장
 
