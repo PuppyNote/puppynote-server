@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.puppynoteserver.global.ApiResponse;
 import com.puppynoteserver.user.users.controller.request.LoginOauthRequest;
 import com.puppynoteserver.user.users.controller.request.LoginRequest;
+import com.puppynoteserver.user.users.controller.request.TokenRefreshRequest;
 import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.response.LoginResponse;
 import com.puppynoteserver.user.users.service.response.OAuthLoginResponse;
+import com.puppynoteserver.user.users.service.response.TokenRefreshResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,11 @@ public class LoginController {
     @PostMapping("/oauth/login")
     public ApiResponse<OAuthLoginResponse> oauthLogin(@Valid @RequestBody LoginOauthRequest loginOauthRequest) throws JsonProcessingException {
         return ApiResponse.ok(loginService.oauthLogin(loginOauthRequest.toServiceRequest()));
+    }
+
+    @PostMapping("/refresh")
+    public ApiResponse<TokenRefreshResponse> refresh(@Valid @RequestBody TokenRefreshRequest request) {
+        return ApiResponse.ok(loginService.refresh(request.toServiceRequest()));
     }
 
 }

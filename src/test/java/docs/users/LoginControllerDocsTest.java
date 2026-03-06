@@ -3,13 +3,17 @@ package docs.users;
 import com.puppynoteserver.user.users.controller.LoginController;
 import com.puppynoteserver.user.users.controller.request.LoginOauthRequest;
 import com.puppynoteserver.user.users.controller.request.LoginRequest;
+import com.puppynoteserver.user.users.controller.request.TokenRefreshRequest;
 import com.puppynoteserver.user.users.entity.enums.SettingStatus;
 import com.puppynoteserver.user.users.entity.enums.SnsType;
 import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.request.LoginServiceRequest;
 import com.puppynoteserver.user.users.service.request.OAuthLoginServiceRequest;
+import com.puppynoteserver.user.users.service.request.TokenRefreshServiceRequest;
+import com.puppynoteserver.jwt.dto.JwtToken;
 import com.puppynoteserver.user.users.service.response.LoginResponse;
 import com.puppynoteserver.user.users.service.response.OAuthLoginResponse;
+import com.puppynoteserver.user.users.service.response.TokenRefreshResponse;
 import docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,6 +105,56 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
+
+    @DisplayName("토큰 재발급 API")
+    @Test
+    void refreshToken() throws Exception {
+        // given
+        TokenRefreshRequest request = new TokenRefreshRequest();
+
+        given(loginService.refresh(any(TokenRefreshServiceRequest.class)))
+                .willReturn(TokenRefreshResponse.from(JwtToken.of(
+                        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJ1c2VySWRcIjoxfSIsImV4cCI6MTc0MTMwOTAwMH0.newAccessToken",
+                        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJ1c2VySWRcIjoxfSIsImV4cCI6MTc0Mzg3ODAwMH0.newRefreshToken",
+                        "Bearer", 43200L
+                )));
+
+        // when // then
+        String requestBody = objectMapper.writeValueAsString(
+                java.util.Map.of("refreshToken",
+                        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJ1c2VySWRcIjoxfSIsImV4cCI6MTc0Mzg3ODAwMH0.oldRefreshToken")
+        );
+
+        mockMvc.perform(
+                        post("/api/v1/auth/refresh")
+                                .content(requestBody)
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auth-refresh",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                        .description("Refresh-Token")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
+                                        .description("새로 발급된 Access-Token"),
+                                fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
+                                        .description("새로 발급된 Refresh-Token")
+                        )
+                ));
+    }
 
     @DisplayName("OAuth 로그인 API")
     @Test

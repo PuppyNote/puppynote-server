@@ -11,6 +11,19 @@ include::{snippets}/user-login/request-fields.adoc[]
 include::{snippets}/user-login/http-response.adoc[]
 include::{snippets}/user-login/response-fields.adoc[]
 
+[[auth-refresh]]
+=== 토큰 재발급
+
+==== HTTP Request
+
+include::{snippets}/auth-refresh/http-request.adoc[]
+include::{snippets}/auth-refresh/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/auth-refresh/http-response.adoc[]
+include::{snippets}/auth-refresh/response-fields.adoc[]
+
 [[user-oauthLogin]]
 === OAuth 로그인
 

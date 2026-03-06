@@ -12,10 +12,14 @@ import com.puppynoteserver.user.users.oauth.client.OAuthApiClient;
 import com.puppynoteserver.user.users.repository.UserRepository;
 import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.UserReadService;
+import com.puppynoteserver.user.refreshToken.entity.RefreshToken;
+import com.puppynoteserver.user.refreshToken.service.RefreshTokenReadService;
 import com.puppynoteserver.user.users.service.request.LoginServiceRequest;
 import com.puppynoteserver.user.users.service.request.OAuthLoginServiceRequest;
+import com.puppynoteserver.user.users.service.request.TokenRefreshServiceRequest;
 import com.puppynoteserver.user.users.service.response.LoginResponse;
 import com.puppynoteserver.user.users.service.response.OAuthLoginResponse;
+import com.puppynoteserver.user.users.service.response.TokenRefreshResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,9 +43,11 @@ public class LoginServiceImpl implements LoginService {
 
     private final UserRepository userRepository;
     private final UserReadService userReadService;
+    private final RefreshTokenReadService refreshTokenReadService;
 
     public LoginServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, JwtTokenGenerator jwtTokenGenerator,
-                            List<OAuthApiClient> clients, UserRepository userRepository, UserReadService userReadService) {
+                            List<OAuthApiClient> clients, UserRepository userRepository, UserReadService userReadService,
+                            RefreshTokenReadService refreshTokenReadService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
         this.jwtTokenGenerator = jwtTokenGenerator;
@@ -49,6 +55,7 @@ public class LoginServiceImpl implements LoginService {
                 Collectors.toUnmodifiableMap(OAuthApiClient::oAuthSnsType, Function.identity())
         );
         this.userReadService = userReadService;
+        this.refreshTokenReadService = refreshTokenReadService;
     }
 
     @Override
@@ -93,6 +100,20 @@ public class LoginServiceImpl implements LoginService {
                 oAuthLoginServiceRequest.getPushKey());
 
         return OAuthLoginResponse.of(user, jwtToken);
+    }
+
+    @Override
+    public TokenRefreshResponse refresh(TokenRefreshServiceRequest request) {
+        // 1. DB에 저장된 refreshToken인지 검증
+        RefreshToken storedToken = refreshTokenReadService.findByRefreshToken(request.getRefreshToken());
+
+        // 2. JWT 서명 및 만료 검증 후 새 토큰 발급
+        JwtToken jwtToken = jwtTokenGenerator.generateJwtToken(request.getRefreshToken());
+
+        // 3. DB의 refreshToken을 새 토큰으로 업데이트 (토큰 로테이션)
+        storedToken.updateRefreshToken(jwtToken.getRefreshToken());
+
+        return TokenRefreshResponse.from(jwtToken);
     }
 
     private JwtToken setJwtTokenPushKey(User user, String deviceId, String pushKey) throws JsonProcessingException {
