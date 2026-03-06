@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/confirmEmail",
             "/docs",                        //API문서는 예외
             "/health-check",
-            "/actuator"                     //모니터링
+            "/actuator",                     //모니터링
+            "/api/v1/test"
     };
 
     @Override
