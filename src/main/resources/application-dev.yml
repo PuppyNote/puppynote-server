@@ -39,6 +39,11 @@ spring:
           starttls:
             enable: true
           auth: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 
 oauth:
   kakao:
@@ -65,9 +70,9 @@ aws:
       user-profile: ${USER_PROFILE_BUCKET}  # 사용자 프로필 이미지 버킷
 
 elasticsearch:
-  host: ${ES_HOST:localhost}
-  port: ${ES_PORT:9200}
-  username: ${ES_USERNAME:elastic}
+  host: ${ES_HOST}
+  port: ${ES_PORT}
+  username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
 
 management:

@@ -104,6 +104,9 @@ dependencies {
     // Elasticsearch
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     // Monitoring (Prometheus + Actuator)
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
@@ -177,7 +180,6 @@ tasks.processResources {
     filesMatching('application-dev.yml') {
         // build.gradle에 설정된 환경변수들을 주입
         expand(
-                MONGO_DB_URL: System.getenv('MONGO_DB_URL'),
                 DB_HOST: System.getenv('DB_HOST'),
                 DB_USERNAME: System.getenv('DB_USERNAME'),
                 DB_PASSWORD: System.getenv('DB_PASSWORD'),
@@ -192,14 +194,16 @@ tasks.processResources {
                 ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
                 ES_PORT: System.getenv('ES_PORT') ?: '9200',
                 ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
-                ES_PASSWORD: System.getenv('ES_PASSWORD')
+                ES_PASSWORD: System.getenv('ES_PASSWORD'),
+                REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
+                REDIS_PORT: System.getenv('REDIS_PORT') ?: '6379',
+                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
         )
     }
 
     filesMatching('application-prd.yml') {
         // PRD 환경변수들을 주입
         expand(
-                MONGO_DB_URL: System.getenv('MONGO_DB_URL'),
                 DB_HOST: System.getenv('DB_HOST'),
                 DB_USERNAME: System.getenv('DB_USERNAME'),
                 DB_PASSWORD: System.getenv('DB_PASSWORD'),
@@ -214,7 +218,10 @@ tasks.processResources {
                 ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
                 ES_PORT: System.getenv('ES_PORT') ?: '9200',
                 ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
-                ES_PASSWORD: System.getenv('ES_PASSWORD')
+                ES_PASSWORD: System.getenv('ES_PASSWORD'),
+                REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
+                REDIS_PORT: System.getenv('REDIS_PORT') ?: '6379',
+                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
         )
     }
 }
