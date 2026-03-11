@@ -181,7 +181,11 @@ tasks.processResources {
                 PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
                 WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
                 PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
-                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET')
+                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
+                ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
+                ES_PORT: System.getenv('ES_PORT') ?: '9200',
+                ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
+                ES_PASSWORD: System.getenv('ES_PASSWORD')
         )
     }
 
@@ -199,7 +203,11 @@ tasks.processResources {
                 PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
                 WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
                 PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
-                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET')
+                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
+                ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
+                ES_PORT: System.getenv('ES_PORT') ?: '9200',
+                ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
+                ES_PASSWORD: System.getenv('ES_PASSWORD')
         )
     }
 }
