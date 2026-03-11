@@ -57,3 +57,4 @@ aws:
       walk-photo: testpuppybucket  # 산책 사진 버킷
       pet-item-photo: testpuppybucket  # 용품 이미지 버킷
       user-profile: testpuppybucket  # 용품 이미지 버킷
+      community-post: testpuppybucket  # 커뮤니티 게시물 이미지 버킷
