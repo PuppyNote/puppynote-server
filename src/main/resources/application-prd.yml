@@ -60,3 +60,24 @@ aws:
       walk-photo: ${WALK_PHOTO_BUCKET}  # 산책 사진 버킷
       pet-item-photo: ${PET_ITEM_PHOTO_BUCKET}  # 용품 이미지 버킷
       user-profile: ${USER_PROFILE_BUCKET}  # 사용자 프로필 이미지 버킷
+
+elasticsearch:
+  host: ${ES_HOST}
+  port: ${ES_PORT:9200}
+  username: ${ES_USERNAME:elastic}
+  password: ${ES_PASSWORD}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: puppynote-prd
