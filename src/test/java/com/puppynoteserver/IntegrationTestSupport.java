@@ -17,7 +17,6 @@ import com.puppynoteserver.user.users.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -46,8 +45,6 @@ public abstract class IntegrationTestSupport {
     protected RefreshTokenRepository refreshTokenRepository;
     @Autowired
     protected PushRepository pushRepository;
-    @MockitoBean
-    protected MongoTemplate mongoTemplate;
 
     @AfterEach
     public void tearDown() {
