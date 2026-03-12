@@ -100,7 +100,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     // Elasticsearch
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch:2.4.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
     // Monitoring (Prometheus + Actuator)
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -187,7 +187,8 @@ tasks.processResources {
                 PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
                 USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
                 COMMUNITY_POST_BUCKET: System.getenv('COMMUNITY_POST_BUCKET'),
-                ES_URI: System.getenv('ES_URI'),
+                ES_HOST: System.getenv('ES_HOST'),
+                ES_PORT: System.getenv('ES_PORT'),
                 ES_USERNAME: System.getenv('ES_USERNAME'),
                 ES_PASSWORD: System.getenv('ES_PASSWORD')
         )
@@ -208,7 +209,8 @@ tasks.processResources {
                 PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
                 USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
                 COMMUNITY_POST_BUCKET: System.getenv('COMMUNITY_POST_BUCKET'),
-                ES_URI: System.getenv('ES_URI'),
+                ES_HOST: System.getenv('ES_HOST'),
+                ES_PORT: System.getenv('ES_PORT'),
                 ES_USERNAME: System.getenv('ES_USERNAME'),
                 ES_PASSWORD: System.getenv('ES_PASSWORD')
         )
