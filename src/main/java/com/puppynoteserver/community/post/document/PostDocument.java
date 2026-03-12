@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Document(indexName = "posts")
+@Setting(settingPath = "es-settings.json")
 public class PostDocument {
 
     @Id
