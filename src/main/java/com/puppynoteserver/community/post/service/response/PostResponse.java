@@ -1,7 +1,6 @@
 package com.puppynoteserver.community.post.service.response;
 
 import com.puppynoteserver.community.post.entity.Post;
-import com.puppynoteserver.global.util.HashtagExtractor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -34,8 +33,7 @@ public class PostResponse {
         this.createdDate = createdDate;
     }
 
-    public static PostResponse of(Post post, String userProfileUrl,
-                                  List<String> imageUrls, HashtagExtractor hashtagExtractor) {
+    public static PostResponse of(Post post, String userProfileUrl, List<String> imageUrls) {
         return PostResponse.builder()
                 .postId(post.getId())
                 .userId(post.getUser().getId())
@@ -43,7 +41,7 @@ public class PostResponse {
                 .userProfileUrl(userProfileUrl)
                 .content(post.getContent())
                 .imageUrls(imageUrls)
-                .hashtags(hashtagExtractor.extract(post.getContent()))
+                .hashtags(post.getHashtags())
                 .createdDate(post.getCreatedDate())
                 .build();
     }

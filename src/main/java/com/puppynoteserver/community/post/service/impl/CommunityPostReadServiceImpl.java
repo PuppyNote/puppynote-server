@@ -9,7 +9,6 @@ import com.puppynoteserver.community.post.service.PostSearchService;
 import com.puppynoteserver.community.post.service.response.PostListResponse;
 import com.puppynoteserver.community.post.service.response.PostResponse;
 import com.puppynoteserver.global.exception.NotFoundException;
-import com.puppynoteserver.global.util.HashtagExtractor;
 import com.puppynoteserver.storage.enums.BucketKind;
 import com.puppynoteserver.storage.service.S3StorageService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
     private final S3StorageService s3StorageService;
-    private final HashtagExtractor hashtagExtractor;
 
     // 테스트 환경에서는 null (ES 미사용)
     @Autowired(required = false)
@@ -75,7 +73,15 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
         String userProfileUrl = s3StorageService.createPresignedUrl(
                 post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
-        return PostResponse.of(post, userProfileUrl, imageUrls, hashtagExtractor);
+        return PostResponse.of(post, userProfileUrl, imageUrls);
+    }
+
+    @Override
+    public List<String> getHashtagSuggestions(String keyword) {
+        if (postSearchService == null) {
+            return List.of();
+        }
+        return postSearchService.searchHashtags(keyword);
     }
 
     // 게시물 목록을 PostResponse로 변환 (N+1 방지: 이미지 일괄 조회)
@@ -101,7 +107,7 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
                     String userProfileUrl = s3StorageService.createPresignedUrl(
                             post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
-                    return PostResponse.of(post, userProfileUrl, imageUrls, hashtagExtractor);
+                    return PostResponse.of(post, userProfileUrl, imageUrls);
                 })
                 .collect(Collectors.toList());
     }

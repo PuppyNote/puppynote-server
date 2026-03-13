@@ -27,19 +27,34 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @ElementCollection
+    @CollectionTable(name = "post_hashtags", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "hashtag")
+    private List<String> hashtags = new ArrayList<>();
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("orderNum ASC")
     private List<PostImage> images = new ArrayList<>();
 
-    public static Post of(User user, String content) {
+    public static Post of(User user, String content, List<String> hashtags) {
         Post post = new Post();
         post.user = user;
         post.content = content;
+        if (hashtags != null) {
+            post.hashtags.addAll(hashtags);
+        }
         return post;
     }
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void updateHashtags(List<String> hashtags) {
+        this.hashtags.clear();
+        if (hashtags != null) {
+            this.hashtags.addAll(hashtags);
+        }
     }
 
     public void clearImages() {

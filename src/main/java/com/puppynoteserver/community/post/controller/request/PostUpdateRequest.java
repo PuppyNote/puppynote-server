@@ -16,11 +16,14 @@ public class PostUpdateRequest {
     @Size(max = 2000, message = "내용은 2000자를 초과할 수 없습니다.")
     private String content;
 
+    private List<String> hashtags;
+
     private List<String> imageKeys;
 
     public PostUpdateServiceRequest toServiceRequest() {
         return PostUpdateServiceRequest.builder()
                 .content(content)
+                .hashtags(hashtags)
                 .imageKeys(imageKeys)
                 .build();
     }

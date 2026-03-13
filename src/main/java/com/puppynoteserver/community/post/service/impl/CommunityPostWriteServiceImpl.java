@@ -45,7 +45,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
         addImages(post, request.getImageKeys());
 
         // ES 인덱싱 이벤트 발행 (트랜잭션 커밋 후 비동기 실행)
-        eventPublisher.publishEvent(new PostIndexEvent(post));
+        eventPublisher.publishEvent(new PostIndexEvent(post, request.getHashtags()));
 
         return post.getId();
     }
@@ -61,6 +61,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
         }
 
         post.updateContent(request.getContent());
+        post.updateHashtags(request.getHashtags());
 
         // 새 이미지가 있으면 기존 이미지 교체
         if (request.getImageKeys() != null && !request.getImageKeys().isEmpty()) {
@@ -69,7 +70,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
         }
 
         // ES 재인덱싱
-        eventPublisher.publishEvent(new PostIndexEvent(post));
+        eventPublisher.publishEvent(new PostIndexEvent(post, request.getHashtags()));
     }
 
     private void addImages(Post post, List<String> imageKeys) {

@@ -2,5 +2,7 @@ package com.puppynoteserver.community.post.event;
 
 import com.puppynoteserver.community.post.entity.Post;
 
-public record PostIndexEvent(Post post) {
+import java.util.List;
+
+public record PostIndexEvent(Post post, List<String> hashtags) {
 }

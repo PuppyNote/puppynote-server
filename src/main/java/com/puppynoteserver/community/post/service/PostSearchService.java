@@ -3,7 +3,6 @@ package com.puppynoteserver.community.post.service;
 import com.puppynoteserver.community.post.document.PostDocument;
 import com.puppynoteserver.community.post.entity.Post;
 import com.puppynoteserver.community.post.repository.PostSearchRepository;
-import com.puppynoteserver.global.util.HashtagExtractor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -25,10 +24,8 @@ public class PostSearchService {
 
     private final ElasticsearchOperations elasticsearchOperations;
     private final PostSearchRepository postSearchRepository;
-    private final HashtagExtractor hashtagExtractor;
 
-    public void indexPost(Post post) {
-        List<String> hashtags = hashtagExtractor.extract(post.getContent());
+    public void indexPost(Post post, List<String> hashtags) {
         PostDocument document = PostDocument.builder()
                 .postId(post.getId())
                 .userId(post.getUser().getId())
@@ -46,15 +43,29 @@ public class PostSearchService {
         log.info("ES 삭제 완료 - postId: {}", postId);
     }
 
-    // 해시태그 + 내용 통합 검색 → postId 목록 반환
+    // 해시태그 자동완성 — keyword를 포함하는 해시태그 목록 반환
+    public List<String> searchHashtags(String keyword) {
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q
+                        .wildcard(w -> w.field("hashtags").wildcard("*" + keyword + "*"))
+                )
+                .withPageable(PageRequest.of(0, 200))
+                .build();
+
+        SearchHits<PostDocument> hits = elasticsearchOperations.search(query, PostDocument.class);
+        return hits.stream()
+                .flatMap(hit -> hit.getContent().getHashtags().stream())
+                .filter(tag -> tag.contains(keyword))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    // 해시태그 검색 → postId 목록 반환
     public List<Long> search(String keyword, int page, int size) {
         NativeQuery query = NativeQuery.builder()
                 .withQuery(q -> q
-                        .bool(b -> b
-                                .should(s -> s.term(t -> t.field("hashtags").value(keyword)))
-                                .should(s -> s.match(m -> m.field("content").query(keyword)))
-                                .minimumShouldMatch("1")
-                        )
+                        .term(t -> t.field("hashtags").value(keyword))
                 )
                 .withPageable(PageRequest.of(page, size))
                 .withSort(Sort.by(Sort.Direction.DESC, "createdDate"))

@@ -16,11 +16,14 @@ public class PostCreateRequest {
     @Size(max = 2000, message = "내용은 2000자를 초과할 수 없습니다.")
     private String content;
 
+    private List<String> hashtags;
+
     private List<String> imageKeys;
 
     public PostCreateServiceRequest toServiceRequest() {
         return PostCreateServiceRequest.builder()
                 .content(content)
+                .hashtags(hashtags)
                 .imageKeys(imageKeys)
                 .build();
     }

@@ -11,15 +11,17 @@ import java.util.List;
 public class PostCreateServiceRequest {
 
     private final String content;
+    private final List<String> hashtags;
     private final List<String> imageKeys;
 
     @Builder
-    private PostCreateServiceRequest(String content, List<String> imageKeys) {
+    private PostCreateServiceRequest(String content, List<String> hashtags, List<String> imageKeys) {
         this.content = content;
+        this.hashtags = hashtags;
         this.imageKeys = imageKeys;
     }
 
     public Post toEntity(User user) {
-        return Post.of(user, content);
+        return Post.of(user, content, hashtags);
     }
 }

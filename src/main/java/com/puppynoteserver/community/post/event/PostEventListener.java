@@ -20,7 +20,7 @@ public class PostEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handlePostIndex(PostIndexEvent event) {
-        postSearchService.indexPost(event.post());
+        postSearchService.indexPost(event.post(), event.hashtags());
     }
 
     @Async

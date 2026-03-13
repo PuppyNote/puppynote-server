@@ -8,9 +8,12 @@ import com.puppynoteserver.community.post.service.response.PostListResponse;
 import com.puppynoteserver.community.post.service.response.PostResponse;
 import com.puppynoteserver.global.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,5 +52,11 @@ public class CommunityPostController {
             @RequestBody @Valid PostUpdateRequest request) {
         communityPostWriteService.updatePost(postId, request.toServiceRequest());
         return ApiResponse.ok(null);
+    }
+
+    // 해시태그 자동완성
+    @GetMapping("/hashtags")
+    public ApiResponse<List<String>> getHashtagSuggestions(@RequestParam @NotBlank String keyword) {
+        return ApiResponse.ok(communityPostReadService.getHashtagSuggestions(keyword));
     }
 }
