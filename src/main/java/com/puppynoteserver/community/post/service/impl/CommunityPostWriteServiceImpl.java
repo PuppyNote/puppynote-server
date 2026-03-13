@@ -64,10 +64,15 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
         post.updateContent(request.getContent());
         post.updateHashtags(request.getHashtags());
 
-        // 새 이미지가 있으면 기존 이미지 교체
-        if (request.getImageKeys() != null && !request.getImageKeys().isEmpty()) {
-            post.clearImages();
-            addImages(post, request.getImageKeys());
+        // 삭제할 이미지 제거
+        if (request.getDeleteImageKeys() != null && !request.getDeleteImageKeys().isEmpty()) {
+            post.removeImagesByKeys(request.getDeleteImageKeys());
+        }
+
+        // 새 이미지 추가 (기존 이미지 뒤에 순서대로 추가)
+        if (request.getAddImageKeys() != null && !request.getAddImageKeys().isEmpty()) {
+            int nextOrder = post.getImages().size();
+            addImages(post, request.getAddImageKeys(), nextOrder);
         }
 
         // ES 재인덱싱
@@ -89,10 +94,14 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
     }
 
     private void addImages(Post post, List<String> imageKeys) {
+        addImages(post, imageKeys, 0);
+    }
+
+    private void addImages(Post post, List<String> imageKeys, int startOrder) {
         if (imageKeys == null || imageKeys.isEmpty()) {
             return;
         }
         IntStream.range(0, imageKeys.size())
-                .forEach(i -> post.addImage(PostImage.of(post, imageKeys.get(i), i)));
+                .forEach(i -> post.addImage(PostImage.of(post, imageKeys.get(i), startOrder + i)));
     }
 }

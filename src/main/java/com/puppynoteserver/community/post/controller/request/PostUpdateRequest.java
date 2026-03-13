@@ -18,13 +18,16 @@ public class PostUpdateRequest {
 
     private List<String> hashtags;
 
-    private List<String> imageKeys;
+    private List<String> addImageKeys;
+
+    private List<String> deleteImageKeys;
 
     public PostUpdateServiceRequest toServiceRequest() {
         return PostUpdateServiceRequest.builder()
                 .content(content)
                 .hashtags(hashtags)
-                .imageKeys(imageKeys)
+                .addImageKeys(addImageKeys)
+                .deleteImageKeys(deleteImageKeys)
                 .build();
     }
 }

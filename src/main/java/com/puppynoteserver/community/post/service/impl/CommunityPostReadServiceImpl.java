@@ -66,6 +66,10 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
         Post post = postRepository.findByIdWithUser(postId)
                 .orElseThrow(() -> new NotFoundException("게시물을 찾을 수 없습니다."));
 
+        List<String> imageKeys = post.getImages().stream()
+                .map(PostImage::getImageKey)
+                .collect(Collectors.toList());
+
         List<String> imageUrls = post.getImages().stream()
                 .map(img -> s3StorageService.createPresignedUrl(img.getImageKey(), BucketKind.COMMUNITY_POST))
                 .collect(Collectors.toList());
@@ -73,7 +77,7 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
         String userProfileUrl = s3StorageService.createPresignedUrl(
                 post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
-        return PostResponse.of(post, userProfileUrl, imageUrls);
+        return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls);
     }
 
     @Override
@@ -99,15 +103,20 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
 
         return posts.stream()
                 .map(post -> {
-                    List<String> imageUrls = imageMap.getOrDefault(post.getId(), List.of())
-                            .stream()
+                    List<PostImage> images = imageMap.getOrDefault(post.getId(), List.of());
+
+                    List<String> imageKeys = images.stream()
+                            .map(PostImage::getImageKey)
+                            .collect(Collectors.toList());
+
+                    List<String> imageUrls = images.stream()
                             .map(img -> s3StorageService.createPresignedUrl(img.getImageKey(), BucketKind.COMMUNITY_POST))
                             .collect(Collectors.toList());
 
                     String userProfileUrl = s3StorageService.createPresignedUrl(
                             post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
-                    return PostResponse.of(post, userProfileUrl, imageUrls);
+                    return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls);
                 })
                 .collect(Collectors.toList());
     }

@@ -10,12 +10,15 @@ public class PostUpdateServiceRequest {
 
     private final String content;
     private final List<String> hashtags;
-    private final List<String> imageKeys;
+    private final List<String> addImageKeys;
+    private final List<String> deleteImageKeys;
 
     @Builder
-    private PostUpdateServiceRequest(String content, List<String> hashtags, List<String> imageKeys) {
+    private PostUpdateServiceRequest(String content, List<String> hashtags,
+                                     List<String> addImageKeys, List<String> deleteImageKeys) {
         this.content = content;
         this.hashtags = hashtags;
-        this.imageKeys = imageKeys;
+        this.addImageKeys = addImageKeys;
+        this.deleteImageKeys = deleteImageKeys;
     }
 }

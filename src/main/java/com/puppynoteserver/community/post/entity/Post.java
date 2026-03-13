@@ -57,8 +57,8 @@ public class Post extends BaseTimeEntity {
         }
     }
 
-    public void clearImages() {
-        this.images.clear();
+    public void removeImagesByKeys(List<String> imageKeys) {
+        this.images.removeIf(img -> imageKeys.contains(img.getImageKey()));
     }
 
     public void addImage(PostImage image) {
