@@ -46,6 +46,8 @@ dependencies {
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     // mysql-connector 추가
     implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.3.0'
 
@@ -102,6 +104,9 @@ dependencies {
     // Elasticsearch
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     // Monitoring (Prometheus + Actuator)
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
@@ -110,10 +115,11 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 
-    // 테스트 실패 시 로그 출력
+    // 테스트 로그 콘솔 출력
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
+        showStandardStreams = true
     }
 }
 
