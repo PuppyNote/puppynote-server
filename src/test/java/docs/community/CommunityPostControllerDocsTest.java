@@ -274,6 +274,31 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
+    @DisplayName("게시물 삭제 API")
+    @Test
+    void deletePost() throws Exception {
+        doNothing().when(communityPostWriteService).deletePost(anyLong());
+
+        mockMvc.perform(
+                        delete("/api/v1/community/posts/{postId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("community-post-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("postId").description("삭제할 게시물 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터 없음")
+                        )
+                ));
+    }
+
     @DisplayName("해시태그 자동완성 API")
     @Test
     void getHashtagSuggestions() throws Exception {

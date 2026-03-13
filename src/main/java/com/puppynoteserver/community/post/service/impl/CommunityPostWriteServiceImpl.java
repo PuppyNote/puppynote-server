@@ -2,6 +2,7 @@ package com.puppynoteserver.community.post.service.impl;
 
 import com.puppynoteserver.community.post.entity.Post;
 import com.puppynoteserver.community.post.entity.PostImage;
+import com.puppynoteserver.community.post.event.PostDeleteEvent;
 import com.puppynoteserver.community.post.event.PostIndexEvent;
 import com.puppynoteserver.community.post.repository.PostRepository;
 import com.puppynoteserver.community.post.service.CommunityPostWriteService;
@@ -71,6 +72,20 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
 
         // ES 재인덱싱
         eventPublisher.publishEvent(new PostIndexEvent(post, request.getHashtags()));
+    }
+
+    @Override
+    public void deletePost(Long postId) {
+        Long userId = securityService.getCurrentLoginUserInfo().getUserId();
+        Post post = postRepository.findByIdWithUser(postId)
+                .orElseThrow(() -> new NotFoundException("게시물을 찾을 수 없습니다."));
+
+        if (!post.getUser().getId().equals(userId)) {
+            throw new UnauthenticatedException("게시물 삭제 권한이 없습니다.");
+        }
+
+        postRepository.delete(post);
+        eventPublisher.publishEvent(new PostDeleteEvent(postId));
     }
 
     private void addImages(Post post, List<String> imageKeys) {

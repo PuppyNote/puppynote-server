@@ -54,6 +54,13 @@ public class CommunityPostController {
         return ApiResponse.ok(null);
     }
 
+    // 게시물 삭제
+    @DeleteMapping("/{postId}")
+    public ApiResponse<Void> deletePost(@PathVariable Long postId) {
+        communityPostWriteService.deletePost(postId);
+        return ApiResponse.ok(null);
+    }
+
     // 해시태그 자동완성
     @GetMapping("/hashtags")
     public ApiResponse<List<String>> getHashtagSuggestions(@RequestParam @NotBlank String keyword) {

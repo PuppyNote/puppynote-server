@@ -8,4 +8,6 @@ public interface CommunityPostWriteService {
     Long createPost(PostCreateServiceRequest request);
 
     void updatePost(Long postId, PostUpdateServiceRequest request);
+
+    void deletePost(Long postId);
 }

@@ -64,6 +64,19 @@ include::{snippets}/community-post-update/request-fields.adoc[]
 include::{snippets}/community-post-update/http-response.adoc[]
 include::{snippets}/community-post-update/response-fields.adoc[]
 
+[[community-post-delete]]
+=== 게시물 삭제
+
+==== HTTP Request
+
+include::{snippets}/community-post-delete/http-request.adoc[]
+include::{snippets}/community-post-delete/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/community-post-delete/http-response.adoc[]
+include::{snippets}/community-post-delete/response-fields.adoc[]
+
 [[community-post-hashtag-suggestions]]
 === 해시태그 자동완성
 
