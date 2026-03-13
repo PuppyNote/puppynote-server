@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,5 +20,10 @@ public class PushReadServiceImpl implements PushReadService {
     @Override
     public Optional<Push> findByUserId(Long userId) {
         return pushRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Push> findAllByUserId(Long userId) {
+        return pushRepository.findAllByUserId(userId);
     }
 }

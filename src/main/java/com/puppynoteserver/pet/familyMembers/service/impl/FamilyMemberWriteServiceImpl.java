@@ -15,6 +15,7 @@ import com.puppynoteserver.pet.familyMembers.service.FamilyMemberWriteService;
 import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberInviteServiceRequest;
 import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberRegisterServiceRequest;
 import com.puppynoteserver.pet.pets.entity.Pet;
+import com.puppynoteserver.user.push.entity.Push;
 import com.puppynoteserver.user.push.service.PushReadService;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
@@ -64,19 +65,21 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
         }
 
         // 초대 대상에게 Push 발송
-        pushReadService.findByUserId(invitee.getId()).ifPresent(push ->
-                firebaseService.sendPushNotification(
-                        SendFirebaseServiceRequest.builder()
-                                .push(push)
-                                .sound("default")
-                                .body(inviter.getNickName() + "님이 가족으로 초대했습니다!")
-                                .sendFirebaseDataDto(SendFirebaseDataDto.builder()
-                                        .alert_destination_type(AlertDestinationType.FAMILY_INVITE)
-                                        .alert_destination_info(String.valueOf(inviterUserId))
-                                        .build())
-                                .build()
-                )
-        );
+        List<Push> pushes = pushReadService.findAllByUserId(invitee.getId());
+        if (!pushes.isEmpty()) {
+            firebaseService.sendPushNotificationToAll(
+                    pushes,
+                    SendFirebaseServiceRequest.builder()
+                            .push(pushes.get(0))
+                            .sound("default")
+                            .body(inviter.getNickName() + "님이 가족으로 초대했습니다!")
+                            .sendFirebaseDataDto(SendFirebaseDataDto.builder()
+                                    .alert_destination_type(AlertDestinationType.FAMILY_INVITE)
+                                    .alert_destination_info(String.valueOf(inviterUserId))
+                                    .build())
+                            .build()
+            );
+        }
     }
 
     @Override
