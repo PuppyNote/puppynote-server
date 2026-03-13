@@ -41,7 +41,7 @@ public class PostResponse {
                 .userProfileUrl(userProfileUrl)
                 .content(post.getContent())
                 .imageUrls(imageUrls)
-                .hashtags(post.getHashtags())
+                .hashtags(List.copyOf(post.getHashtags()))
                 .createdDate(post.getCreatedDate())
                 .build();
     }
