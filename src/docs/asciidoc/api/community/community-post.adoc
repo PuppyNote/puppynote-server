@@ -25,7 +25,7 @@ include::{snippets}/community-post-list/http-response.adoc[]
 include::{snippets}/community-post-list/response-fields.adoc[]
 
 [[community-post-search]]
-=== 게시물 검색
+=== 게시물 해시태그 검색
 
 ==== HTTP Request
 
@@ -63,3 +63,16 @@ include::{snippets}/community-post-update/request-fields.adoc[]
 
 include::{snippets}/community-post-update/http-response.adoc[]
 include::{snippets}/community-post-update/response-fields.adoc[]
+
+[[community-post-hashtag-suggestions]]
+=== 해시태그 자동완성
+
+==== HTTP Request
+
+include::{snippets}/community-post-hashtag-suggestions/http-request.adoc[]
+include::{snippets}/community-post-hashtag-suggestions/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/community-post-hashtag-suggestions/http-response.adoc[]
+include::{snippets}/community-post-hashtag-suggestions/response-fields.adoc[]
