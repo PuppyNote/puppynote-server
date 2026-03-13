@@ -51,7 +51,9 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                         post("/api/v1/community/posts")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .content(objectMapper.writeValueAsString(
-                                        new PostCreateRequestDoc("오늘 산책 다녀왔어요 @강아지산책 @골든리트리버",
+                                        new PostRequestDoc(
+                                                "오늘 산책 다녀왔어요!",
+                                                List.of("강아지산책", "골든리트리버"),
                                                 List.of("uuid-key-1.jpg", "uuid-key-2.jpg"))
                                 ))
                 )
@@ -62,9 +64,11 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("content").type(JsonFieldType.STRING)
-                                        .description("게시물 내용 (필수, 최대 2000자). @해시태그 형태로 해시태그 삽입 가능"),
+                                        .description("게시물 내용 (필수, 최대 2000자)"),
+                                fieldWithPath("hashtags").type(JsonFieldType.ARRAY)
+                                        .description("해시태그 목록 (선택, @ 기호 없이 태그명만 전달)").optional(),
                                 fieldWithPath("imageKeys").type(JsonFieldType.ARRAY)
-                                        .description("S3에 업로드된 이미지 키 목록 (선택, 최대 5개)").optional()
+                                        .description("S3에 업로드된 이미지 키 목록 (선택)").optional()
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
@@ -83,7 +87,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
         given(postResponse.getUserId()).willReturn(10L);
         given(postResponse.getUserNickname()).willReturn("퍼피노트");
         given(postResponse.getUserProfileUrl()).willReturn("https://s3.amazonaws.com/profile.jpg?X-Amz-Expires=3600");
-        given(postResponse.getContent()).willReturn("오늘 산책 다녀왔어요 @강아지산책 @골든리트리버");
+        given(postResponse.getContent()).willReturn("오늘 산책 다녀왔어요!");
         given(postResponse.getImageUrls()).willReturn(List.of("https://s3.amazonaws.com/photo.jpg?X-Amz-Expires=3600"));
         given(postResponse.getHashtags()).willReturn(List.of("강아지산책", "골든리트리버"));
         given(postResponse.getCreatedDate()).willReturn(LocalDateTime.of(2026, 3, 11, 10, 0, 0));
@@ -104,7 +108,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(
-                                parameterWithName("keyword").description("검색 키워드 (해시태그명 또는 내용). 미입력 시 전체 목록 반환").optional(),
+                                parameterWithName("keyword").description("해시태그 검색 키워드 (미입력 시 전체 목록 반환)").optional(),
                                 parameterWithName("page").description("페이지 번호 (0부터 시작, 기본값: 0)").optional(),
                                 parameterWithName("size").description("페이지 크기 (기본값: 20)").optional()
                         ),
@@ -120,7 +124,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.posts[].userProfileUrl").type(JsonFieldType.STRING).description("작성자 프로필 이미지 Presigned URL").optional(),
                                 fieldWithPath("data.posts[].content").type(JsonFieldType.STRING).description("게시물 내용"),
                                 fieldWithPath("data.posts[].imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
-                                fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록 (@기호 제외)"),
+                                fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
                                 fieldWithPath("data.posts[].createdDate").type(JsonFieldType.STRING).description("작성일시"),
                                 fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                 fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
@@ -129,7 +133,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
-    @DisplayName("게시물 검색 API")
+    @DisplayName("게시물 해시태그 검색 API")
     @Test
     void searchPosts() throws Exception {
         PostResponse postResponse = mock(PostResponse.class);
@@ -137,7 +141,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
         given(postResponse.getUserId()).willReturn(10L);
         given(postResponse.getUserNickname()).willReturn("퍼피노트");
         given(postResponse.getUserProfileUrl()).willReturn("https://s3.amazonaws.com/profile.jpg?X-Amz-Expires=3600");
-        given(postResponse.getContent()).willReturn("오늘 산책 다녀왔어요 @강아지산책 @골든리트리버");
+        given(postResponse.getContent()).willReturn("오늘 산책 다녀왔어요!");
         given(postResponse.getImageUrls()).willReturn(List.of());
         given(postResponse.getHashtags()).willReturn(List.of("강아지산책", "골든리트리버"));
         given(postResponse.getCreatedDate()).willReturn(LocalDateTime.of(2026, 3, 11, 10, 0, 0));
@@ -159,7 +163,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(
-                                parameterWithName("keyword").description("검색 키워드. Elasticsearch로 해시태그 및 내용 통합 검색").optional(),
+                                parameterWithName("keyword").description("해시태그 검색 키워드 (Elasticsearch 해시태그 정확 매칭)").optional(),
                                 parameterWithName("page").description("페이지 번호 (0부터 시작)").optional(),
                                 parameterWithName("size").description("페이지 크기").optional()
                         ),
@@ -175,7 +179,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.posts[].userProfileUrl").type(JsonFieldType.STRING).description("작성자 프로필 이미지 Presigned URL").optional(),
                                 fieldWithPath("data.posts[].content").type(JsonFieldType.STRING).description("게시물 내용"),
                                 fieldWithPath("data.posts[].imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
-                                fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록 (@기호 제외)"),
+                                fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
                                 fieldWithPath("data.posts[].createdDate").type(JsonFieldType.STRING).description("작성일시"),
                                 fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                 fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
@@ -192,7 +196,7 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
         given(postResponse.getUserId()).willReturn(10L);
         given(postResponse.getUserNickname()).willReturn("퍼피노트");
         given(postResponse.getUserProfileUrl()).willReturn("https://s3.amazonaws.com/profile.jpg?X-Amz-Expires=3600");
-        given(postResponse.getContent()).willReturn("오늘 산책 다녀왔어요 @강아지산책 @골든리트리버");
+        given(postResponse.getContent()).willReturn("오늘 산책 다녀왔어요!");
         given(postResponse.getImageUrls()).willReturn(List.of(
                 "https://s3.amazonaws.com/photo1.jpg?X-Amz-Expires=3600",
                 "https://s3.amazonaws.com/photo2.jpg?X-Amz-Expires=3600"
@@ -221,10 +225,10 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.postId").type(JsonFieldType.NUMBER).description("게시물 ID"),
                                 fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("작성자 유저 ID"),
                                 fieldWithPath("data.userNickname").type(JsonFieldType.STRING).description("작성자 닉네임"),
-                                fieldWithPath("data.userProfileUrl").type(JsonFieldType.STRING).description("작성자 프로필 이미지 Presigned URL (유효시간 1시간)").optional(),
+                                fieldWithPath("data.userProfileUrl").type(JsonFieldType.STRING).description("작성자 프로필 이미지 Presigned URL").optional(),
                                 fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시물 내용"),
-                                fieldWithPath("data.imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록 (유효시간 1시간)"),
-                                fieldWithPath("data.hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록 (@기호 제외)"),
+                                fieldWithPath("data.imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
+                                fieldWithPath("data.hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
                                 fieldWithPath("data.createdDate").type(JsonFieldType.STRING).description("작성일시")
                         )
                 ));
@@ -239,7 +243,9 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                         patch("/api/v1/community/posts/{postId}", 1L)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .content(objectMapper.writeValueAsString(
-                                        new PostCreateRequestDoc("수정된 내용입니다 @강아지산책",
+                                        new PostRequestDoc(
+                                                "수정된 내용입니다!",
+                                                List.of("강아지산책"),
                                                 List.of("uuid-key-new.jpg"))
                                 ))
                 )
@@ -253,7 +259,9 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                         ),
                         requestFields(
                                 fieldWithPath("content").type(JsonFieldType.STRING)
-                                        .description("수정할 내용 (필수, 최대 2000자). @해시태그 형태로 해시태그 삽입 가능"),
+                                        .description("수정할 내용 (필수, 최대 2000자)"),
+                                fieldWithPath("hashtags").type(JsonFieldType.ARRAY)
+                                        .description("수정할 해시태그 목록 (선택). 전송 시 기존 해시태그 전체 교체").optional(),
                                 fieldWithPath("imageKeys").type(JsonFieldType.ARRAY)
                                         .description("새 S3 이미지 키 목록 (선택). 전송 시 기존 이미지 전체 교체").optional()
                         ),
@@ -266,12 +274,42 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
+    @DisplayName("해시태그 자동완성 API")
+    @Test
+    void getHashtagSuggestions() throws Exception {
+        given(communityPostReadService.getHashtagSuggestions(anyString()))
+                .willReturn(List.of("강아지산책", "강아지훈련", "강아지간식"));
+
+        mockMvc.perform(
+                        get("/api/v1/community/posts/hashtags")
+                                .param("keyword", "강아지")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("community-post-hashtag-suggestions",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("keyword").description("검색할 해시태그 키워드 (필수)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("키워드를 포함하는 해시태그 목록 (알파벳/가나다 순 정렬)")
+                        )
+                ));
+    }
+
     // 테스트용 내부 클래스
-    static class PostCreateRequestDoc {
+    static class PostRequestDoc {
         public final String content;
+        public final List<String> hashtags;
         public final List<String> imageKeys;
-        PostCreateRequestDoc(String content, List<String> imageKeys) {
+
+        PostRequestDoc(String content, List<String> hashtags, List<String> imageKeys) {
             this.content = content;
+            this.hashtags = hashtags;
             this.imageKeys = imageKeys;
         }
     }
