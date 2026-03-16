@@ -74,8 +74,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
-    //MongoDB
-    implementation('org.springframework.boot:spring-boot-starter-data-mongodb')
     //fcm
     implementation 'com.google.firebase:firebase-admin:9.1.1'
 
@@ -187,16 +185,10 @@ tasks.processResources {
                 EMAIL_PASSWORD: System.getenv('EMAIL_PASSWORD'),
                 AWS_ACCESS_KEY: System.getenv('AWS_ACCESS_KEY'),
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
-                PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
-                WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
-                PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
-                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
                 ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
-                ES_PORT: System.getenv('ES_PORT') ?: '9200',
                 ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
                 ES_PASSWORD: System.getenv('ES_PASSWORD'),
                 REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
-                REDIS_PORT: System.getenv('REDIS_PORT') ?: '6379',
                 REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
         )
     }
@@ -211,16 +203,10 @@ tasks.processResources {
                 EMAIL_PASSWORD: System.getenv('EMAIL_PASSWORD'),
                 AWS_ACCESS_KEY: System.getenv('AWS_ACCESS_KEY'),
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
-                PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
-                WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
-                PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
-                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
                 ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
-                ES_PORT: System.getenv('ES_PORT') ?: '9200',
                 ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
                 ES_PASSWORD: System.getenv('ES_PASSWORD'),
                 REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
-                REDIS_PORT: System.getenv('REDIS_PORT') ?: '6379',
                 REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
         )
     }

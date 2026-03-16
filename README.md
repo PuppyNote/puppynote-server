@@ -49,7 +49,6 @@
 | `DB_HOST` | MySQL 호스트 |
 | `DB_USERNAME` | MySQL 사용자명 |
 | `DB_PASSWORD` | MySQL 비밀번호 |
-| `MONGO_DB_URL` | MongoDB 연결 URL |
 | `JWT_SECRET_KEY` | JWT 서명 키 |
 | `EMAIL_PASSWORD` | Gmail SMTP 앱 비밀번호 |
 | `AWS_ACCESS_KEY` | AWS IAM Access Key |
@@ -212,7 +211,7 @@ src/main/java/com/puppynoteserver/
 ./gradlew asciidoctor
 ```
 
-테스트 환경에서는 H2 인메모리 DB와 MongoDB 비활성화(`application-test.yml`)가 적용됩니다.
+테스트 환경에서는 H2 인메모리 DB(`application-test.yml`)가 적용됩니다.
 
 ## Docker
 
