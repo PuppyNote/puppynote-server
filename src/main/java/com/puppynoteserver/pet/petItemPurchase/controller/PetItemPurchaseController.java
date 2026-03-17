@@ -32,4 +32,10 @@ public class PetItemPurchaseController {
     public ApiResponse<List<PetItemPurchaseResponse>> getPurchaseHistory(@PathVariable Long petItemId) {
         return ApiResponse.ok(petItemPurchaseReadService.getPurchaseHistory(petItemId));
     }
+
+    @DeleteMapping("/purchases/{purchaseId}")
+    public ApiResponse<Void> deletePurchase(@PathVariable Long purchaseId) {
+        petItemPurchaseWriteService.deletePurchase(purchaseId);
+        return ApiResponse.ok(null);
+    }
 }

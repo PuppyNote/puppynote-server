@@ -28,6 +28,13 @@ public class PetItemPurchaseWriteServiceImpl implements PetItemPurchaseWriteServ
     }
 
     @Override
+    public void deletePurchase(Long purchaseId) {
+        petItemPurchaseRepository.findById(purchaseId)
+                .orElseThrow(() -> new NotFoundException("구매 이력을 찾을 수 없습니다."));
+        petItemPurchaseRepository.deleteById(purchaseId);
+    }
+
+    @Override
     public void deleteAllByPetItemId(Long petItemId) {
         petItemPurchaseRepository.deleteAllByPetItemId(petItemId);
     }

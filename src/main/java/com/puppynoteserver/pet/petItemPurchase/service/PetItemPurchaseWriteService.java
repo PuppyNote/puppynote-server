@@ -7,6 +7,8 @@ public interface PetItemPurchaseWriteService {
 
     PetItemPurchaseResponse recordPurchase(PetItemPurchaseCreateServiceRequest request);
 
+    void deletePurchase(Long purchaseId);
+
     void deleteAllByPetItemId(Long petItemId);
 
     void deleteAllByPetId(Long petId);
