@@ -14,7 +14,7 @@ import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberRepository;
 import com.puppynoteserver.pet.familyMembers.service.FamilyMemberWriteService;
 import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberInviteServiceRequest;
 import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberRegisterServiceRequest;
-import com.puppynoteserver.pet.pets.entity.Pet;
+import com.puppynoteserver.pet.pets.service.PetReadService;
 import com.puppynoteserver.user.push.entity.Push;
 import com.puppynoteserver.user.push.service.PushReadService;
 import com.puppynoteserver.user.users.entity.User;
@@ -32,6 +32,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
 
     private final FamilyMemberRepository familyMemberRepository;
     private final UserReadService userReadService;
+    private final PetReadService petReadService;
     private final PushReadService pushReadService;
     private final FirebaseService firebaseService;
     private final SecurityService securityService;
@@ -40,29 +41,23 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
     public void invite(FamilyMemberInviteServiceRequest request) {
         Long inviterUserId = securityService.getCurrentLoginUserInfo().getUserId();
 
-        // 초대자의 강아지 목록 조회
-        List<FamilyMember> ownerPets = familyMemberRepository.findAllOwnerPetsOf(inviterUserId);
-        if (ownerPets.isEmpty()) {
-            throw new PuppyNoteException("등록된 반려견이 없습니다.");
+        // 초대자가 해당 펫의 OWNER인지 검증
+        FamilyMember ownerRecord = familyMemberRepository.findByUserIdAndPetId(inviterUserId, request.getPetId())
+                .orElseThrow(() -> new NotFoundException("해당 펫을 찾을 수 없습니다."));
+        if (ownerRecord.getRole() != RoleType.OWNER) {
+            throw new PuppyNoteException("펫의 OWNER만 가족을 초대할 수 있습니다.");
         }
 
-        List<Long> petIds = ownerPets.stream()
-                .map(fm -> fm.getId().getPetId())
-                .toList();
-
         // 중복 초대 체크
-        if (familyMemberRepository.existsByUserIdAndPetIds(request.getInviteeUserId(), petIds)) {
+        if (familyMemberRepository.existsByUserIdAndPetIds(request.getInviteeUserId(), List.of(request.getPetId()))) {
             throw new PuppyNoteException("이미 가족으로 등록되어 있거나 초대 대기 중인 유저입니다.");
         }
 
         User invitee = userReadService.findById(request.getInviteeUserId());
         User inviter = userReadService.findById(inviterUserId);
 
-        // 초대자의 모든 강아지에 PENDING 레코드 생성
-        for (FamilyMember ownerPet : ownerPets) {
-            Pet pet = ownerPet.getPet();
-            familyMemberRepository.save(FamilyMember.of(invitee, pet, RoleType.FAMILY, FamilyMemberStatus.PENDING));
-        }
+        // 해당 펫에 PENDING 레코드 생성
+        familyMemberRepository.save(FamilyMember.of(invitee, petReadService.findById(request.getPetId()), RoleType.FAMILY, FamilyMemberStatus.PENDING));
 
         // 초대 대상에게 Push 발송
         List<Push> pushes = pushReadService.findAllByUserId(invitee.getId());
@@ -75,7 +70,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
                             .body(inviter.getNickName() + "님이 가족으로 초대했습니다!")
                             .sendFirebaseDataDto(SendFirebaseDataDto.builder()
                                     .alert_destination_type(AlertDestinationType.FAMILY_INVITE)
-                                    .alert_destination_info(String.valueOf(inviterUserId))
+                                    .alert_destination_info("{\"userId\":" + request.getInviteeUserId() + ",\"petId\":" + request.getPetId() + "}")
                                     .build())
                             .build()
             );
@@ -84,21 +79,40 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
 
     @Override
     public void register(FamilyMemberRegisterServiceRequest request) {
-        Long currentUserId = securityService.getCurrentLoginUserInfo().getUserId();
-
-        // 초대자의 강아지 목록 조회
-        List<FamilyMember> ownerPets = familyMemberRepository.findAllOwnerPetsOf(request.getInviterUserId());
-        List<Long> petIds = ownerPets.stream()
-                .map(fm -> fm.getId().getPetId())
-                .toList();
-
-        // 현재 유저의 PENDING 레코드 조회 후 DONE으로 변경
-        List<FamilyMember> pendingRecords = familyMemberRepository.findAllPendingByUserIdAndPetIds(currentUserId, petIds);
-        if (pendingRecords.isEmpty()) {
-            throw new PuppyNoteException("이미 가족으로 등록되어 있거나 초대받은 내역이 없습니다.");
+        // alertDestinationInfo의 userId + petId로 PENDING 레코드 조회 후 DONE으로 변경
+        FamilyMember pendingRecord = familyMemberRepository.findByUserIdAndPetId(request.getUserId(), request.getPetId())
+                .orElseThrow(() -> new NotFoundException("초대받은 내역이 없습니다."));
+        if (pendingRecord.getStatus() != FamilyMemberStatus.PENDING) {
+            throw new PuppyNoteException("이미 가족으로 등록되어 있습니다.");
         }
 
-        pendingRecords.forEach(fm -> fm.updateStatus(FamilyMemberStatus.DONE));
+        pendingRecord.updateStatus(FamilyMemberStatus.DONE);
+    }
+
+    @Override
+    public void deleteFamilyRelation(Long targetUserId, Long petId) {
+        Long currentUserId = securityService.getCurrentLoginUserInfo().getUserId();
+
+        FamilyMember currentUserRecord = familyMemberRepository.findByUserIdAndPetId(currentUserId, petId)
+                .orElseThrow(() -> new NotFoundException("해당 펫의 가족 구성원 정보를 찾을 수 없습니다."));
+
+        if (currentUserRecord.getRole() == RoleType.OWNER) {
+            // 내가 OWNER → 상대(FAMILY)를 해당 펫에서 제거
+            FamilyMember targetRecord = familyMemberRepository.findByUserIdAndPetId(targetUserId, petId)
+                    .orElseThrow(() -> new NotFoundException("삭제할 가족 관계를 찾을 수 없습니다."));
+            if (targetRecord.getRole() != RoleType.FAMILY) {
+                throw new PuppyNoteException("FAMILY 멤버만 삭제할 수 있습니다.");
+            }
+            familyMemberRepository.deleteAllByUserIdAndPetIds(targetUserId, List.of(petId));
+        } else {
+            // 내가 FAMILY → 내 자신을 해당 펫에서 제거 (OWNER와의 연결 해제)
+            FamilyMember ownerRecord = familyMemberRepository.findByUserIdAndPetId(targetUserId, petId)
+                    .orElseThrow(() -> new NotFoundException("삭제할 가족 관계를 찾을 수 없습니다."));
+            if (ownerRecord.getRole() != RoleType.OWNER) {
+                throw new PuppyNoteException("FAMILY는 FAMILY를 삭제할 수 없습니다.");
+            }
+            familyMemberRepository.deleteAllByUserIdAndPetIds(currentUserId, List.of(petId));
+        }
     }
 
     @Override

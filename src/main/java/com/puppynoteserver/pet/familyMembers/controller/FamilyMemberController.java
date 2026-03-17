@@ -23,8 +23,8 @@ public class FamilyMemberController {
     private final FamilyMemberWriteService familyMemberWriteService;
 
     @GetMapping
-    public ApiResponse<List<FamilyMemberResponse>> getFamilyMembers() {
-        return ApiResponse.ok(familyMemberReadService.getFamilyMembers());
+    public ApiResponse<List<FamilyMemberResponse>> getFamilyMembers(@RequestParam Long petId) {
+        return ApiResponse.ok(familyMemberReadService.getFamilyMembers(petId));
     }
 
     @GetMapping("/search")
@@ -42,6 +42,12 @@ public class FamilyMemberController {
     @PostMapping("/register")
     public ApiResponse<Void> register(@Valid @RequestBody FamilyMemberRegisterRequest request) {
         familyMemberWriteService.register(request.toServiceRequest());
+        return ApiResponse.ok(null);
+    }
+
+    @DeleteMapping("/{targetUserId}")
+    public ApiResponse<Void> deleteFamilyRelation(@PathVariable Long targetUserId, @RequestParam Long petId) {
+        familyMemberWriteService.deleteFamilyRelation(targetUserId, petId);
         return ApiResponse.ok(null);
     }
 }

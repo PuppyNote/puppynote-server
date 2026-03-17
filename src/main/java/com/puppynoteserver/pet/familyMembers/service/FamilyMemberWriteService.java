@@ -9,5 +9,7 @@ public interface FamilyMemberWriteService {
 
     void register(FamilyMemberRegisterServiceRequest request);
 
+    void deleteFamilyRelation(Long targetUserId, Long petId);
+
     void deleteAllByPetId(Long petId);
 }

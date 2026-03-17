@@ -6,10 +6,12 @@ import lombok.Getter;
 @Getter
 public class FamilyMemberRegisterServiceRequest {
 
-    private final Long inviterUserId;
+    private final Long userId;
+    private final Long petId;
 
     @Builder
-    private FamilyMemberRegisterServiceRequest(Long inviterUserId) {
-        this.inviterUserId = inviterUserId;
+    private FamilyMemberRegisterServiceRequest(Long userId, Long petId) {
+        this.userId = userId;
+        this.petId = petId;
     }
 }

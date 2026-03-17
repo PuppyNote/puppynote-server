@@ -22,11 +22,11 @@ public class FamilyMemberResponse {
         this.status = status;
     }
 
-    public static FamilyMemberResponse of(FamilyMember familyMember) {
+    public static FamilyMemberResponse of(FamilyMember familyMember, String presignedProfileUrl) {
         return new FamilyMemberResponse(
                 familyMember.getUser().getId(),
                 familyMember.getUser().getNickName(),
-                familyMember.getUser().getProfileUrl(),
+                presignedProfileUrl,
                 familyMember.getRole(),
                 familyMember.getStatus()
         );

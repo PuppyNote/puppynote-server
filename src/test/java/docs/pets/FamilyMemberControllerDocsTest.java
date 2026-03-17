@@ -56,16 +56,19 @@ public class FamilyMemberControllerDocsTest extends RestDocsSupport {
         given(response2.getRole()).willReturn(RoleType.FAMILY);
         given(response2.getStatus()).willReturn(FamilyMemberStatus.DONE);
 
-        given(familyMemberReadService.getFamilyMembers()).willReturn(List.of(response1, response2));
+        given(familyMemberReadService.getFamilyMembers(anyLong())).willReturn(List.of(response1, response2));
 
         mockMvc.perform(
-                        get("/api/v1/family-members")
+                        get("/api/v1/family-members?petId=1")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("family-member-list",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("petId").description("조회할 펫 ID")
+                        ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
                                 fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
@@ -98,8 +101,7 @@ public class FamilyMemberControllerDocsTest extends RestDocsSupport {
         given(familyMemberReadService.searchUsersByEmail(anyString())).willReturn(List.of(response1, response2));
 
         mockMvc.perform(
-                        get("/api/v1/family-members/search")
-                                .param("email", "puppy")
+                        get("/api/v1/family-members/search?email=puppy")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -129,7 +131,7 @@ public class FamilyMemberControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(
                         post("/api/v1/family-members/invite")
-                                .content("{\"inviteeUserId\": 2}")
+                                .content("{\"inviteeUserId\": 2, \"petId\": 1}")
                                 .contentType(APPLICATION_JSON)
                 )
                 .andDo(print())
@@ -139,7 +141,9 @@ public class FamilyMemberControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("inviteeUserId").type(JsonFieldType.NUMBER)
-                                        .description("초대할 유저 ID. 초대 시 내 모든 강아지에 대해 가족 관계가 생성되며 Push 알림이 발송됩니다.")
+                                        .description("초대할 유저 ID"),
+                                fieldWithPath("petId").type(JsonFieldType.NUMBER)
+                                        .description("초대할 펫 ID. 해당 펫에 대해서만 가족 관계가 생성되며 Push 알림이 발송됩니다.")
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
@@ -157,7 +161,7 @@ public class FamilyMemberControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(
                         post("/api/v1/family-members/register")
-                                .content("{\"inviterUserId\": 1}")
+                                .content("{\"userId\": 2, \"petId\": 1}")
                                 .contentType(APPLICATION_JSON)
                 )
                 .andDo(print())
@@ -166,8 +170,40 @@ public class FamilyMemberControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("inviterUserId").type(JsonFieldType.NUMBER)
-                                        .description("초대한 유저 ID. 해당 유저의 모든 강아지에 대해 PENDING → DONE으로 변경됩니다.")
+                                fieldWithPath("userId").type(JsonFieldType.NUMBER)
+                                        .description("Push 알림의 alertDestinationInfo.userId (초대받은 유저 ID)"),
+                                fieldWithPath("petId").type(JsonFieldType.NUMBER)
+                                        .description("Push 알림의 alertDestinationInfo.petId (초대된 펫 ID)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터 없음")
+                        )
+                ));
+    }
+
+    @DisplayName("가족 삭제 API")
+    @Test
+    void deleteFamilyRelation() throws Exception {
+        doNothing().when(familyMemberWriteService).deleteFamilyRelation(anyLong(), anyLong());
+
+        mockMvc.perform(
+                        delete("/api/v1/family-members/{targetUserId}?petId=1", 2L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("family-member-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("targetUserId").description("삭제할 가족 유저 ID")
+                        ),
+                        queryParameters(
+                                parameterWithName("petId").description(
+                                        "펫 ID. 내가 OWNER이면 해당 유저를 해당 펫에서 제거하고, " +
+                                        "내가 FAMILY이면 해당 펫에서 내가 빠집니다.")
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),

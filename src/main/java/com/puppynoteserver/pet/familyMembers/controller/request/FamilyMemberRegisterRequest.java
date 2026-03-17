@@ -9,12 +9,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FamilyMemberRegisterRequest {
 
-    @NotNull(message = "초대한 유저 ID는 필수입니다.")
-    private Long inviterUserId;
+    @NotNull(message = "유저 ID는 필수입니다.")
+    private Long userId;
+
+    @NotNull(message = "펫 ID는 필수입니다.")
+    private Long petId;
 
     public FamilyMemberRegisterServiceRequest toServiceRequest() {
         return FamilyMemberRegisterServiceRequest.builder()
-                .inviterUserId(inviterUserId)
+                .userId(userId)
+                .petId(petId)
                 .build();
     }
 }
