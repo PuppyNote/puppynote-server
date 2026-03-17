@@ -49,7 +49,7 @@ public class FamilyMemberReadServiceImpl implements FamilyMemberReadService {
         return userReadService.findAllByEmailLike(email)
                 .stream()
                 .filter(user -> !user.getId().equals(currentUserId))
-                .map(UserSearchResponse::of)
+                .map(user -> UserSearchResponse.of(user, s3StorageService.createPresignedUrl(user.getProfileUrl(), BucketKind.USER_PROFILE)))
                 .toList();
     }
 }
