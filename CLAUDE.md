@@ -78,7 +78,6 @@ All responses are wrapped in `ApiResponse<T>`:
 - Testing: H2 in-memory (PostgreSQL dialect, `ddl-auto: create`)
 - ORM: Spring Data JPA + QueryDSL (generated sources go to `src/main/generated`)
 - Base entity: `BaseTimeEntity` (audit fields: `createdDate`, `updatedDate`)
-- Push notifications: MongoDB (disabled in test profile)
 
 ### Key Configuration Files
 
@@ -86,7 +85,7 @@ All responses are wrapped in `ApiResponse<T>`:
 |---|---|
 | `src/main/resources/application-dev.yml` | Dev environment (MySQL, OAuth URLs, JWT from env vars) |
 | `src/main/resources/application-prd.yml` | Production environment |
-| `src/main/resources/application-test.yml` | Test environment (H2, MongoDB disabled) |
+| `src/main/resources/application-test.yml` | Test environment (H2) |
 | `build.gradle` | Dependencies, QueryDSL setup, REST Docs, env var injection |
 | `Dockerfile` | Java 17 Alpine-based image |
 

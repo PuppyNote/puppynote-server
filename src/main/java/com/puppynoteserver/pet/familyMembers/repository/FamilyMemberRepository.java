@@ -3,6 +3,7 @@ package com.puppynoteserver.pet.familyMembers.repository;
 import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
 import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
 import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
+import com.puppynoteserver.user.users.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +29,8 @@ public interface FamilyMemberRepository {
     Optional<FamilyMember> findByUserIdAndPetId(Long userId, Long petId);
 
     void deleteAllByPetId(Long petId);
+
+    void deleteAllByUserIdAndPetIds(Long userId, List<Long> petIds);
+
+    List<User> findDirectFamilyUsers(Long userId);
 }

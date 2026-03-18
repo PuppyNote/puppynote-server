@@ -182,15 +182,11 @@ tasks.processResources {
                 EMAIL_PASSWORD: System.getenv('EMAIL_PASSWORD'),
                 AWS_ACCESS_KEY: System.getenv('AWS_ACCESS_KEY'),
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
-                PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
-                WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
-                PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
-                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
-                COMMUNITY_POST_BUCKET: System.getenv('COMMUNITY_POST_BUCKET'),
-                ES_HOST: System.getenv('ES_HOST'),
-                ES_PORT: System.getenv('ES_PORT'),
-                ES_USERNAME: System.getenv('ES_USERNAME'),
-                ES_PASSWORD: System.getenv('ES_PASSWORD')
+                ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
+                ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
+                ES_PASSWORD: System.getenv('ES_PASSWORD'),
+                REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
+                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
         )
     }
 
@@ -204,15 +200,11 @@ tasks.processResources {
                 EMAIL_PASSWORD: System.getenv('EMAIL_PASSWORD'),
                 AWS_ACCESS_KEY: System.getenv('AWS_ACCESS_KEY'),
                 AWS_SECRET_KEY: System.getenv('AWS_SECRET_KEY'),
-                PUPPY_PROFILE_BUCKET: System.getenv('PUPPY_PROFILE_BUCKET'),
-                WALK_PHOTO_BUCKET: System.getenv('WALK_PHOTO_BUCKET'),
-                PET_ITEM_PHOTO_BUCKET: System.getenv('PET_ITEM_PHOTO_BUCKET'),
-                USER_PROFILE_BUCKET: System.getenv('USER_PROFILE_BUCKET'),
-                COMMUNITY_POST_BUCKET: System.getenv('COMMUNITY_POST_BUCKET'),
-                ES_HOST: System.getenv('ES_HOST'),
-                ES_PORT: System.getenv('ES_PORT'),
-                ES_USERNAME: System.getenv('ES_USERNAME'),
-                ES_PASSWORD: System.getenv('ES_PASSWORD')
+                ES_HOST: System.getenv('ES_HOST') ?: 'localhost',
+                ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
+                ES_PASSWORD: System.getenv('ES_PASSWORD'),
+                REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
+                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
         )
     }
 }

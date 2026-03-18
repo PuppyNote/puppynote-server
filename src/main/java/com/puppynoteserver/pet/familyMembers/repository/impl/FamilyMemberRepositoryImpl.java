@@ -5,11 +5,13 @@ import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
 import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
 import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberJpaRepository;
 import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberRepository;
+import com.puppynoteserver.user.users.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Repository
 @RequiredArgsConstructor
@@ -77,5 +79,26 @@ public class FamilyMemberRepositoryImpl implements FamilyMemberRepository {
     @Override
     public void deleteAllByPetId(Long petId) {
         familyMemberJpaRepository.deleteAllByIdPetId(petId);
+    }
+
+    @Override
+    public void deleteAllByUserIdAndPetIds(Long userId, List<Long> petIds) {
+        if (petIds.isEmpty()) {
+            return;
+        }
+        familyMemberJpaRepository.deleteAllByUserIdAndPetIdIn(userId, petIds);
+    }
+
+    @Override
+    public List<User> findDirectFamilyUsers(Long userId) {
+        // 내가 직접 초대한 사람들 (내 OWNER 펫의 FAMILY 멤버)
+        List<User> familyOnMyPets = familyMemberJpaRepository.findFamilyUsersOnOwnedPets(
+                userId, RoleType.OWNER, RoleType.FAMILY, FamilyMemberStatus.DONE);
+        // 나를 직접 초대한 사람들 (내가 FAMILY인 펫의 OWNER)
+        List<User> ownersWhoInvitedMe = familyMemberJpaRepository.findOwnerUsersOfJoinedPets(
+                userId, RoleType.FAMILY, RoleType.OWNER, FamilyMemberStatus.DONE);
+        return Stream.concat(familyOnMyPets.stream(), ownersWhoInvitedMe.stream())
+                .distinct()
+                .toList();
     }
 }

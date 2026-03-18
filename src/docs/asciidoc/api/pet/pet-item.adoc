@@ -102,3 +102,16 @@ include::{snippets}/pet-item-purchase-list/path-parameters.adoc[]
 
 include::{snippets}/pet-item-purchase-list/http-response.adoc[]
 include::{snippets}/pet-item-purchase-list/response-fields.adoc[]
+
+[[pet-item-purchase-delete]]
+=== 용품 구매 이력 삭제
+
+==== HTTP Request
+
+include::{snippets}/pet-item-purchase-delete/http-request.adoc[]
+include::{snippets}/pet-item-purchase-delete/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/pet-item-purchase-delete/http-response.adoc[]
+include::{snippets}/pet-item-purchase-delete/response-fields.adoc[]

@@ -6,14 +6,15 @@ import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberRepository;
 import com.puppynoteserver.pet.familyMembers.service.FamilyMemberReadService;
 import com.puppynoteserver.pet.familyMembers.service.response.FamilyMemberResponse;
 import com.puppynoteserver.pet.familyMembers.service.response.UserSearchResponse;
+import com.puppynoteserver.storage.enums.BucketKind;
+import com.puppynoteserver.storage.service.S3StorageService;
+import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,25 +24,22 @@ public class FamilyMemberReadServiceImpl implements FamilyMemberReadService {
     private final FamilyMemberRepository familyMemberRepository;
     private final UserReadService userReadService;
     private final SecurityService securityService;
+    private final S3StorageService s3StorageService;
 
     @Override
-    public List<FamilyMemberResponse> getFamilyMembers() {
+    public List<FamilyMemberResponse> getFamilyMembers(Long petId) {
         Long currentUserId = securityService.getCurrentLoginUserInfo().getUserId();
 
-        // 내가 속한 모든 펫 ID 조회 (OWNER/FAMILY 역할 무관)
-        List<Long> petIds = familyMemberRepository.findAllPetIdsByUserId(currentUserId);
-        if (petIds.isEmpty()) {
-            return List.of();
-        }
-
-        // 해당 펫들의 DONE 가족 목록 조회 후 유저 기준 중복 제거 (본인 제외)
-        Map<Long, FamilyMemberResponse> uniqueMembers = new LinkedHashMap<>();
-        familyMemberRepository.findAllByPetIdsAndStatus(petIds, FamilyMemberStatus.DONE)
+        return familyMemberRepository.findAllByPetIdAndStatus(petId, FamilyMemberStatus.DONE)
                 .stream()
                 .filter(fm -> !fm.getId().getUserId().equals(currentUserId))
-                .forEach(fm -> uniqueMembers.putIfAbsent(fm.getId().getUserId(), FamilyMemberResponse.of(fm)));
+                .map(fm -> FamilyMemberResponse.of(fm, s3StorageService.createPresignedUrl(fm.getUser().getProfileUrl(), BucketKind.USER_PROFILE)))
+                .toList();
+    }
 
-        return List.copyOf(uniqueMembers.values());
+    @Override
+    public List<User> findFamilyUsers(Long userId) {
+        return familyMemberRepository.findDirectFamilyUsers(userId);
     }
 
     @Override
@@ -51,7 +49,7 @@ public class FamilyMemberReadServiceImpl implements FamilyMemberReadService {
         return userReadService.findAllByEmailLike(email)
                 .stream()
                 .filter(user -> !user.getId().equals(currentUserId))
-                .map(UserSearchResponse::of)
+                .map(user -> UserSearchResponse.of(user, s3StorageService.createPresignedUrl(user.getProfileUrl(), BucketKind.USER_PROFILE)))
                 .toList();
     }
 }

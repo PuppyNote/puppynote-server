@@ -18,12 +18,12 @@ public class UserSearchResponse {
         this.profileUrl = profileUrl;
     }
 
-    public static UserSearchResponse of(User user) {
+    public static UserSearchResponse of(User user, String presignedProfileUrl) {
         return new UserSearchResponse(
                 user.getId(),
                 user.getEmail(),
                 user.getNickName(),
-                user.getProfileUrl()
+                presignedProfileUrl
         );
     }
 }

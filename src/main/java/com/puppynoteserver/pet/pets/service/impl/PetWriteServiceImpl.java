@@ -6,6 +6,7 @@ import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
 import com.puppynoteserver.pet.familyMembers.entity.enums.FamilyMemberStatus;
 import com.puppynoteserver.pet.familyMembers.entity.enums.RoleType;
+import com.puppynoteserver.pet.familyMembers.service.FamilyMemberReadService;
 import com.puppynoteserver.pet.familyMembers.service.FamilyMemberService;
 import com.puppynoteserver.pet.familyMembers.service.FamilyMemberWriteService;
 import com.puppynoteserver.pet.petItems.service.PetItemWriteService;
@@ -34,6 +35,7 @@ public class PetWriteServiceImpl implements PetWriteService {
     private final PetReadService petReadService;
     private final FamilyMemberService familyMemberService;
     private final FamilyMemberWriteService familyMemberWriteService;
+    private final FamilyMemberReadService familyMemberReadService;
     private final PetItemWriteService petItemWriteService;
     private final PetWalkAlarmWriteService petWalkAlarmWriteService;
     private final WalkWriteService walkWriteService;
@@ -47,8 +49,13 @@ public class PetWriteServiceImpl implements PetWriteService {
 
         Pet savedPet = petRepository.save(request.toEntity());
 
-        FamilyMember familyMember = FamilyMember.of(user, savedPet, RoleType.OWNER, FamilyMemberStatus.DONE);
-        familyMemberService.save(familyMember);
+        // 현재 유저를 OWNER로 추가
+        familyMemberService.save(FamilyMember.of(user, savedPet, RoleType.OWNER, FamilyMemberStatus.DONE));
+
+        // 기존 가족 멤버들을 FAMILY로 추가
+        familyMemberReadService.findFamilyUsers(userId)
+                .forEach(familyUser ->
+                        familyMemberService.save(FamilyMember.of(familyUser, savedPet, RoleType.FAMILY, FamilyMemberStatus.DONE)));
 
         return PetCreateResponse.from(savedPet);
     }

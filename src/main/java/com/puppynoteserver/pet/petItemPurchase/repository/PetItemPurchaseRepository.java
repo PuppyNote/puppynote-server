@@ -22,4 +22,8 @@ public interface PetItemPurchaseRepository {
     void deleteAllByPetItemId(Long petItemId);
 
     void deleteAllByPetId(Long petId);
+
+    Optional<PetItemPurchase> findById(Long id);
+
+    void deleteById(Long id);
 }
