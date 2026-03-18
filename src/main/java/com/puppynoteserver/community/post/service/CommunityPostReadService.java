@@ -9,6 +9,8 @@ public interface CommunityPostReadService {
 
     PostListResponse getPosts(String keyword, int page, int size);
 
+    PostListResponse getMyPosts(int page, int size);
+
     PostResponse getPost(Long postId);
 
     List<String> getHashtagSuggestions(String keyword);
