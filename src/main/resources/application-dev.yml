@@ -68,6 +68,7 @@ aws:
       walk-photo: walk-photo-dev  # 산책 사진 버킷
       pet-item-photo: pet-item-dev  # 용품 이미지 버킷
       user-profile: user-profile-photo-dev  # 사용자 프로필 이미지 버킷
+      community-post: community-photo-dev  # 커뮤니티 게시물 이미지 버킷
 
 elasticsearch:
   host: ${ES_HOST}
