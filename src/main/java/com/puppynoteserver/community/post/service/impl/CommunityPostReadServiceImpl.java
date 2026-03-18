@@ -9,6 +9,7 @@ import com.puppynoteserver.community.post.service.PostSearchService;
 import com.puppynoteserver.community.post.service.response.PostListResponse;
 import com.puppynoteserver.community.post.service.response.PostResponse;
 import com.puppynoteserver.global.exception.NotFoundException;
+import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.storage.enums.BucketKind;
 import com.puppynoteserver.storage.service.S3StorageService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
     private final S3StorageService s3StorageService;
+    private final SecurityService securityService;
 
     // 테스트 환경에서는 null (ES 미사용)
     @Autowired(required = false)
@@ -59,6 +61,15 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
 
         List<PostResponse> responses = toPostResponses(posts);
         return PostListResponse.of(responses, page, totalPages, totalCount);
+    }
+
+    @Override
+    public PostListResponse getMyPosts(int page, int size) {
+        Long userId = securityService.getCurrentLoginUserInfo().getUserId();
+        Page<Post> postPage = postRepository.findAllByUserIdWithUser(userId, PageRequest.of(page, size));
+
+        List<PostResponse> responses = toPostResponses(postPage.getContent());
+        return PostListResponse.of(responses, page, postPage.getTotalPages(), postPage.getTotalElements());
     }
 
     @Override

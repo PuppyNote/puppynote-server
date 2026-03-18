@@ -192,6 +192,60 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
+    @DisplayName("내가 작성한 게시물 목록 조회 API")
+    @Test
+    void getMyPosts() throws Exception {
+        PostResponse postResponse = mock(PostResponse.class);
+        given(postResponse.getPostId()).willReturn(1L);
+        given(postResponse.getUserId()).willReturn(10L);
+        given(postResponse.getUserNickname()).willReturn("퍼피노트");
+        given(postResponse.getUserProfileUrl()).willReturn("https://s3.amazonaws.com/profile.jpg?X-Amz-Expires=3600");
+        given(postResponse.getContent()).willReturn("오늘 산책 다녀왔어요!");
+        given(postResponse.getImageKeys()).willReturn(List.of("uuid-key-1.jpg"));
+        given(postResponse.getImageUrls()).willReturn(List.of("https://s3.amazonaws.com/photo.jpg?X-Amz-Expires=3600"));
+        given(postResponse.getHashtags()).willReturn(List.of("강아지산책", "골든리트리버"));
+        given(postResponse.getCreatedDate()).willReturn(LocalDateTime.of(2026, 3, 18, 10, 0, 0));
+
+        PostListResponse listResponse = PostListResponse.of(List.of(postResponse), 0, 1, 1L);
+
+        given(communityPostReadService.getMyPosts(anyInt(), anyInt())).willReturn(listResponse);
+
+        mockMvc.perform(
+                        get("/api/v1/community/posts/my")
+                                .param("page", "0")
+                                .param("size", "20")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("community-post-my-list",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호 (0부터 시작, 기본값: 0)").optional(),
+                                parameterWithName("size").description("페이지 크기 (기본값: 20)").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                                fieldWithPath("data.posts").type(JsonFieldType.ARRAY).description("내가 작성한 게시물 목록"),
+                                fieldWithPath("data.posts[].postId").type(JsonFieldType.NUMBER).description("게시물 ID"),
+                                fieldWithPath("data.posts[].userId").type(JsonFieldType.NUMBER).description("작성자 유저 ID"),
+                                fieldWithPath("data.posts[].userNickname").type(JsonFieldType.STRING).description("작성자 닉네임"),
+                                fieldWithPath("data.posts[].userProfileUrl").type(JsonFieldType.STRING).description("작성자 프로필 이미지 Presigned URL").optional(),
+                                fieldWithPath("data.posts[].content").type(JsonFieldType.STRING).description("게시물 내용"),
+                                fieldWithPath("data.posts[].imageKeys").type(JsonFieldType.ARRAY).description("첨부 이미지 S3 키 목록"),
+                                fieldWithPath("data.posts[].imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
+                                fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
+                                fieldWithPath("data.posts[].createdDate").type(JsonFieldType.STRING).description("작성일시"),
+                                fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
+                                fieldWithPath("data.totalCount").type(JsonFieldType.NUMBER).description("전체 게시물 수")
+                        )
+                ));
+    }
+
     @DisplayName("게시물 단건 조회 API")
     @Test
     void getPost() throws Exception {

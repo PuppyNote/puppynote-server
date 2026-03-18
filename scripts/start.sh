@@ -53,6 +53,7 @@ nohup java \
   -XX:+UseG1GC \
   -Dspring.profiles.active=prd \
   -Dserver.port=$INACTIVE_PORT \
+  -Duser.timezone=Asia/Seoul \
   -Djava.security.egd=file:/dev/./urandom \
   -jar $JAR_FILE \
   > $LOG_DIR/app-$INACTIVE_PORT.log 2>&1 &

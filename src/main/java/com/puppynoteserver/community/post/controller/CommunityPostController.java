@@ -39,6 +39,14 @@ public class CommunityPostController {
         return ApiResponse.ok(communityPostReadService.getPosts(keyword, page, size));
     }
 
+    // 내가 작성한 게시물 목록 조회
+    @GetMapping("/my")
+    public ApiResponse<PostListResponse> getMyPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ApiResponse.ok(communityPostReadService.getMyPosts(page, size));
+    }
+
     // 게시물 단건 조회
     @GetMapping("/{postId}")
     public ApiResponse<PostResponse> getPost(@PathVariable Long postId) {
