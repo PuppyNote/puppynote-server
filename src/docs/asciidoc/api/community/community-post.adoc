@@ -37,6 +37,19 @@ include::{snippets}/community-post-search/query-parameters.adoc[]
 include::{snippets}/community-post-search/http-response.adoc[]
 include::{snippets}/community-post-search/response-fields.adoc[]
 
+[[community-post-my-list]]
+=== 내가 작성한 게시물 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/community-post-my-list/http-request.adoc[]
+include::{snippets}/community-post-my-list/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/community-post-my-list/http-response.adoc[]
+include::{snippets}/community-post-my-list/response-fields.adoc[]
+
 [[community-post-get]]
 === 게시물 단건 조회
 
