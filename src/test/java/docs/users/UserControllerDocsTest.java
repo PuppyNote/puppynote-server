@@ -92,6 +92,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
     @Test
     void getMyProfile() throws Exception {
         UserProfileResponse response = mock(UserProfileResponse.class);
+        given(response.getUserId()).willReturn(1L);
         given(response.getEmail()).willReturn("test@puppynote.com");
         given(response.getNickName()).willReturn("멍멍이주인");
         given(response.getProfileUrl()).willReturn("https://example.com/profile.jpg");
@@ -110,6 +111,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
                                 fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                                fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("유저ID"),
                                 fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
                                 fieldWithPath("data.nickName").type(JsonFieldType.STRING).description("닉네임"),
                                 fieldWithPath("data.profileUrl").type(JsonFieldType.STRING).description("프로필 이미지 URL").optional()

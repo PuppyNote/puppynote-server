@@ -86,6 +86,9 @@ management:
       show-details: always
     prometheus:
       enabled: true
+  health:
+    elasticsearch:
+      enabled: false
   metrics:
     tags:
       application: puppynote-dev

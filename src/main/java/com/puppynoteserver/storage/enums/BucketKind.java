@@ -8,6 +8,7 @@ public enum BucketKind {
     PUPPY_PROFILE,
     WALK_PHOTO,
     PET_ITEM_PHOTO,
-    USER_PROFILE
+    USER_PROFILE,
+    COMMUNITY_POST
 
 }

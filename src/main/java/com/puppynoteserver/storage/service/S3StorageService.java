@@ -29,6 +29,9 @@ public class S3StorageService {
     @Value("${aws.s3.bucket.puppy-profile}")
     private String puppyProfileBucketName;
 
+    @Value("${aws.s3.bucket.community-post}")
+    private String communityPostBucketName;
+
     @Value("${aws.s3.bucket.walk-photo}")
     private String walkPhotoBucketName;
 
@@ -143,6 +146,7 @@ public class S3StorageService {
             case WALK_PHOTO -> walkPhotoBucketName;
             case PET_ITEM_PHOTO -> petItemImageBucketName;
             case USER_PROFILE -> userProfileBucketName;
+            case COMMUNITY_POST -> communityPostBucketName;
         };
     }
 

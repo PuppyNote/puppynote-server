@@ -71,6 +71,11 @@ include::api/alert/alert-setting.adoc[]
 
 include::api/petTip/pet-tip.adoc[]
 
+[[Community-API]]
+== Community API
+
+include::api/community/community-post.adoc[]
+
 [[Storage-API]]
 == Storage API
 
