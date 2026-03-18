@@ -2,8 +2,6 @@ package com.puppynoteserver.community.post.service.impl;
 
 import com.puppynoteserver.community.post.entity.Post;
 import com.puppynoteserver.community.post.entity.PostImage;
-import com.puppynoteserver.community.post.event.PostDeleteEvent;
-import com.puppynoteserver.community.post.event.PostIndexEvent;
 import com.puppynoteserver.community.post.repository.PostRepository;
 import com.puppynoteserver.community.post.service.CommunityPostWriteService;
 import com.puppynoteserver.community.post.service.request.PostCreateServiceRequest;
@@ -15,7 +13,6 @@ import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +28,6 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
     private final PostRepository postRepository;
     private final SecurityService securityService;
     private final UserRepository userRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public Long createPost(PostCreateServiceRequest request) {
@@ -42,11 +38,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
         Post post = request.toEntity(user);
         postRepository.save(post);
 
-        // 이미지 키 저장
         addImages(post, request.getImageKeys());
-
-        // ES 인덱싱 이벤트 발행 (트랜잭션 커밋 후 비동기 실행)
-        eventPublisher.publishEvent(new PostIndexEvent(post, request.getHashtags()));
 
         return post.getId();
     }
@@ -64,19 +56,14 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
         post.updateContent(request.getContent());
         post.updateHashtags(request.getHashtags());
 
-        // 삭제할 이미지 제거
         if (request.getDeleteImageKeys() != null && !request.getDeleteImageKeys().isEmpty()) {
             post.removeImagesByKeys(request.getDeleteImageKeys());
         }
 
-        // 새 이미지 추가 (기존 이미지 뒤에 순서대로 추가)
         if (request.getAddImageKeys() != null && !request.getAddImageKeys().isEmpty()) {
             int nextOrder = post.getImages().size();
             addImages(post, request.getAddImageKeys(), nextOrder);
         }
-
-        // ES 재인덱싱
-        eventPublisher.publishEvent(new PostIndexEvent(post, request.getHashtags()));
     }
 
     @Override
@@ -89,8 +76,8 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
             throw new UnauthenticatedException("게시물 삭제 권한이 없습니다.");
         }
 
-        postRepository.delete(post);
-        eventPublisher.publishEvent(new PostDeleteEvent(postId));
+        // Logstash가 deleted_at 컬럼을 감지해 ES에서 삭제 처리
+        post.softDelete();
     }
 
     private void addImages(Post post, List<String> imageKeys) {

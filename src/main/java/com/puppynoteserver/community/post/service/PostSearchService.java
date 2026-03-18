@@ -1,7 +1,6 @@
 package com.puppynoteserver.community.post.service;
 
 import com.puppynoteserver.community.post.document.PostDocument;
-import com.puppynoteserver.community.post.entity.Post;
 import com.puppynoteserver.community.post.repository.PostSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,24 +23,6 @@ public class PostSearchService {
 
     private final ElasticsearchOperations elasticsearchOperations;
     private final PostSearchRepository postSearchRepository;
-
-    public void indexPost(Post post, List<String> hashtags) {
-        PostDocument document = PostDocument.builder()
-                .postId(post.getId())
-                .userId(post.getUser().getId())
-                .userNickname(post.getUser().getNickName())
-                .content(post.getContent())
-                .hashtags(hashtags)
-                .createdDate(post.getCreatedDate())
-                .build();
-        postSearchRepository.save(document);
-        log.info("ES 인덱싱 완료 - postId: {}, 해시태그: {}", post.getId(), hashtags);
-    }
-
-    public void deletePost(Long postId) {
-        postSearchRepository.deleteById(String.valueOf(postId));
-        log.info("ES 삭제 완료 - postId: {}", postId);
-    }
 
     // 해시태그 자동완성 — keyword를 포함하는 해시태그 목록 반환
     public List<String> searchHashtags(String keyword) {

@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class Post extends BaseTimeEntity {
     @OrderBy("orderNum ASC")
     private List<PostImage> images = new ArrayList<>();
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public static Post of(User user, String content, List<String> hashtags) {
         Post post = new Post();
         post.user = user;
@@ -63,5 +67,13 @@ public class Post extends BaseTimeEntity {
 
     public void addImage(PostImage image) {
         this.images.add(image);
+    }
+
+    public void softDelete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public boolean isDeleted() {
+        return this.deletedAt != null;
     }
 }
