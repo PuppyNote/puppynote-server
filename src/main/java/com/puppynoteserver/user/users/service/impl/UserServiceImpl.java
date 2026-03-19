@@ -31,9 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public SignUpResponse signUp(SignUpServiceRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new PuppyNoteException("이미 사용 중인 이메일입니다.");
-        }
+        checkExistEmail(request.getEmail());
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -47,6 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String sendVerificationEmail(EmailSendServiceRequest request) {
+        checkExistEmail(request.getEmail());
         return emailService.sendVerificationCode(request.getEmail());
     }
 
@@ -56,5 +55,11 @@ public class UserServiceImpl implements UserService {
         User user = userReadService.findById(userId);
         user.updateNickName(request.getNickName());
         user.updateProfileUrl(request.getProfileUrl());
+    }
+
+    private void checkExistEmail(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new PuppyNoteException("이미 사용 중인 이메일입니다.");
+        }
     }
 }
