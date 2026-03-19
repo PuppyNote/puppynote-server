@@ -1,6 +1,7 @@
 package com.puppynoteserver.user.users.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.puppynoteserver.global.email.EmailService;
 import com.puppynoteserver.global.exception.PuppyNoteException;
 import com.puppynoteserver.jwt.JwtTokenGenerator;
 import com.puppynoteserver.jwt.dto.JwtToken;
@@ -14,8 +15,10 @@ import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.UserReadService;
 import com.puppynoteserver.user.refreshToken.entity.RefreshToken;
 import com.puppynoteserver.user.refreshToken.service.RefreshTokenReadService;
+import com.puppynoteserver.user.users.service.request.EmailSendServiceRequest;
 import com.puppynoteserver.user.users.service.request.LoginServiceRequest;
 import com.puppynoteserver.user.users.service.request.OAuthLoginServiceRequest;
+import com.puppynoteserver.user.users.service.request.PasswordResetServiceRequest;
 import com.puppynoteserver.user.users.service.request.TokenRefreshServiceRequest;
 import com.puppynoteserver.user.users.service.response.LoginResponse;
 import com.puppynoteserver.user.users.service.response.OAuthLoginResponse;
@@ -40,6 +43,7 @@ public class LoginServiceImpl implements LoginService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final Map<SnsType, OAuthApiClient> clients;
+    private final EmailService emailService;
 
     private final UserRepository userRepository;
     private final UserReadService userReadService;
@@ -47,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
 
     public LoginServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, JwtTokenGenerator jwtTokenGenerator,
                             List<OAuthApiClient> clients, UserRepository userRepository, UserReadService userReadService,
-                            RefreshTokenReadService refreshTokenReadService) {
+                            RefreshTokenReadService refreshTokenReadService, EmailService emailService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
         this.jwtTokenGenerator = jwtTokenGenerator;
@@ -56,6 +60,7 @@ public class LoginServiceImpl implements LoginService {
         );
         this.userReadService = userReadService;
         this.refreshTokenReadService = refreshTokenReadService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -116,12 +121,32 @@ public class LoginServiceImpl implements LoginService {
         return TokenRefreshResponse.from(jwtToken);
     }
 
+    @Override
+    public String sendPasswordResetEmail(EmailSendServiceRequest request) {
+        User user = userReadService.findByEmail(request.getEmail());
+        checkSnsType(user);
+        return emailService.sendVerificationCode(request.getEmail());
+    }
+
+    @Override
+    public void resetPassword(PasswordResetServiceRequest request) {
+        User user = userReadService.findByEmail(request.getEmail());
+        checkSnsType(user);
+        user.updatePassword(bCryptPasswordEncoder.encode(request.getNewPassword()));
+    }
+
     private JwtToken setJwtTokenPushKey(User user, String deviceId, String pushKey) throws JsonProcessingException {
         LoginUserInfo userInfo = LoginUserInfo.of(user.getId());
         JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
         user.checkRefreshToken(jwtToken, deviceId);
         user.checkPushKey(pushKey, deviceId);
         return jwtToken;
+    }
+
+    private void checkSnsType(User user) {
+        if (user.getSnsType() != SnsType.NORMAL) {
+            throw new PuppyNoteException(SnsType.NORMAL.getText() + "로 가입된 계정이 아닙니다.");
+        }
     }
 
 }

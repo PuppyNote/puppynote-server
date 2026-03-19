@@ -1,8 +1,10 @@
 package com.puppynoteserver.user.users.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.puppynoteserver.user.users.service.request.EmailSendServiceRequest;
 import com.puppynoteserver.user.users.service.request.LoginServiceRequest;
 import com.puppynoteserver.user.users.service.request.OAuthLoginServiceRequest;
+import com.puppynoteserver.user.users.service.request.PasswordResetServiceRequest;
 import com.puppynoteserver.user.users.service.request.TokenRefreshServiceRequest;
 import com.puppynoteserver.user.users.service.response.LoginResponse;
 import com.puppynoteserver.user.users.service.response.OAuthLoginResponse;
@@ -16,5 +18,9 @@ public interface LoginService {
             JsonProcessingException;
 
     TokenRefreshResponse refresh(TokenRefreshServiceRequest request);
+
+    void resetPassword(PasswordResetServiceRequest request);
+
+    String sendPasswordResetEmail(EmailSendServiceRequest request);
 
 }

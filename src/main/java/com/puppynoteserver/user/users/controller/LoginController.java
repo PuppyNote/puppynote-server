@@ -2,8 +2,10 @@ package com.puppynoteserver.user.users.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.puppynoteserver.global.ApiResponse;
+import com.puppynoteserver.user.users.controller.request.EmailSendRequest;
 import com.puppynoteserver.user.users.controller.request.LoginOauthRequest;
 import com.puppynoteserver.user.users.controller.request.LoginRequest;
+import com.puppynoteserver.user.users.controller.request.PasswordResetRequest;
 import com.puppynoteserver.user.users.controller.request.TokenRefreshRequest;
 import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.response.LoginResponse;
@@ -36,6 +38,17 @@ public class LoginController {
     @PostMapping("/refresh")
     public ApiResponse<TokenRefreshResponse> refresh(@Valid @RequestBody TokenRefreshRequest request) {
         return ApiResponse.ok(loginService.refresh(request.toServiceRequest()));
+    }
+
+    @PostMapping("/password/email/send")
+    public ApiResponse<String> sendPasswordResetEmail(@Valid @RequestBody EmailSendRequest request) {
+        return ApiResponse.ok(loginService.sendPasswordResetEmail(request.toServiceRequest()));
+    }
+
+    @PostMapping("/password/reset")
+    public ApiResponse<Void> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
+        loginService.resetPassword(request.toServiceRequest());
+        return ApiResponse.ok(null);
     }
 
 }

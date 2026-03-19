@@ -100,6 +100,10 @@ public class User extends BaseTimeEntity {
                 );
     }
 
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     public void updateNickName(String nickName) {
         this.nickName = nickName;
     }

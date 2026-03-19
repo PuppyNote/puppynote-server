@@ -1,14 +1,18 @@
 package docs.users;
 
 import com.puppynoteserver.user.users.controller.LoginController;
+import com.puppynoteserver.user.users.controller.request.EmailSendRequest;
 import com.puppynoteserver.user.users.controller.request.LoginOauthRequest;
 import com.puppynoteserver.user.users.controller.request.LoginRequest;
+import com.puppynoteserver.user.users.controller.request.PasswordResetRequest;
 import com.puppynoteserver.user.users.controller.request.TokenRefreshRequest;
 import com.puppynoteserver.user.users.entity.enums.SettingStatus;
 import com.puppynoteserver.user.users.entity.enums.SnsType;
 import com.puppynoteserver.user.users.service.LoginService;
+import com.puppynoteserver.user.users.service.request.EmailSendServiceRequest;
 import com.puppynoteserver.user.users.service.request.LoginServiceRequest;
 import com.puppynoteserver.user.users.service.request.OAuthLoginServiceRequest;
+import com.puppynoteserver.user.users.service.request.PasswordResetServiceRequest;
 import com.puppynoteserver.user.users.service.request.TokenRefreshServiceRequest;
 import com.puppynoteserver.jwt.dto.JwtToken;
 import com.puppynoteserver.user.users.service.response.LoginResponse;
@@ -24,6 +28,7 @@ import java.util.Arrays;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -152,6 +157,86 @@ public class LoginControllerDocsTest extends RestDocsSupport {
                                         .description("새로 발급된 Access-Token"),
                                 fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
                                         .description("새로 발급된 Refresh-Token")
+                        )
+                ));
+    }
+
+    @DisplayName("비밀번호 재설정 인증번호 발송 API")
+    @Test
+    void sendPasswordResetEmail() throws Exception {
+        // given
+        EmailSendRequest request = EmailSendRequest.builder()
+                .email("test@puppynote.com")
+                .build();
+
+        given(loginService.sendPasswordResetEmail(any(EmailSendServiceRequest.class)))
+                .willReturn("382910");
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/auth/password/email/send")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auth-password-email-send",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").type(JsonFieldType.STRING)
+                                        .description("인증번호를 받을 이메일 (NORMAL 가입 계정만 가능)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.STRING)
+                                        .description("발송된 인증번호 6자리")
+                        )
+                ));
+    }
+
+    @DisplayName("비밀번호 재설정 API")
+    @Test
+    void resetPassword() throws Exception {
+        // given
+        PasswordResetRequest request = PasswordResetRequest.builder()
+                .email("test@puppynote.com")
+                .newPassword("newPassword123!")
+                .build();
+
+        doNothing().when(loginService).resetPassword(any(PasswordResetServiceRequest.class));
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/v1/auth/password/reset")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auth-password-reset",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").type(JsonFieldType.STRING)
+                                        .description("이메일"),
+                                fieldWithPath("newPassword").type(JsonFieldType.STRING)
+                                        .description("변경할 비밀번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL)
+                                        .description("응답 데이터 없음")
                         )
                 ));
     }

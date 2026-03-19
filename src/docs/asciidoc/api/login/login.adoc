@@ -36,3 +36,29 @@ include::{snippets}/user-oauthLogin/request-fields.adoc[]
 
 include::{snippets}/user-oauthLogin/http-response.adoc[]
 include::{snippets}/user-oauthLogin/response-fields.adoc[]
+
+[[auth-password-email-send]]
+=== 비밀번호 재설정 인증번호 발송
+
+==== HTTP Request
+
+include::{snippets}/auth-password-email-send/http-request.adoc[]
+include::{snippets}/auth-password-email-send/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/auth-password-email-send/http-response.adoc[]
+include::{snippets}/auth-password-email-send/response-fields.adoc[]
+
+[[auth-password-reset]]
+=== 비밀번호 재설정
+
+==== HTTP Request
+
+include::{snippets}/auth-password-reset/http-request.adoc[]
+include::{snippets}/auth-password-reset/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/auth-password-reset/http-response.adoc[]
+include::{snippets}/auth-password-reset/response-fields.adoc[]
