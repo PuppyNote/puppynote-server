@@ -145,7 +145,7 @@ public class LoginServiceImpl implements LoginService {
 
     private void checkSnsType(User user) {
         if (user.getSnsType() != SnsType.NORMAL) {
-            throw new PuppyNoteException(SnsType.NORMAL.getText() + "로 가입된 계정이 아닙니다.");
+            throw new PuppyNoteException(user.getSnsType().getText() + "로 가입된 계정입니다.");
         }
     }
 

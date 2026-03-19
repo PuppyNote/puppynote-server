@@ -114,7 +114,7 @@ public class EmailServiceImpl implements EmailService {
                                             <tr>
                                                 <td style="background:#f9f9f9;border-radius:10px;padding:20px 24px;">
                                                     <p style="margin:0 0 6px;font-size:13px;color:#555;line-height:1.7;">
-                                                        ⏰ &nbsp;인증번호는 <strong style="color:#eebd2b;">5분</strong> 후 만료됩니다.
+                                                        ⏰ &nbsp;인증번호는 <strong style="color:#eebd2b;">3분</strong> 후 만료됩니다.
                                                     </p>
                                                     <p style="margin:0;font-size:13px;color:#999;line-height:1.7;">
                                                         🔒 &nbsp;본인이 요청하지 않은 경우, 이 메일을 무시하셔도 됩니다.
