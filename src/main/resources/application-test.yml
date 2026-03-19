@@ -51,8 +51,6 @@ aws:
   s3:
     region: ap-northeast-2  # Seoul Region
     bucket:
-      puppy-profile: testpuppybucket  # 사용자 관련 파일 버킷
-      walk-photo: testpuppybucket  # 산책 사진 버킷
-      pet-item-photo: testpuppybucket  # 용품 이미지 버킷
-      user-profile: testpuppybucket  # 용품 이미지 버킷
-      community-post: testpuppybucket  # 커뮤니티 게시물 이미지 버킷
+      name: puppynote-prd  # 통합 버킷
+  cloudfront:
+    domain: test.com
