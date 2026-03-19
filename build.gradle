@@ -186,7 +186,8 @@ tasks.processResources {
                 ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
                 ES_PASSWORD: System.getenv('ES_PASSWORD'),
                 REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
-                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
+                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD'),
+                CLOUDFRONT_DOMAIN: System.getenv('CLOUDFRONT_DOMAIN')
         )
     }
 
@@ -204,7 +205,8 @@ tasks.processResources {
                 ES_USERNAME: System.getenv('ES_USERNAME') ?: 'elastic',
                 ES_PASSWORD: System.getenv('ES_PASSWORD'),
                 REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
-                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD')
+                REDIS_PASSWORD: System.getenv('REDIS_PASSWORD'),
+                CLOUDFRONT_DOMAIN: System.getenv('CLOUDFRONT_DOMAIN')
         )
     }
 }
