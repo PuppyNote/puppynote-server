@@ -16,6 +16,7 @@ env:
     REDIS_HOST:            "/puppynote/prd/REDIS_HOST"
     REDIS_PASSWORD:        "/puppynote/prd/REDIS_PASSWORD"
     FIREBASE_CONFIG:       "/puppynote/prd/FIREBASE_CONFIG"
+    CLOUDFRONT_DOMAIN:     "/puppynote/prd/CLOUDFRONT_DOMAIN"
 
 phases:
   pre_build:

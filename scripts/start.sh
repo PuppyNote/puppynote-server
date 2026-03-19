@@ -42,6 +42,7 @@ export ES_HOST=$(get_ssm ES_HOST)
 export ES_PORT=$(get_ssm ES_PORT)
 export ES_USERNAME=$(get_ssm ES_USERNAME)
 export ES_PASSWORD=$(get_ssm ES_PASSWORD)
+export CLOUDFRONT_DOMAIN=$(get_ssm CLOUDFRONT_DOMAIN)
 echo "환경변수 로드 완료"
 
 JAR_FILE=$(ls $APP_DIR/*.jar | head -1)
