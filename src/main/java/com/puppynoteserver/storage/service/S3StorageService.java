@@ -36,9 +36,10 @@ public class S3StorageService {
      */
     public String upload(MultipartFile file, BucketKind bucketKind) {
         validateImageFile(file);
-        String objectKey = bucketKind.getFolder() + "/" + generateObjectKey(file.getOriginalFilename());
+        String imageKey = generateObjectKey(file.getOriginalFilename());
+        String objectKey = bucketKind.getFolder() + "/" + imageKey;
         uploadToS3(file, objectKey);
-        return getCloudFrontUrl(objectKey);
+        return imageKey;
     }
 
     /**
