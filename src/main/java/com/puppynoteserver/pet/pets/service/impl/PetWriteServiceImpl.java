@@ -63,7 +63,7 @@ public class PetWriteServiceImpl implements PetWriteService {
     @Override
     public void updatePet(Long petId, PetUpdateServiceRequest request) {
         Pet pet = petReadService.findById(petId);
-        pet.updateInfo(request.getName(), request.getBirthDate(), request.getProfileImage());
+        pet.updateInfo(request.getName(), request.getBirthDate(), request.getProfileImage(), request.getRegistrationNumber());
     }
 
     @Override

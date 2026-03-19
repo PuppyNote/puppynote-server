@@ -20,11 +20,14 @@ public class PetCreateRequest {
 
     private String profileImage;
 
+    private String registrationNumber;
+
     @Builder
-    private PetCreateRequest(String name, LocalDate birthDate,  String profileImage) {
+    private PetCreateRequest(String name, LocalDate birthDate, String profileImage, String registrationNumber) {
         this.name = name;
         this.birthDate = birthDate;
         this.profileImage = profileImage;
+        this.registrationNumber = registrationNumber;
     }
 
     public PetCreateServiceRequest toServiceRequest() {
@@ -32,6 +35,7 @@ public class PetCreateRequest {
                 .name(name)
                 .birthDate(birthDate)
                 .profileImage(profileImage)
+                .registrationNumber(registrationNumber)
                 .build();
     }
 }

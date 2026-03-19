@@ -29,17 +29,22 @@ public class Pet extends BaseTimeEntity {
     @Column(length = 255)
     private String profileImage;
 
-    public static Pet of(String name, LocalDate birthDate, String profileImage) {
+    @Column(length = 50)
+    private String registrationNumber;
+
+    public static Pet of(String name, LocalDate birthDate, String profileImage, String registrationNumber) {
         Pet pet = new Pet();
         pet.name = name;
         pet.birthDate = birthDate;
         pet.profileImage = profileImage;
+        pet.registrationNumber = registrationNumber;
         return pet;
     }
 
-    public void updateInfo(String name, LocalDate birthDate, String profileImage) {
+    public void updateInfo(String name, LocalDate birthDate, String profileImage, String registrationNumber) {
         this.name = name;
         this.birthDate = birthDate;
         this.profileImage = profileImage;
+        this.registrationNumber = registrationNumber;
     }
 }

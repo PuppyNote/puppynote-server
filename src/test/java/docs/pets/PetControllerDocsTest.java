@@ -118,6 +118,7 @@ public class PetControllerDocsTest extends RestDocsSupport {
                 .name("초코")
                 .birthDate(LocalDate.of(2022, 3, 15))
                 .profileImage("550e8400-e29b-41d4-a716-446655440000.jpg")
+                .registrationNumber("410123456789012")
                 .build();
 
         doNothing().when(petWriteService).updatePet(anyLong(), any(PetUpdateServiceRequest.class));
@@ -141,7 +142,9 @@ public class PetControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("birthDate").type(JsonFieldType.STRING)
                                         .description("생년월일 (yyyy-MM-dd)").optional(),
                                 fieldWithPath("profileImage").type(JsonFieldType.STRING)
-                                        .description("프로필 이미지 S3 Object Key").optional()
+                                        .description("프로필 이미지 S3 Object Key").optional(),
+                                fieldWithPath("registrationNumber").type(JsonFieldType.STRING)
+                                        .description("동물등록번호").optional()
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
@@ -159,10 +162,8 @@ public class PetControllerDocsTest extends RestDocsSupport {
                 .name("초코")
                 .birthDate(LocalDate.of(2022, 3, 15))
                 .profileImage("550e8400-e29b-41d4-a716-446655440000.jpg")
+                .registrationNumber("410123456789012")
                 .build();
-
-        given(petWriteService.createPet(any(PetCreateServiceRequest.class)))
-                .willReturn(mock(PetCreateResponse.class));
 
         PetCreateResponse response = mock(PetCreateResponse.class);
         given(response.getPetId()).willReturn(1L);
@@ -186,7 +187,9 @@ public class PetControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("birthDate").type(JsonFieldType.STRING)
                                         .description("생년월일 (yyyy-MM-dd)").optional(),
                                 fieldWithPath("profileImage").type(JsonFieldType.STRING)
-                                        .description("프로필 이미지 S3 Object Key (Storage API 업로드 후 반환값)").optional()
+                                        .description("프로필 이미지 S3 Object Key (Storage API 업로드 후 반환값)").optional(),
+                                fieldWithPath("registrationNumber").type(JsonFieldType.STRING)
+                                        .description("동물등록번호").optional()
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER)
