@@ -34,7 +34,7 @@ public class HomeReadServiceImpl implements HomeReadService {
         LocalDate today = LocalDate.now();
 
         // 펫 기본 정보
-        String petProfileImageUrl = s3StorageService.createPresignedUrl(pet.getProfileImage(), BucketKind.PUPPY_PROFILE);
+        String petProfileImageUrl = s3StorageService.getCloudFrontUrl(pet.getProfileImage(), BucketKind.PUPPY_PROFILE);
         String petAge = calculateAge(pet.getBirthDate(), today);
         Integer birthdayDday = calculateBirthdayDday(pet.getBirthDate(), today);
 

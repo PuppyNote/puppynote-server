@@ -38,7 +38,7 @@ public class WalkWriteServiceImpl implements WalkWriteService {
         Walk savedWalk = walkRepository.save(walk);
 
         String photoUrl = (photoKeys == null || photoKeys.isEmpty()) ? null :
-                s3StorageService.createPresignedUrl(photoKeys.get(0), BucketKind.WALK_PHOTO);
+                s3StorageService.getCloudFrontUrl(photoKeys.get(0), BucketKind.WALK_PHOTO);
 
         return WalkResponse.of(savedWalk, photoUrl);
     }

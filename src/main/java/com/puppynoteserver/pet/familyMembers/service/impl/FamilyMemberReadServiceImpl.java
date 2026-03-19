@@ -33,7 +33,7 @@ public class FamilyMemberReadServiceImpl implements FamilyMemberReadService {
         return familyMemberRepository.findAllByPetIdAndStatus(petId, FamilyMemberStatus.DONE)
                 .stream()
                 .filter(fm -> !fm.getId().getUserId().equals(currentUserId))
-                .map(fm -> FamilyMemberResponse.of(fm, s3StorageService.createPresignedUrl(fm.getUser().getProfileUrl(), BucketKind.USER_PROFILE)))
+                .map(fm -> FamilyMemberResponse.of(fm, s3StorageService.getCloudFrontUrl(fm.getUser().getProfileUrl(), BucketKind.USER_PROFILE)))
                 .toList();
     }
 
@@ -49,7 +49,7 @@ public class FamilyMemberReadServiceImpl implements FamilyMemberReadService {
         return userReadService.findAllByEmailLike(email)
                 .stream()
                 .filter(user -> !user.getId().equals(currentUserId))
-                .map(user -> UserSearchResponse.of(user, s3StorageService.createPresignedUrl(user.getProfileUrl(), BucketKind.USER_PROFILE)))
+                .map(user -> UserSearchResponse.of(user, s3StorageService.getCloudFrontUrl(user.getProfileUrl(), BucketKind.USER_PROFILE)))
                 .toList();
     }
 }

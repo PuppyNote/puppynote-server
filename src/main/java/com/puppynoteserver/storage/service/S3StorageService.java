@@ -10,12 +10,8 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
-import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.UUID;
 
 @Slf4j
@@ -24,46 +20,52 @@ import java.util.UUID;
 public class S3StorageService {
 
     private final S3Client s3Client;
-    private final S3Presigner s3Presigner;
 
-    @Value("${aws.s3.bucket.puppy-profile}")
-    private String puppyProfileBucketName;
+    @Value("${aws.s3.bucket.name}")
+    private String bucketName;
 
-    @Value("${aws.s3.bucket.community-post}")
-    private String communityPostBucketName;
-
-    @Value("${aws.s3.bucket.walk-photo}")
-    private String walkPhotoBucketName;
-
-    @Value("${aws.s3.bucket.pet-item-photo}")
-    private String petItemImageBucketName;
-
-    @Value("${aws.s3.bucket.user-profile}")
-    private String userProfileBucketName;
+    @Value("${aws.cloudfront.domain}")
+    private String cloudFrontDomain;
 
     /**
-     * S3에 파일 업로드
+     * S3에 파일 업로드 후 CloudFront URL 반환
      *
      * @param file       업로드할 파일
-     * @return 업로드된 파일의 S3 URL
+     * @param bucketKind 폴더 종류
+     * @return 업로드된 파일의 CloudFront URL
      */
     public String upload(MultipartFile file, BucketKind bucketKind) {
         validateImageFile(file);
-        return uploadFileToS3(file, getBucketName(bucketKind));
+        String objectKey = bucketKind.getFolder() + "/" + generateObjectKey(file.getOriginalFilename());
+        uploadToS3(file, objectKey);
+        return getCloudFrontUrl(objectKey);
     }
 
     /**
-     * MultipartFile을 S3에 업로드
+     * CloudFront URL 반환
      *
-     * @param file       업로드할 파일
-     * @param bucketName S3 버킷 이름
-     * @return 업로드된 객체 키
+     * @param objectKey  S3 객체 키 (폴더 포함)
+     * @param bucketKind 폴더 종류
+     * @return CloudFront URL
      */
-    public String uploadFileToS3(MultipartFile file, String bucketName) {
-        validateFile(file);
+    public String getCloudFrontUrl(String objectKey, BucketKind bucketKind) {
+        if (objectKey == null || objectKey.isEmpty()) {
+            return objectKey;
+        }
+        // 이미 폴더 prefix가 포함된 경우 그대로 사용, 없으면 추가
+        String key = objectKey.startsWith(bucketKind.getFolder() + "/")
+                ? objectKey
+                : bucketKind.getFolder() + "/" + objectKey;
+        return getCloudFrontUrl(key);
+    }
 
+    private String getCloudFrontUrl(String objectKey) {
+        return cloudFrontDomain + "/" + objectKey;
+    }
+
+    private void uploadToS3(MultipartFile file, String objectKey) {
+        validateFile(file);
         try {
-            String objectKey = generateObjectKey(file.getOriginalFilename());
             String contentType = determineContentType(file);
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -79,7 +81,6 @@ public class S3StorageService {
             );
 
             log.info("S3 파일 업로드 성공: {}, ETag: {}", objectKey, response.eTag());
-            return objectKey;
 
         } catch (IOException e) {
             log.error("파일 업로드 중 IO 오류 발생: {}", file.getOriginalFilename(), e);
@@ -88,66 +89,6 @@ public class S3StorageService {
             log.error("S3 파일 업로드 중 오류 발생: {}", file.getOriginalFilename(), e);
             throw new RuntimeException("파일 업로드 실패", e);
         }
-    }
-
-    /**
-     * Presigned URL 생성 (임시 접근 URL)
-     *
-     * @param objectKey  S3 객체 키
-     * @param bucketName S3 버킷 이름
-     * @param duration   URL 유효 시간
-     * @return Presigned URL
-     */
-    public String createPresignedUrl(String objectKey, String bucketName, Duration duration) {
-        try {
-            GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                    .signatureDuration(duration)
-                    .getObjectRequest(req -> req
-                            .bucket(bucketName)
-                            .key(objectKey))
-                    .build();
-
-            PresignedGetObjectRequest presignedRequest = s3Presigner.presignGetObject(presignRequest);
-            String presignedUrl = presignedRequest.url().toString();
-
-            log.info("Presigned URL 생성 성공: {}, 유효시간: {}", objectKey, duration);
-            return presignedUrl;
-
-        } catch (Exception e) {
-            log.error("Presigned URL 생성 중 오류 발생: {}", objectKey, e);
-            throw new RuntimeException("Presigned URL 생성 실패", e);
-        }
-    }
-
-    /**
-     * Presigned URL 생성 (기본 1시간)
-     *
-     * @param objectKey  S3 객체 키
-     * @param bucketKind 버킷 종류
-     * @return Presigned URL
-     */
-    public String createPresignedUrl(String objectKey, BucketKind bucketKind) {
-        if(objectKey == null || objectKey.isEmpty()) {
-            return objectKey;
-        }
-        String bucketName = getBucketName(bucketKind);
-        return createPresignedUrl(objectKey, bucketName, Duration.ofHours(1));
-    }
-
-    /**
-     * BucketKind에 따른 버킷 이름 반환
-     *
-     * @param bucketKind 버킷 종류
-     * @return 버킷 이름
-     */
-    private String getBucketName(BucketKind bucketKind) {
-        return switch (bucketKind) {
-            case PUPPY_PROFILE -> puppyProfileBucketName;
-            case WALK_PHOTO -> walkPhotoBucketName;
-            case PET_ITEM_PHOTO -> petItemImageBucketName;
-            case USER_PROFILE -> userProfileBucketName;
-            case COMMUNITY_POST -> communityPostBucketName;
-        };
     }
 
     private void validateFile(MultipartFile file) {
@@ -180,13 +121,10 @@ public class S3StorageService {
 
     private String generateObjectKey(String originalFilename) {
         String filename = UUID.randomUUID().toString();
-
-        // 파일 확장자 처리
         String extension = getFileExtension(originalFilename);
         if (!filename.endsWith(extension)) {
             filename += extension;
         }
-
         return filename;
     }
 
@@ -194,12 +132,10 @@ public class S3StorageService {
         if (filename == null || filename.isEmpty()) {
             return "";
         }
-
         int lastDotIndex = filename.lastIndexOf('.');
         if (lastDotIndex == -1) {
             return "";
         }
-
         return filename.substring(lastDotIndex).toLowerCase();
     }
 
@@ -208,8 +144,6 @@ public class S3StorageService {
         if (contentType != null && !contentType.isEmpty()) {
             return contentType;
         }
-
-        // 파일 확장자로 추정
         String extension = getFileExtension(file.getOriginalFilename());
         return switch (extension) {
             case ".jpg", ".jpeg" -> "image/jpeg";

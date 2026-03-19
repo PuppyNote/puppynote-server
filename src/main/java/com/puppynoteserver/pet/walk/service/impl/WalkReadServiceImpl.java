@@ -39,7 +39,7 @@ public class WalkReadServiceImpl implements WalkReadService {
                 .map(walk -> {
                     String photoUrl = walk.getPhotos().stream()
                             .findFirst()
-                            .map(photo -> s3StorageService.createPresignedUrl(photo.getImageKey(), BucketKind.WALK_PHOTO))
+                            .map(photo -> s3StorageService.getCloudFrontUrl(photo.getImageKey(), BucketKind.WALK_PHOTO))
                             .orElse(null);
                     return WalkResponse.of(walk, photoUrl);
                 })
@@ -114,7 +114,7 @@ public class WalkReadServiceImpl implements WalkReadService {
         Walk walk = findById(walkId);
 
         List<String> photoUrls = walk.getPhotos().stream()
-                .map(photo -> s3StorageService.createPresignedUrl(photo.getImageKey(), BucketKind.WALK_PHOTO))
+                .map(photo -> s3StorageService.getCloudFrontUrl(photo.getImageKey(), BucketKind.WALK_PHOTO))
                 .toList();
 
         return WalkDetailResponse.of(walk, photoUrls);

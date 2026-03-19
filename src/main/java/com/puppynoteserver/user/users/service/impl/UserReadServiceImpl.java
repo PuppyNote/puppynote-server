@@ -46,7 +46,7 @@ public class UserReadServiceImpl implements UserReadService {
     public UserProfileResponse getMyProfile() {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = findById(userId);
-        String profileUrl = s3StorageService.createPresignedUrl(user.getProfileUrl(), BucketKind.USER_PROFILE);
+        String profileUrl = s3StorageService.getCloudFrontUrl(user.getProfileUrl(), BucketKind.USER_PROFILE);
         return UserProfileResponse.of(user, profileUrl);
     }
 }

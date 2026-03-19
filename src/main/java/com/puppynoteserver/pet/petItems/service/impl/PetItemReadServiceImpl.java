@@ -46,7 +46,7 @@ public class PetItemReadServiceImpl implements PetItemReadService {
         return items.stream()
                 .map(item -> {
                     LocalDate lastPurchasedAt = latestPurchaseDateMap.get(item.getId());
-                    String imageUrl = s3StorageService.createPresignedUrl(item.getImageKey(), BucketKind.PET_ITEM_PHOTO);
+                    String imageUrl = s3StorageService.getCloudFrontUrl(item.getImageKey(), BucketKind.PET_ITEM_PHOTO);
                     return PetItemResponse.of(item, imageUrl, lastPurchasedAt);
                 })
                 // 구매주기가 다가오는 순 정렬: null(미구매)이 가장 앞, 이후 nextPurchaseAt - today ASC
@@ -76,7 +76,7 @@ public class PetItemReadServiceImpl implements PetItemReadService {
         LocalDate lastPurchasedAt = petItemPurchaseReadService.findLatestPurchaseDateByPetItemId(petItemId)
                 .orElse(null);
 
-        String imageUrl = s3StorageService.createPresignedUrl(petItem.getImageKey(), BucketKind.PET_ITEM_PHOTO);
+        String imageUrl = s3StorageService.getCloudFrontUrl(petItem.getImageKey(), BucketKind.PET_ITEM_PHOTO);
 
         return PetItemResponse.of(petItem, imageUrl, lastPurchasedAt);
     }

@@ -30,7 +30,7 @@ public class PetReadServiceImpl implements PetReadService {
         return petRepository.findFamilyMembersByUserId(userId).stream()
                 .map(fm -> PetResponse.of(
                         fm.getPet(),
-                        s3StorageService.createPresignedUrl(fm.getPet().getProfileImage(), BucketKind.PUPPY_PROFILE),
+                        s3StorageService.getCloudFrontUrl(fm.getPet().getProfileImage(), BucketKind.PUPPY_PROFILE),
                         fm.getRole()
                 ))
                 .toList();

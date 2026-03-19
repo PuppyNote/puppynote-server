@@ -82,10 +82,10 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
                 .collect(Collectors.toList());
 
         List<String> imageUrls = post.getImages().stream()
-                .map(img -> s3StorageService.createPresignedUrl(img.getImageKey(), BucketKind.COMMUNITY_POST))
+                .map(img -> s3StorageService.getCloudFrontUrl(img.getImageKey(), BucketKind.COMMUNITY_POST))
                 .collect(Collectors.toList());
 
-        String userProfileUrl = s3StorageService.createPresignedUrl(
+        String userProfileUrl = s3StorageService.getCloudFrontUrl(
                 post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
         return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls);
@@ -121,10 +121,10 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
                             .collect(Collectors.toList());
 
                     List<String> imageUrls = images.stream()
-                            .map(img -> s3StorageService.createPresignedUrl(img.getImageKey(), BucketKind.COMMUNITY_POST))
+                            .map(img -> s3StorageService.getCloudFrontUrl(img.getImageKey(), BucketKind.COMMUNITY_POST))
                             .collect(Collectors.toList());
 
-                    String userProfileUrl = s3StorageService.createPresignedUrl(
+                    String userProfileUrl = s3StorageService.getCloudFrontUrl(
                             post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
                     return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls);
