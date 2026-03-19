@@ -15,6 +15,7 @@ public class HomeResponse {
     private final LocalDate birthDate;
     private final String petAge;
     private final Integer birthdayDday;
+    private final String registrationNumber;
     private final boolean walkedToday;
     private final Integer daysSinceLastWalk;
     private final long monthlyWalkMinutes;
@@ -24,14 +25,15 @@ public class HomeResponse {
 
     @Builder
     private HomeResponse(String petName, String petProfileImageUrl, LocalDate birthDate, String petAge,
-                         Integer birthdayDday, boolean walkedToday, Integer daysSinceLastWalk,
-                         long monthlyWalkMinutes, long recentWalkCount, long petItemCount,
-                         List<LocalTime> todayWalkAlarmTimes) {
+                         Integer birthdayDday, String registrationNumber, boolean walkedToday,
+                         Integer daysSinceLastWalk, long monthlyWalkMinutes, long recentWalkCount,
+                         long petItemCount, List<LocalTime> todayWalkAlarmTimes) {
         this.petName = petName;
         this.petProfileImageUrl = petProfileImageUrl;
         this.birthDate = birthDate;
         this.petAge = petAge;
         this.birthdayDday = birthdayDday;
+        this.registrationNumber = registrationNumber;
         this.walkedToday = walkedToday;
         this.daysSinceLastWalk = daysSinceLastWalk;
         this.monthlyWalkMinutes = monthlyWalkMinutes;

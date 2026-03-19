@@ -57,6 +57,7 @@ public class HomeReadServiceImpl implements HomeReadService {
                 .birthDate(pet.getBirthDate())
                 .petAge(petAge)
                 .birthdayDday(birthdayDday)
+                .registrationNumber(pet.getRegistrationNumber())
                 .walkedToday(walkedToday)
                 .daysSinceLastWalk(daysSinceLastWalk)
                 .monthlyWalkMinutes(monthlyWalkMinutes)

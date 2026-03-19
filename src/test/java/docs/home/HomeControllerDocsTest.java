@@ -42,6 +42,7 @@ public class HomeControllerDocsTest extends RestDocsSupport {
                         .birthDate(LocalDate.of(2021, 3, 15))
                         .petAge("3살")
                         .birthdayDday(12)
+                        .registrationNumber("410123456789012")
                         .walkedToday(true)
                         .daysSinceLastWalk(0)
                         .monthlyWalkMinutes(320L)
@@ -81,6 +82,8 @@ public class HomeControllerDocsTest extends RestDocsSupport {
                                         .description("펫 나이 (예: '3살', '8개월'). 생일 미등록 시 null").optional(),
                                 fieldWithPath("data.birthdayDday").type(JsonFieldType.NUMBER)
                                         .description("생일까지 남은 일수 (0 = 오늘 생일). 생일 미등록 시 null").optional(),
+                                fieldWithPath("data.registrationNumber").type(JsonFieldType.STRING)
+                                        .description("동물등록번호. 미등록 시 null").optional(),
                                 fieldWithPath("data.walkedToday").type(JsonFieldType.BOOLEAN)
                                         .description("오늘 산책 여부"),
                                 fieldWithPath("data.daysSinceLastWalk").type(JsonFieldType.NUMBER)
