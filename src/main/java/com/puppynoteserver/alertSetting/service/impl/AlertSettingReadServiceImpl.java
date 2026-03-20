@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -31,6 +35,12 @@ public class AlertSettingReadServiceImpl implements AlertSettingReadService {
 	public AlertSetting findByUserOrCreateDefault(User user) {
 		return alertSettingRepository.findByUser(user)
 			.orElseGet(() -> alertSettingRepository.save(AlertSetting.createDefault(user)));
+	}
+
+	@Override
+	public Map<Long, AlertSetting> findAllByUserIds(List<Long> userIds) {
+		return alertSettingRepository.findAllByUserIds(userIds).stream()
+				.collect(Collectors.toMap(s -> s.getUser().getId(), s -> s));
 	}
 
 }

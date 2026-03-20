@@ -30,6 +30,12 @@ public class FamilyMemberRepositoryImpl implements FamilyMemberRepository {
     }
 
     @Override
+    public List<FamilyMember> findAllByPetIdsWithUser(List<Long> petIds) {
+        if (petIds.isEmpty()) return List.of();
+        return familyMemberJpaRepository.findAllByPetIdInWithUser(petIds);
+    }
+
+    @Override
     public List<FamilyMember> findAllByPetIdAndStatus(Long petId, FamilyMemberStatus status) {
         return familyMemberJpaRepository.findAllByPetIdAndStatusWithUser(petId, status);
     }

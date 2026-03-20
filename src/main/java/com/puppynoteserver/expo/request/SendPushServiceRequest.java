@@ -1,4 +1,4 @@
-package com.puppynoteserver.firebase.request;
+package com.puppynoteserver.expo.request;
 
 import com.puppynoteserver.user.push.entity.Push;
 import lombok.Builder;
@@ -7,17 +7,18 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SendFirebaseServiceRequest {
+public class SendPushServiceRequest {
+
     private Push push;
     private String sound;
     private String body;
-    private SendFirebaseDataDto sendFirebaseDataDto;
+    private SendPushDataDto sendPushDataDto;
 
     @Builder
-    private SendFirebaseServiceRequest(Push push, String sound, String body, SendFirebaseDataDto sendFirebaseDataDto) {
+    private SendPushServiceRequest(Push push, String sound, String body, SendPushDataDto sendPushDataDto) {
         this.push = push;
         this.sound = sound;
         this.body = body;
-        this.sendFirebaseDataDto = sendFirebaseDataDto;
+        this.sendPushDataDto = sendPushDataDto;
     }
 }

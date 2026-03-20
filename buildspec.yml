@@ -15,15 +15,9 @@ env:
     ES_PASSWORD:           "/puppynote/prd/ES_PASSWORD"
     REDIS_HOST:            "/puppynote/prd/REDIS_HOST"
     REDIS_PASSWORD:        "/puppynote/prd/REDIS_PASSWORD"
-    FIREBASE_CONFIG:       "/puppynote/prd/FIREBASE_CONFIG"
     CLOUDFRONT_DOMAIN:     "/puppynote/prd/CLOUDFRONT_DOMAIN"
 
 phases:
-  pre_build:
-    commands:
-      - echo "--- Firebase 설정 파일 주입 ---"
-      - echo "$FIREBASE_CONFIG" > src/main/resources/puppynote-firebase.json
-
   build:
     commands:
       - echo "--- Gradle 빌드 ---"
