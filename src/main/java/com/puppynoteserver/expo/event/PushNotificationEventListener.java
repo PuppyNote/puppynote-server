@@ -17,7 +17,7 @@ public class PushNotificationEventListener {
     @Async
     @EventListener
     public void handlePushNotification(PushNotificationEvent event) {
-        log.info("푸시 알림 이벤트 수신 - 디바이스 수: {}", event.getPushes().size());
-        expoNotiService.sendPushNotificationToAll(event.getPushes(), event.getRequest());
+        log.info("푸시 알림 이벤트 수신 - 건수: {}", event.getRequests().size());
+        expoNotiService.sendBatchPushNotification(event.getRequests());
     }
 }

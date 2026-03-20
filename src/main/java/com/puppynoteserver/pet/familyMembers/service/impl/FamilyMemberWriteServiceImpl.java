@@ -17,10 +17,10 @@ import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberRegiste
 import com.puppynoteserver.pet.pets.service.PetReadService;
 import com.puppynoteserver.user.push.entity.Push;
 import com.puppynoteserver.user.push.service.PushReadService;
-import org.springframework.context.ApplicationEventPublisher;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,18 +59,18 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
 
         List<Push> pushes = pushReadService.findAllByUserId(invitee.getId());
         if (!pushes.isEmpty()) {
-            eventPublisher.publishEvent(new PushNotificationEvent(
-                    pushes,
-                    SendPushServiceRequest.builder()
-                            .push(pushes.get(0))
+            List<SendPushServiceRequest> pushRequests = pushes.stream()
+                    .map(push -> SendPushServiceRequest.builder()
+                            .push(push)
                             .sound("default")
                             .body(inviter.getNickName() + "님이 가족으로 초대했습니다!")
                             .sendPushDataDto(SendPushDataDto.builder()
                                     .alert_destination_type(AlertDestinationType.FAMILY_INVITE)
                                     .alert_destination_info("{\"userId\":" + request.getInviteeUserId() + ",\"petId\":" + request.getPetId() + "}")
                                     .build())
-                            .build()
-            ));
+                            .build())
+                    .toList();
+            eventPublisher.publishEvent(new PushNotificationEvent(pushRequests));
         }
     }
 

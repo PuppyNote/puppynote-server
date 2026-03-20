@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -47,6 +48,8 @@ public class PetItemPurchaseBatch {
 
         log.info("구매 예정 아이템 수: {}", targets.size());
 
+        List<SendPushServiceRequest> pushRequests = new ArrayList<>();
+
         for (PetItemPurchase purchase : targets) {
             PetItem petItem = purchase.getPetItem();
             Long petId = petItem.getPet().getId();
@@ -62,20 +65,23 @@ public class PetItemPurchaseBatch {
                     continue;
                 }
 
-                log.info("구매용품 알림 이벤트 발행 - userId: {}, 디바이스 수: {}", user.getId(), pushes.size());
-                eventPublisher.publishEvent(new PushNotificationEvent(
-                        pushes,
-                        SendPushServiceRequest.builder()
-                                .push(pushes.get(0))
-                                .sound("default")
-                                .body(petItem.getName() + " 구매 예정일이 내일입니다!")
-                                .sendPushDataDto(SendPushDataDto.builder()
-                                        .alert_destination_type(AlertDestinationType.PET_ITEM)
-                                        .alert_destination_info(String.valueOf(petItem.getId()))
-                                        .build())
-                                .build()
-                ));
+                for (Push push : pushes) {
+                    pushRequests.add(SendPushServiceRequest.builder()
+                            .push(push)
+                            .sound("default")
+                            .body(petItem.getName() + " 구매 예정일이 내일입니다!")
+                            .sendPushDataDto(SendPushDataDto.builder()
+                                    .alert_destination_type(AlertDestinationType.PET_ITEM)
+                                    .alert_destination_info(String.valueOf(petItem.getId()))
+                                    .build())
+                            .build());
+                }
             }
+        }
+
+        if (!pushRequests.isEmpty()) {
+            log.info("구매용품 알림 이벤트 발행 - 총 건수: {}", pushRequests.size());
+            eventPublisher.publishEvent(new PushNotificationEvent(pushRequests));
         }
     }
 }

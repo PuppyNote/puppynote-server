@@ -27,6 +27,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -50,6 +51,8 @@ public class WalkAlarmBatch {
         List<PetWalkAlarm> alarms = petWalkAlarmRepository.findActiveAlarmsAtTimeAndDay(AlarmStatus.YES, targetTime, today);
         log.info("산책 알림 배치 실행 - 대상 시각: {}, 요일: {}, 알람 수: {}", targetTime, today, alarms.size());
 
+        List<SendPushServiceRequest> pushRequests = new ArrayList<>();
+
         for (PetWalkAlarm alarm : alarms) {
             List<FamilyMember> familyMembers = familyMemberRepository.findByPetIdWithUser(alarm.getPet().getId());
 
@@ -70,20 +73,23 @@ public class WalkAlarmBatch {
                     continue;
                 }
 
-                log.info("산책 알림 이벤트 발행 - userId: {}, 디바이스 수: {}", user.getId(), pushes.size());
-                eventPublisher.publishEvent(new PushNotificationEvent(
-                        pushes,
-                        SendPushServiceRequest.builder()
-                                .push(pushes.get(0))
-                                .sound("default")
-                                .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
-                                .sendPushDataDto(SendPushDataDto.builder()
-                                        .alert_destination_type(AlertDestinationType.WALK)
-                                        .alert_destination_info(String.valueOf(alarm.getPet().getId()))
-                                        .build())
-                                .build()
-                ));
+                for (Push push : pushes) {
+                    pushRequests.add(SendPushServiceRequest.builder()
+                            .push(push)
+                            .sound("default")
+                            .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
+                            .sendPushDataDto(SendPushDataDto.builder()
+                                    .alert_destination_type(AlertDestinationType.WALK)
+                                    .alert_destination_info(String.valueOf(alarm.getPet().getId()))
+                                    .build())
+                            .build());
+                }
             }
+        }
+
+        if (!pushRequests.isEmpty()) {
+            log.info("산책 알림 이벤트 발행 - 총 건수: {}", pushRequests.size());
+            eventPublisher.publishEvent(new PushNotificationEvent(pushRequests));
         }
     }
 
