@@ -1,7 +1,5 @@
 package com.puppynoteserver;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.puppynoteserver.global.config.FCMConfig;
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.jwt.dto.LoginUserInfo;
 import com.puppynoteserver.user.push.entity.Push;
@@ -31,10 +29,6 @@ public abstract class IntegrationTestSupport {
     protected KakaoApiFeignCall kakaoApiFeignCall;
     @MockitoBean
     protected GoogleApiFeignCall googleApiFeignCall;
-    @MockitoBean
-    protected FCMConfig fcmConfig;
-    @MockitoBean
-    protected FirebaseMessaging firebaseMessaging;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
