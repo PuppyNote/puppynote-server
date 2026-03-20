@@ -1,7 +1,7 @@
 package com.puppynoteserver.pet.familyMembers.service.impl;
 
 import com.puppynoteserver.alertHistory.entity.AlertDestinationType;
-import com.puppynoteserver.expo.ExpoNotiService;
+import com.puppynoteserver.expo.event.PushNotificationEvent;
 import com.puppynoteserver.expo.request.SendPushDataDto;
 import com.puppynoteserver.expo.request.SendPushServiceRequest;
 import com.puppynoteserver.global.exception.NotFoundException;
@@ -17,6 +17,7 @@ import com.puppynoteserver.pet.familyMembers.service.request.FamilyMemberRegiste
 import com.puppynoteserver.pet.pets.service.PetReadService;
 import com.puppynoteserver.user.push.entity.Push;
 import com.puppynoteserver.user.push.service.PushReadService;
+import org.springframework.context.ApplicationEventPublisher;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
     private final UserReadService userReadService;
     private final PetReadService petReadService;
     private final PushReadService pushReadService;
-    private final ExpoNotiService expoNotiService;
+    private final ApplicationEventPublisher eventPublisher;
     private final SecurityService securityService;
 
     @Override
@@ -58,7 +59,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
 
         List<Push> pushes = pushReadService.findAllByUserId(invitee.getId());
         if (!pushes.isEmpty()) {
-            expoNotiService.sendPushNotificationToAll(
+            eventPublisher.publishEvent(new PushNotificationEvent(
                     pushes,
                     SendPushServiceRequest.builder()
                             .push(pushes.get(0))
@@ -69,7 +70,7 @@ public class FamilyMemberWriteServiceImpl implements FamilyMemberWriteService {
                                     .alert_destination_info("{\"userId\":" + request.getInviteeUserId() + ",\"petId\":" + request.getPetId() + "}")
                                     .build())
                             .build()
-            );
+            ));
         }
     }
 
