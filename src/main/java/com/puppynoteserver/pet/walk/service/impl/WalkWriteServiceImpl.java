@@ -45,11 +45,25 @@ public class WalkWriteServiceImpl implements WalkWriteService {
 
     @Override
     public void delete(Long walkId) {
+        Walk walk = walkRepository.findById(walkId)
+                .orElseThrow(() -> new IllegalArgumentException("산책 기록을 찾을 수 없습니다."));
+
+        List<String> photoKeys = walk.getPhotos().stream()
+                .map(photo -> photo.getImageKey())
+                .toList();
+        s3StorageService.deleteObjects(photoKeys, BucketKind.WALK_PHOTO);
+
         walkRepository.deleteById(walkId);
     }
 
     @Override
     public void deleteAllByPetId(Long petId) {
+        List<String> photoKeys = walkRepository.findAllByPetId(petId).stream()
+                .flatMap(walk -> walk.getPhotos().stream())
+                .map(photo -> photo.getImageKey())
+                .toList();
+        s3StorageService.deleteObjects(photoKeys, BucketKind.WALK_PHOTO);
+
         walkRepository.deleteAllByPetId(petId);
     }
 }

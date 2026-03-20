@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -58,6 +60,39 @@ public class S3StorageService {
                 ? objectKey
                 : bucketKind.getFolder() + "/" + objectKey;
         return getCloudFrontUrl(key);
+    }
+
+    /**
+     * S3에서 파일 삭제
+     *
+     * @param imageKey   삭제할 이미지 키
+     * @param bucketKind 폴더 종류
+     */
+    public void deleteObject(String imageKey, BucketKind bucketKind) {
+        if (imageKey == null || imageKey.isEmpty()) return;
+        String objectKey = imageKey.startsWith(bucketKind.getFolder() + "/")
+                ? imageKey
+                : bucketKind.getFolder() + "/" + imageKey;
+        try {
+            s3Client.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(objectKey)
+                    .build());
+            log.info("S3 파일 삭제 성공: {}", objectKey);
+        } catch (Exception e) {
+            log.error("S3 파일 삭제 실패: {}, message: {}", objectKey, e.getMessage());
+        }
+    }
+
+    /**
+     * S3에서 파일 목록 삭제
+     *
+     * @param imageKeys  삭제할 이미지 키 목록
+     * @param bucketKind 폴더 종류
+     */
+    public void deleteObjects(List<String> imageKeys, BucketKind bucketKind) {
+        if (imageKeys == null || imageKeys.isEmpty()) return;
+        imageKeys.forEach(key -> deleteObject(key, bucketKind));
     }
 
     private String getCloudFrontUrl(String objectKey) {

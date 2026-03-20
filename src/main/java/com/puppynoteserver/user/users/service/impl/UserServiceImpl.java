@@ -3,6 +3,8 @@ package com.puppynoteserver.user.users.service.impl;
 import com.puppynoteserver.global.email.EmailService;
 import com.puppynoteserver.global.exception.PuppyNoteException;
 import com.puppynoteserver.global.security.SecurityService;
+import com.puppynoteserver.storage.enums.BucketKind;
+import com.puppynoteserver.storage.service.S3StorageService;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.entity.enums.Role;
 import com.puppynoteserver.user.users.entity.enums.SnsType;
@@ -18,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final SecurityService securityService;
+    private final S3StorageService s3StorageService;
 
     @Override
     public SignUpResponse signUp(SignUpServiceRequest request) {
@@ -53,8 +58,15 @@ public class UserServiceImpl implements UserService {
     public void updateProfile(UserProfileUpdateServiceRequest request) {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userReadService.findById(userId);
+        String oldProfileUrl = user.getProfileUrl();
+
         user.updateNickName(request.getNickName());
         user.updateProfileUrl(request.getProfileUrl());
+
+        // 프로필 이미지가 변경된 경우 기존 이미지 S3에서 삭제
+        if (oldProfileUrl != null && !Objects.equals(oldProfileUrl, request.getProfileUrl())) {
+            s3StorageService.deleteObject(oldProfileUrl, BucketKind.USER_PROFILE);
+        }
     }
 
     private void checkExistEmail(String email) {

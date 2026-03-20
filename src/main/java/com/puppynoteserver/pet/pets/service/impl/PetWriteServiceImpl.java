@@ -19,17 +19,20 @@ import com.puppynoteserver.pet.pets.service.request.PetCreateServiceRequest;
 import com.puppynoteserver.pet.pets.service.request.PetUpdateServiceRequest;
 import com.puppynoteserver.pet.pets.service.response.PetCreateResponse;
 import com.puppynoteserver.pet.walk.service.WalkWriteService;
+import com.puppynoteserver.storage.enums.BucketKind;
+import com.puppynoteserver.storage.service.S3StorageService;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.service.UserReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class PetWriteServiceImpl implements PetWriteService {
-
 
     private final PetRepository petRepository;
     private final PetReadService petReadService;
@@ -41,6 +44,7 @@ public class PetWriteServiceImpl implements PetWriteService {
     private final WalkWriteService walkWriteService;
     private final UserReadService userReadService;
     private final SecurityService securityService;
+    private final S3StorageService s3StorageService;
 
     @Override
     public PetCreateResponse createPet(PetCreateServiceRequest request) {
@@ -63,12 +67,19 @@ public class PetWriteServiceImpl implements PetWriteService {
     @Override
     public void updatePet(Long petId, PetUpdateServiceRequest request) {
         Pet pet = petReadService.findById(petId);
+        String oldProfileImage = pet.getProfileImage();
+
         pet.updateInfo(request.getName(), request.getBirthDate(), request.getProfileImage(), request.getRegistrationNumber());
+
+        // 프로필 이미지가 변경된 경우 기존 이미지 S3에서 삭제
+        if (oldProfileImage != null && !Objects.equals(oldProfileImage, request.getProfileImage())) {
+            s3StorageService.deleteObject(oldProfileImage, BucketKind.PUPPY_PROFILE);
+        }
     }
 
     @Override
     public void deletePet(Long petId) {
-        petReadService.findById(petId);
+        Pet pet = petReadService.findById(petId);
 
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
         FamilyMember familyMember = familyMemberService.findByUserIdAndPetId(userId, petId)
@@ -78,11 +89,14 @@ public class PetWriteServiceImpl implements PetWriteService {
             throw new PuppyNoteException("펫 삭제는 OWNER만 가능합니다.");
         }
 
-        // 연관 데이터 순서대로 삭제
+        // 연관 데이터 순서대로 삭제 (각 서비스에서 S3 이미지도 함께 삭제)
         petItemWriteService.deleteAllByPetId(petId);
         walkWriteService.deleteAllByPetId(petId);
         petWalkAlarmWriteService.deleteAllByPetId(petId);
         familyMemberWriteService.deleteAllByPetId(petId);
         petRepository.deleteById(petId);
+
+        // 펫 프로필 이미지 S3 삭제
+        s3StorageService.deleteObject(pet.getProfileImage(), BucketKind.PUPPY_PROFILE);
     }
 }

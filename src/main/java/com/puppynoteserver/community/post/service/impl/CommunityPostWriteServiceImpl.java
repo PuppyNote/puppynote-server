@@ -9,6 +9,8 @@ import com.puppynoteserver.community.post.service.request.PostUpdateServiceReque
 import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.global.exception.UnauthenticatedException;
 import com.puppynoteserver.global.security.SecurityService;
+import com.puppynoteserver.storage.enums.BucketKind;
+import com.puppynoteserver.storage.service.S3StorageService;
 import com.puppynoteserver.user.users.entity.User;
 import com.puppynoteserver.user.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
     private final PostRepository postRepository;
     private final SecurityService securityService;
     private final UserRepository userRepository;
+    private final S3StorageService s3StorageService;
 
     @Override
     public Long createPost(PostCreateServiceRequest request) {
@@ -58,6 +61,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
 
         if (request.getDeleteImageKeys() != null && !request.getDeleteImageKeys().isEmpty()) {
             post.removeImagesByKeys(request.getDeleteImageKeys());
+            s3StorageService.deleteObjects(request.getDeleteImageKeys(), BucketKind.COMMUNITY_POST);
         }
 
         if (request.getAddImageKeys() != null && !request.getAddImageKeys().isEmpty()) {
@@ -76,8 +80,14 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
             throw new UnauthenticatedException("게시물 삭제 권한이 없습니다.");
         }
 
+        List<String> imageKeys = post.getImages().stream()
+                .map(PostImage::getImageKey)
+                .toList();
+
         // Logstash가 deleted_at 컬럼을 감지해 ES에서 삭제 처리
         post.softDelete();
+
+        s3StorageService.deleteObjects(imageKeys, BucketKind.COMMUNITY_POST);
     }
 
     private void addImages(Post post, List<String> imageKeys) {
