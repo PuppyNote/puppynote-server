@@ -7,6 +7,7 @@ import com.puppynoteserver.user.users.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,6 +24,12 @@ public class AlertSettingRepositoryImpl implements AlertSettingRepository {
 	@Override
 	public Optional<AlertSetting> findByUser(User user) {
 		return alertSettingJpaRepository.findByUser(user);
+	}
+
+	@Override
+	public List<AlertSetting> findAllByUserIds(List<Long> userIds) {
+		if (userIds.isEmpty()) return List.of();
+		return alertSettingJpaRepository.findAllByUserIdIn(userIds);
 	}
 
 	@Override

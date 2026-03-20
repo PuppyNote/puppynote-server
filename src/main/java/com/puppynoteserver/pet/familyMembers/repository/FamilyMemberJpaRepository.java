@@ -18,6 +18,9 @@ public interface FamilyMemberJpaRepository extends JpaRepository<FamilyMember, F
     @Query("SELECT fm FROM FamilyMember fm JOIN FETCH fm.user WHERE fm.id.petId = :petId")
     List<FamilyMember> findByPetIdWithUser(@Param("petId") Long petId);
 
+    @Query("SELECT fm FROM FamilyMember fm JOIN FETCH fm.user WHERE fm.id.petId IN :petIds")
+    List<FamilyMember> findAllByPetIdInWithUser(@Param("petIds") List<Long> petIds);
+
     @Query("SELECT fm FROM FamilyMember fm JOIN FETCH fm.user WHERE fm.id.petId = :petId AND fm.status = :status")
     List<FamilyMember> findAllByPetIdAndStatusWithUser(@Param("petId") Long petId, @Param("status") FamilyMemberStatus status);
 

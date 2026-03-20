@@ -14,6 +14,8 @@ public interface FamilyMemberRepository {
 
     List<FamilyMember> findByPetIdWithUser(Long petId);
 
+    List<FamilyMember> findAllByPetIdsWithUser(List<Long> petIds);
+
     List<FamilyMember> findAllByPetIdAndStatus(Long petId, FamilyMemberStatus status);
 
     List<FamilyMember> findAllByPetIdsAndStatus(List<Long> petIds, FamilyMemberStatus status);

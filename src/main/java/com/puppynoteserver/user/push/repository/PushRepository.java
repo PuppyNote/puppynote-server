@@ -13,4 +13,6 @@ public interface PushRepository {
 	Optional<Push> findByUserId(Long userId);
 
 	List<Push> findAllByUserId(Long userId);
+
+	List<Push> findAllByUserIds(List<Long> userIds);
 }

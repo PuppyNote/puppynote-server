@@ -11,4 +11,6 @@ public interface PushJpaRepository extends JpaRepository<Push, Long> {
     Optional<Push> findByUserId(Long userId);
 
     List<Push> findAllByUserId(Long userId);
+
+    List<Push> findAllByUserIdIn(List<Long> userIds);
 }
