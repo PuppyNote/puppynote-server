@@ -4,9 +4,9 @@ import com.puppynoteserver.alertHistory.entity.AlertDestinationType;
 import com.puppynoteserver.alertSetting.entity.AlertSetting;
 import com.puppynoteserver.alertSetting.entity.enums.AlertType;
 import com.puppynoteserver.alertSetting.service.AlertSettingReadService;
-import com.puppynoteserver.firebase.FirebaseService;
-import com.puppynoteserver.firebase.request.SendFirebaseDataDto;
-import com.puppynoteserver.firebase.request.SendFirebaseServiceRequest;
+import com.puppynoteserver.expo.event.PushNotificationEvent;
+import com.puppynoteserver.expo.request.SendPushDataDto;
+import com.puppynoteserver.expo.request.SendPushServiceRequest;
 import com.puppynoteserver.pet.familyMembers.entity.FamilyMember;
 import com.puppynoteserver.pet.familyMembers.repository.FamilyMemberRepository;
 import com.puppynoteserver.pet.petWalkAlarms.entity.PetWalkAlarm;
@@ -18,6 +18,7 @@ import com.puppynoteserver.user.push.repository.PushRepository;
 import com.puppynoteserver.user.users.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class WalkAlarmBatch {
     private final FamilyMemberRepository familyMemberRepository;
     private final PushRepository pushRepository;
     private final AlertSettingReadService alertSettingReadService;
-    private final FirebaseService firebaseService;
+    private final ApplicationEventPublisher eventPublisher;
 
     // 5분마다 실행, 10분 뒤 산책 알림 대상 조회
     @Scheduled(cron = "0 */5 * * * *")
@@ -68,19 +69,20 @@ public class WalkAlarmBatch {
                     log.warn("산책 알림 스킵 - userId: {}, 등록된 pushToken 없음", user.getId());
                     continue;
                 }
-                log.info("산책 알림 전송 시도 - userId: {}, 디바이스 수: {}", user.getId(), pushes.size());
-                firebaseService.sendPushNotificationToAll(
+
+                log.info("산책 알림 이벤트 발행 - userId: {}, 디바이스 수: {}", user.getId(), pushes.size());
+                eventPublisher.publishEvent(new PushNotificationEvent(
                         pushes,
-                        SendFirebaseServiceRequest.builder()
+                        SendPushServiceRequest.builder()
                                 .push(pushes.get(0))
                                 .sound("default")
                                 .body(alarm.getPet().getName() + " 산책 시간이 10분 후입니다!")
-                                .sendFirebaseDataDto(SendFirebaseDataDto.builder()
+                                .sendPushDataDto(SendPushDataDto.builder()
                                         .alert_destination_type(AlertDestinationType.WALK)
                                         .alert_destination_info(String.valueOf(alarm.getPet().getId()))
                                         .build())
                                 .build()
-                );
+                ));
             }
         }
     }
