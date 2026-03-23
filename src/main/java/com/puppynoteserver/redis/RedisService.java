@@ -52,6 +52,7 @@ public class RedisService {
 
     // 여러 String 키의 값을 한 번의 네트워크 호출로 조회한다 (MGET)
     // 존재하지 않는 키는 null로 반환된다
+    public List<String> mGet(List<String> keys) {
         return redisTemplate.opsForValue().multiGet(keys);
     }
 
