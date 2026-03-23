@@ -1,8 +1,8 @@
-package com.puppynoteserver.community.post.like.service.impl;
+package com.puppynoteserver.community.like.service.impl;
 
-import com.puppynoteserver.community.post.like.repository.PostLikeRepository;
-import com.puppynoteserver.community.post.like.service.PostLikeService;
-import com.puppynoteserver.community.post.like.service.response.PostLikeToggleResponse;
+import com.puppynoteserver.community.like.repository.PostLikeRepository;
+import com.puppynoteserver.community.like.service.PostLikeService;
+import com.puppynoteserver.community.like.service.response.PostLikeToggleResponse;
 import com.puppynoteserver.community.post.service.CommunityPostReadService;
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.redis.PostLikeRedisService;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,19 +37,17 @@ public class PostLikeServiceImpl implements PostLikeService {
         return PostLikeToggleResponse.of(liked, likeCount);
     }
 
-    // 캐시 미스 시 DB에서 좋아요 유저 목록 전체를 Redis에 로드
+    // 캐시 미스 시 DB에서 각각 조회해 초기화
+    // count: countByPostId 1번 / liked 여부: findByPostIdAndUserId 1번
     private void initializeCacheIfAbsent(Long postId, Long userId) {
-        if (postLikeRedisService.existsUsersCache(postId)) {
-            // users Set은 있지만 개인 캐시가 없는 경우 Set에서 판단
-            if (!postLikeRedisService.existsLikedCache(userId, postId)) {
-                boolean liked = postLikeRedisService.isLiked(postId, userId);
-                postLikeRedisService.setLikedCache(userId, postId, liked);
-            }
-            return;
+        if (!postLikeRedisService.existsCountCache(postId)) {
+            long count = postLikeRepository.countByPostId(postId);
+            postLikeRedisService.setCountCache(postId, count);
         }
 
-        // users Set 자체가 없으면 DB에서 전체 로드
-        Set<Long> dbUserIds = postLikeRepository.findUserIdsByPostId(postId);
-        postLikeRedisService.initializeUsersCache(postId, dbUserIds, userId);
+        if (!postLikeRedisService.existsLikedCache(userId, postId)) {
+            boolean liked = postLikeRepository.findByPostIdAndUserId(postId, userId).isPresent();
+            postLikeRedisService.setLikedCache(userId, postId, liked);
+        }
     }
 }

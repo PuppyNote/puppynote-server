@@ -15,6 +15,7 @@ import com.puppynoteserver.user.users.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import com.puppynoteserver.community.post.service.PostSearchService;
 import com.puppynoteserver.redis.PostLikeRedisService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -32,6 +33,8 @@ public abstract class IntegrationTestSupport {
     protected GoogleApiFeignCall googleApiFeignCall;
     @MockitoBean
     protected PostLikeRedisService postLikeRedisService;
+    @MockitoBean
+    protected PostSearchService postSearchService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired

@@ -39,9 +39,20 @@ public class RedisService {
         redisTemplate.expire(key, ttl);
     }
 
+    // String 타입 키의 값을 조회한다 (GET)
+    // 키가 존재하지 않으면 null을 반환한다
+    public String getValue(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
     // String 타입 키에 값을 저장하고 TTL을 설정한다
     public void setValue(String key, String value, Duration ttl) {
         redisTemplate.opsForValue().set(key, value, ttl);
+    }
+
+    // 여러 String 키의 값을 한 번의 네트워크 호출로 조회한다 (MGET)
+    // 존재하지 않는 키는 null로 반환된다
+        return redisTemplate.opsForValue().multiGet(keys);
     }
 
     // Set 타입 키에 하나 이상의 멤버를 추가한다 (SADD)

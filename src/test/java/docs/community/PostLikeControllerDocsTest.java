@@ -1,8 +1,8 @@
 package docs.community;
 
-import com.puppynoteserver.community.post.like.controller.PostLikeController;
-import com.puppynoteserver.community.post.like.service.PostLikeService;
-import com.puppynoteserver.community.post.like.service.response.PostLikeToggleResponse;
+import com.puppynoteserver.community.like.controller.PostLikeController;
+import com.puppynoteserver.community.like.service.PostLikeService;
+import com.puppynoteserver.community.like.service.response.PostLikeToggleResponse;
 import docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

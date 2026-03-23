@@ -1,7 +1,7 @@
 package com.puppynoteserver.batch;
 
-import com.puppynoteserver.community.post.like.entity.PostLikeRedisKey;
-import com.puppynoteserver.community.post.like.repository.PostLikeRepository;
+import com.puppynoteserver.community.like.entity.PostLikeRedisKey;
+import com.puppynoteserver.community.like.repository.PostLikeRepository;
 import com.puppynoteserver.redis.PostLikeRedisService;
 import com.puppynoteserver.redis.RedisService;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.puppynoteserver.community.post.like.repository.dto;
+package com.puppynoteserver.community.like.repository.dto;
 
 import lombok.Getter;
 

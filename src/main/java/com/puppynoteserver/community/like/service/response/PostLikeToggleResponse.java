@@ -1,4 +1,4 @@
-package com.puppynoteserver.community.post.like.service.response;
+package com.puppynoteserver.community.like.service.response;
 
 import lombok.Getter;
 

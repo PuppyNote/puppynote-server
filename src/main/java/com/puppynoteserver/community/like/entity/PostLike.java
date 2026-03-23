@@ -1,4 +1,4 @@
-package com.puppynoteserver.community.post.like.entity;
+package com.puppynoteserver.community.like.entity;
 
 import com.puppynoteserver.global.BaseTimeEntity;
 import jakarta.persistence.*;

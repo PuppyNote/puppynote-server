@@ -1,4 +1,4 @@
-package com.puppynoteserver.community.post.like.entity;
+package com.puppynoteserver.community.like.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum PostLikeRedisKey {
 
     USER_LIKED("user:liked:"),                          // user:liked:{userId}:{postId} → "1"/"0"
-    POST_LIKE_USERS("post:like:users:"),                // post:like:users:{postId} → Set<userId>
+    POST_LIKE_COUNT("post:like:count:"),                // post:like:count:{postId} → 총 좋아요 수
     DIRTY("post:like:dirty"),                           // post:like:dirty → Set<postId>
     DIRTY_PROCESSING("post:like:dirty:processing:"),    // post:like:dirty:processing:{ts}
     DELTA_ADD("post:like:delta:add:"),                  // post:like:delta:add:{postId} → 새로 좋아요한 userId Set

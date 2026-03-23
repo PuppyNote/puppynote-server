@@ -1,7 +1,7 @@
-package com.puppynoteserver.community.post.like.controller;
+package com.puppynoteserver.community.like.controller;
 
-import com.puppynoteserver.community.post.like.service.PostLikeService;
-import com.puppynoteserver.community.post.like.service.response.PostLikeToggleResponse;
+import com.puppynoteserver.community.like.service.PostLikeService;
+import com.puppynoteserver.community.like.service.response.PostLikeToggleResponse;
 import com.puppynoteserver.global.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
