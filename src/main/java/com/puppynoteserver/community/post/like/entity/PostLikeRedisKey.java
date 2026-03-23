@@ -7,10 +7,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PostLikeRedisKey {
 
-    USER_LIKED("user:liked:"),               // user:liked:{userId}:{postId} → "1"/"0"
-    POST_LIKE_USERS("post:like:users:"),      // post:like:users:{postId} → Set<userId>
-    DIRTY("post:like:dirty"),                 // post:like:dirty → Set<postId>
-    DIRTY_PROCESSING("post:like:dirty:processing:"); // post:like:dirty:processing:{ts}
+    USER_LIKED("user:liked:"),                          // user:liked:{userId}:{postId} → "1"/"0"
+    POST_LIKE_USERS("post:like:users:"),                // post:like:users:{postId} → Set<userId>
+    DIRTY("post:like:dirty"),                           // post:like:dirty → Set<postId>
+    DIRTY_PROCESSING("post:like:dirty:processing:"),    // post:like:dirty:processing:{ts}
+    DELTA_ADD("post:like:delta:add:"),                  // post:like:delta:add:{postId} → 새로 좋아요한 userId Set
+    DELTA_REMOVE("post:like:delta:remove:"),            // post:like:delta:remove:{postId} → 좋아요 취소한 userId Set
+    DELTA_ADD_PROCESSING("post:like:delta:add:processing:"),       // 배치 처리 중 임시 키
+    DELTA_REMOVE_PROCESSING("post:like:delta:remove:processing:"); // 배치 처리 중 임시 키
 
     private final String key;
 
@@ -19,7 +23,6 @@ public enum PostLikeRedisKey {
         for (Object arg : args) {
             sb.append(arg).append(":");
         }
-        // 마지막 구분자 제거
         if (args.length > 0) {
             sb.deleteCharAt(sb.length() - 1);
         }

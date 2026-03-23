@@ -1,8 +1,8 @@
 package com.puppynoteserver.batch;
 
-import com.puppynoteserver.community.post.like.entity.PostLike;
 import com.puppynoteserver.community.post.like.entity.PostLikeRedisKey;
 import com.puppynoteserver.community.post.like.repository.PostLikeRepository;
+import com.puppynoteserver.redis.PostLikeRedisService;
 import com.puppynoteserver.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -20,14 +19,16 @@ import java.util.stream.Collectors;
 public class PostLikeSyncBatch {
 
     private final PostLikeRepository postLikeRepository;
+    private final PostLikeRedisService postLikeRedisService;
     private final RedisService redisService;
 
     @Scheduled(fixedRate = 60000) // 1분마다 실행
     public void syncLikesToDB() {
-        // RENAME으로 dirty set을 원자적으로 분리 (처리 중 새 항목은 원본 키에 계속 쌓임)
         if (!redisService.hasKey(PostLikeRedisKey.DIRTY.of())) {
             return;
         }
+
+        // RENAME으로 dirty set을 원자적으로 분리 (처리 중 새 항목은 원본 키에 계속 쌓임)
         String processingKey = PostLikeRedisKey.DIRTY_PROCESSING.of(System.currentTimeMillis());
         redisService.rename(PostLikeRedisKey.DIRTY.of(), processingKey);
 
@@ -53,35 +54,22 @@ public class PostLikeSyncBatch {
 
     @Transactional
     public void syncPost(Long postId) {
-        String usersKey = PostLikeRedisKey.POST_LIKE_USERS.of(postId);
+        long timestamp = System.currentTimeMillis();
 
-        // Set이 만료된 경우 스킵 (마지막 sync 이후 변경 없음)
-        if (!redisService.hasKey(usersKey)) {
-            log.debug("[좋아요 배치 동기화] Redis Set 만료로 스킵 postId={}", postId);
+        // delta set을 원자적으로 분리 (처리 중 새 변경은 원본 키에 계속 쌓임)
+        Set<String> deltaAdd = postLikeRedisService.popDeltaAdd(postId, timestamp);
+        Set<String> deltaRemove = postLikeRedisService.popDeltaRemove(postId, timestamp);
+
+        if (deltaAdd.isEmpty() && deltaRemove.isEmpty()) {
             return;
         }
 
-        Set<String> redisMembers = redisService.sMembers(usersKey);
-        Set<Long> redisUserIds = redisMembers == null
-                ? Set.of()
-                : redisMembers.stream().map(Long::parseLong).collect(Collectors.toSet());
+        List<Long> toInsert = deltaAdd.stream().map(Long::parseLong).toList();
+        List<Long> toDelete = deltaRemove.stream().map(Long::parseLong).toList();
 
-        Set<Long> dbUserIds = postLikeRepository.findUserIdsByPostId(postId);
+        // INSERT IGNORE: like→unlike→like 같이 동일 주기 내 중복 시도 무시
+        toInsert.forEach(userId -> postLikeRepository.insertIgnore(postId, userId));
 
-        // 새로 좋아요한 유저 INSERT
-        List<PostLike> toInsert = redisUserIds.stream()
-                .filter(uid -> !dbUserIds.contains(uid))
-                .map(uid -> PostLike.of(postId, uid))
-                .toList();
-
-        // 좋아요 취소한 유저 DELETE
-        List<Long> toDelete = dbUserIds.stream()
-                .filter(uid -> !redisUserIds.contains(uid))
-                .toList();
-
-        if (!toInsert.isEmpty()) {
-            postLikeRepository.saveAll(toInsert);
-        }
         if (!toDelete.isEmpty()) {
             postLikeRepository.deleteByPostIdAndUserIdIn(postId, toDelete);
         }

@@ -9,16 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
-
-    Optional<PostLike> findByPostIdAndUserId(Long postId, Long userId);
-
-    @Modifying
-    @Query("DELETE FROM PostLike pl WHERE pl.postId = :postId AND pl.userId = :userId")
-    void deleteByPostIdAndUserId(@Param("postId") Long postId, @Param("userId") Long userId);
 
     @Query("SELECT pl.userId FROM PostLike pl WHERE pl.postId = :postId")
     Set<Long> findUserIdsByPostId(@Param("postId") Long postId);
@@ -27,8 +20,10 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     @Query("DELETE FROM PostLike pl WHERE pl.postId = :postId AND pl.userId IN :userIds")
     void deleteByPostIdAndUserIdIn(@Param("postId") Long postId, @Param("userIds") Collection<Long> userIds);
 
-    // 단건 카운트 (캐시 미스 시 단일 게시물 카운트 조회)
-    long countByPostId(Long postId);
+    // like→unlike→like 같이 동일 주기 내 중복 삽입 시도 시 DB 레벨에서 무시
+    @Modifying
+    @Query(value = "INSERT IGNORE INTO post_likes (post_id, user_id, created_date, updated_date) VALUES (:postId, :userId, NOW(), NOW())", nativeQuery = true)
+    void insertIgnore(@Param("postId") Long postId, @Param("userId") Long userId);
 
     // 게시물 목록 조회 시 좋아요 수 + 좋아요 여부 한 번에 조회
     @Query("""

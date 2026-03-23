@@ -1,11 +1,14 @@
 package com.puppynoteserver.redis;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,8 +64,19 @@ public class RedisService {
         return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, value));
     }
 
+    // Set 타입 키를 커서 기반으로 청크 단위 순회해 전체 멤버를 반환한다 (SSCAN)
+    // SMEMBERS 대신 사용해 대용량 Set 조회 시 Redis 블로킹을 방지한다
+    public Set<String> sScan(String key, int chunkSize) {
+        Set<String> result = new HashSet<>();
+        try (Cursor<String> cursor = redisTemplate.opsForSet()
+                .scan(key, ScanOptions.scanOptions().count(chunkSize).build())) {
+            cursor.forEachRemaining(result::add);
+        }
+        return result;
+    }
+
     // Lua 스크립트를 원자적으로 실행한다
     public <T> T execute(RedisScript<T> script, List<String> keys, String... args) {
-        return redisTemplate.execute(script, keys, args);
+        return redisTemplate.execute(script, keys, (Object[]) args);
     }
 }
