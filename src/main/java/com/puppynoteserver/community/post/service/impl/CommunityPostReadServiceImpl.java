@@ -2,6 +2,8 @@ package com.puppynoteserver.community.post.service.impl;
 
 import com.puppynoteserver.community.post.entity.Post;
 import com.puppynoteserver.community.post.entity.PostImage;
+import com.puppynoteserver.community.post.like.repository.PostLikeRepository;
+import com.puppynoteserver.community.post.like.repository.dto.PostLikeAggDto;
 import com.puppynoteserver.community.post.repository.PostImageRepository;
 import com.puppynoteserver.community.post.repository.PostRepository;
 import com.puppynoteserver.community.post.service.CommunityPostReadService;
@@ -9,6 +11,7 @@ import com.puppynoteserver.community.post.service.PostSearchService;
 import com.puppynoteserver.community.post.service.response.PostListResponse;
 import com.puppynoteserver.community.post.service.response.PostResponse;
 import com.puppynoteserver.global.exception.NotFoundException;
+import com.puppynoteserver.global.exception.UnauthenticatedException;
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.storage.enums.BucketKind;
 import com.puppynoteserver.storage.service.S3StorageService;
@@ -19,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,6 +34,7 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
 
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
+    private final PostLikeRepository postLikeRepository;
     private final S3StorageService s3StorageService;
     private final SecurityService securityService;
 
@@ -88,7 +93,21 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
         String userProfileUrl = s3StorageService.getCloudFrontUrl(
                 post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
-        return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls);
+        Long currentUserId = getCurrentUserIdSafely();
+        PostLikeAggDto likeAgg = postLikeRepository
+                .findLikeAggByPostIds(List.of(postId), currentUserId != null ? currentUserId : 0L)
+                .stream().findFirst().orElse(null);
+
+        long likeCount = likeAgg != null ? likeAgg.getLikeCount() : 0L;
+        boolean isLiked = likeAgg != null && likeAgg.getIsLikedCount() > 0;
+
+        return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls, likeCount, isLiked);
+    }
+
+    @Override
+    public Post getPostOrThrow(Long postId) {
+        return postRepository.findByIdWithUser(postId)
+                .orElseThrow(() -> new NotFoundException("게시물을 찾을 수 없습니다."));
     }
 
     @Override
@@ -99,7 +118,7 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
         return postSearchService.searchHashtags(keyword);
     }
 
-    // 게시물 목록을 PostResponse로 변환 (N+1 방지: 이미지 일괄 조회)
+    // 게시물 목록을 PostResponse로 변환 (N+1 방지: 이미지/좋아요 일괄 조회)
     private List<PostResponse> toPostResponses(List<Post> posts) {
         if (posts.isEmpty()) {
             return List.of();
@@ -107,10 +126,16 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
 
         List<Long> postIds = posts.stream().map(Post::getId).collect(Collectors.toList());
 
-        // 이미지 일괄 조회 후 postId 기준으로 그룹핑
+        // 이미지 일괄 조회
         Map<Long, List<PostImage>> imageMap = postImageRepository.findByPostIdIn(postIds)
                 .stream()
                 .collect(Collectors.groupingBy(img -> img.getPost().getId()));
+
+        // 좋아요 수 + 좋아요 여부 한 번에 조회 (JOIN GROUP BY 1번)
+        Long currentUserId = getCurrentUserIdSafely();
+        Map<Long, PostLikeAggDto> likeAggMap = new HashMap<>();
+        postLikeRepository.findLikeAggByPostIds(postIds, currentUserId != null ? currentUserId : 0L)
+                .forEach(dto -> likeAggMap.put(dto.getPostId(), dto));
 
         return posts.stream()
                 .map(post -> {
@@ -127,8 +152,20 @@ public class CommunityPostReadServiceImpl implements CommunityPostReadService {
                     String userProfileUrl = s3StorageService.getCloudFrontUrl(
                             post.getUser().getProfileUrl(), BucketKind.USER_PROFILE);
 
-                    return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls);
+                    PostLikeAggDto likeAgg = likeAggMap.get(post.getId());
+                    long likeCount = likeAgg != null ? likeAgg.getLikeCount() : 0L;
+                    boolean isLiked = likeAgg != null && likeAgg.getIsLikedCount() > 0;
+
+                    return PostResponse.of(post, userProfileUrl, imageKeys, imageUrls, likeCount, isLiked);
                 })
                 .collect(Collectors.toList());
+    }
+
+    private Long getCurrentUserIdSafely() {
+        try {
+            return securityService.getCurrentLoginUserInfo().getUserId();
+        } catch (UnauthenticatedException e) {
+            return null;
+        }
     }
 }

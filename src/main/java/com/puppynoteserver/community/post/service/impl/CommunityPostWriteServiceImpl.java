@@ -3,10 +3,11 @@ package com.puppynoteserver.community.post.service.impl;
 import com.puppynoteserver.community.post.entity.Post;
 import com.puppynoteserver.community.post.entity.PostImage;
 import com.puppynoteserver.community.post.repository.PostRepository;
+import com.puppynoteserver.community.post.service.CommunityPostReadService;
 import com.puppynoteserver.community.post.service.CommunityPostWriteService;
 import com.puppynoteserver.community.post.service.request.PostCreateServiceRequest;
 import com.puppynoteserver.community.post.service.request.PostUpdateServiceRequest;
-import com.puppynoteserver.global.exception.NotFoundException;
+import com.puppynoteserver.global.exception.PuppyNoteException;
 import com.puppynoteserver.global.exception.UnauthenticatedException;
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.storage.enums.BucketKind;
@@ -28,6 +29,7 @@ import java.util.stream.IntStream;
 public class CommunityPostWriteServiceImpl implements CommunityPostWriteService {
 
     private final PostRepository postRepository;
+    private final CommunityPostReadService communityPostReadService;
     private final SecurityService securityService;
     private final UserRepository userRepository;
     private final S3StorageService s3StorageService;
@@ -36,7 +38,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
     public Long createPost(PostCreateServiceRequest request) {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new PuppyNoteException("사용자를 찾을 수 없습니다."));
 
         Post post = request.toEntity(user);
         postRepository.save(post);
@@ -49,8 +51,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
     @Override
     public void updatePost(Long postId, PostUpdateServiceRequest request) {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
-        Post post = postRepository.findByIdWithUser(postId)
-                .orElseThrow(() -> new NotFoundException("게시물을 찾을 수 없습니다."));
+        Post post = communityPostReadService.getPostOrThrow(postId);
 
         if (!post.getUser().getId().equals(userId)) {
             throw new UnauthenticatedException("게시물 수정 권한이 없습니다.");
@@ -73,8 +74,7 @@ public class CommunityPostWriteServiceImpl implements CommunityPostWriteService 
     @Override
     public void deletePost(Long postId) {
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
-        Post post = postRepository.findByIdWithUser(postId)
-                .orElseThrow(() -> new NotFoundException("게시물을 찾을 수 없습니다."));
+        Post post = communityPostReadService.getPostOrThrow(postId);
 
         if (!post.getUser().getId().equals(userId)) {
             throw new UnauthenticatedException("게시물 삭제 권한이 없습니다.");
