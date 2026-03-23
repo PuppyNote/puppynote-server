@@ -18,8 +18,8 @@ public class PostLikeRedisService {
 
     private final RedisService redisService;
 
-    static final Duration USER_LIKED_TTL = Duration.ofDays(7);
-    static final Duration POST_COUNT_TTL = Duration.ofDays(30);
+    static final Duration USER_LIKED_TTL = Duration.ofDays(1);
+    static final Duration POST_COUNT_TTL = Duration.ofDays(1);
 
     // 원자적 토글 스크립트
     // KEYS[1] = user:liked:{userId}:{postId}
