@@ -58,7 +58,7 @@ public class PostLikeServiceImpl implements PostLikeService {
         communityPostReadService.getPostOrThrow(postId);
 
         Long userId = securityService.getCurrentLoginUserInfo().getUserId();
-        String isLikedKey = userLikedKey(userId, postId);
+        String isLikedKey = createUserLikedKey(userId, postId);
 
         // 캐시 미스 시에만 DB에서 현재 좋아요 상태 로드
         if (!redisTemplate.hasKey(isLikedKey)) {
@@ -85,7 +85,7 @@ public class PostLikeServiceImpl implements PostLikeService {
         return PostLikeToggleResponse.of(liked, likeCount);
     }
 
-    private String userLikedKey(Long userId, Long postId) {
+    private String createUserLikedKey(Long userId, Long postId) {
         return USER_LIKED_KEY_PREFIX + userId + ":" + postId;
     }
 }
