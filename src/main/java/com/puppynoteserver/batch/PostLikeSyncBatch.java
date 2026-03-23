@@ -22,6 +22,7 @@ public class PostLikeSyncBatch {
     private final PostLikeRedisService postLikeRedisService;
     private final RedisService redisService;
 
+    @Transactional
     @Scheduled(fixedRate = 60000) // 1분마다 실행
     public void syncLikesToDB() {
         if (!redisService.hasKey(PostLikeRedisKey.DIRTY.of())) {
@@ -52,7 +53,6 @@ public class PostLikeSyncBatch {
         }
     }
 
-    @Transactional
     public void syncPost(Long postId) {
         long timestamp = System.currentTimeMillis();
 
