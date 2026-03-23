@@ -5,7 +5,7 @@ import com.puppynoteserver.community.like.service.PostLikeService;
 import com.puppynoteserver.community.like.service.response.PostLikeToggleResponse;
 import com.puppynoteserver.community.post.service.CommunityPostReadService;
 import com.puppynoteserver.global.security.SecurityService;
-import com.puppynoteserver.redis.PostLikeRedisService;
+import com.puppynoteserver.redis.service.PostLikeRedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

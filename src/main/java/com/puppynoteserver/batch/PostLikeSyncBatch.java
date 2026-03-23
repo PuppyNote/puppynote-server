@@ -2,8 +2,8 @@ package com.puppynoteserver.batch;
 
 import com.puppynoteserver.community.like.entity.PostLikeRedisKey;
 import com.puppynoteserver.community.like.repository.PostLikeRepository;
-import com.puppynoteserver.redis.PostLikeRedisService;
-import com.puppynoteserver.redis.RedisService;
+import com.puppynoteserver.redis.service.PostLikeRedisService;
+import com.puppynoteserver.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

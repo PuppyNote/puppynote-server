@@ -16,7 +16,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.puppynoteserver.community.post.service.PostSearchService;
-import com.puppynoteserver.redis.PostLikeRedisService;
+import com.puppynoteserver.redis.service.PostLikeRedisService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;

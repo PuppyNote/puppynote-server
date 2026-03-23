@@ -13,7 +13,7 @@ import com.puppynoteserver.community.post.service.response.PostResponse;
 import com.puppynoteserver.global.exception.NotFoundException;
 import com.puppynoteserver.global.exception.UnauthenticatedException;
 import com.puppynoteserver.global.security.SecurityService;
-import com.puppynoteserver.redis.PostLikeRedisService;
+import com.puppynoteserver.redis.service.PostLikeRedisService;
 import com.puppynoteserver.storage.enums.BucketKind;
 import com.puppynoteserver.storage.service.S3StorageService;
 import lombok.RequiredArgsConstructor;

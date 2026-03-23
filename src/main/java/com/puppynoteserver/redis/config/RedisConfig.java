@@ -1,4 +1,4 @@
-package com.puppynoteserver.redis;
+package com.puppynoteserver.redis.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.puppynoteserver.redis;
+package com.puppynoteserver.redis.service;
 
 import com.puppynoteserver.community.like.entity.PostLikeRedisKey;
 import lombok.RequiredArgsConstructor;
