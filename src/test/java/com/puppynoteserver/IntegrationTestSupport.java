@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.puppynoteserver.community.post.service.PostSearchService;
 import com.puppynoteserver.redis.service.PostLikeRedisService;
+import com.puppynoteserver.storage.service.S3StorageService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -35,6 +36,8 @@ public abstract class IntegrationTestSupport {
     protected PostLikeRedisService postLikeRedisService;
     @MockitoBean
     protected PostSearchService postSearchService;
+    @MockitoBean
+    protected S3StorageService s3StorageService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
