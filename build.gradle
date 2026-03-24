@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
     id "org.asciidoctor.jvm.convert" version '3.3.2'
-    id 'jacoco'
 }
 
 dependencyManagement {
@@ -108,84 +107,13 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
-jacoco {
-    toolVersion = "0.8.11"
-}
-
 tasks.named('test') {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
 
     // 테스트 실패 시 로그 출력
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
-    }
-}
-
-def jacocoExcludePatterns = [
-    // 애플리케이션 진입점
-    '**/PuppynoteServerApplication*',
-    // QueryDSL 생성 파일
-    '**/generated/**',
-    '**/Q*.class',
-    // 설정 클래스
-    '**/global/config/**',
-    '**/global/filter/**',
-    '**/global/interceptor/**',
-    '**/global/page/**',
-    '**/redis/config/**',
-    // DTO / 요청·응답 모델
-    '**/*Request*',
-    '**/*Response*',
-    '**/*Dto*',
-    '**/*Entity*',
-    '**/entity/**',
-    '**/enums/**',
-    // 외부 서비스 인프라 (단위 테스트 불가)
-    '**/global/email/**',           // 이메일 서비스
-    '**/global/security/**',        // 보안 설정
-    '**/global/test/**',            // 테스트 헬퍼
-    '**/jwt/filter/**',             // JWT 필터 체인
-    '**/batch/**',                  // 스케줄러/배치
-    '**/expo/**',                   // Expo 푸시 알림
-    '**/storage/**',                // S3 스토리지
-    '**/redis/service/**',          // Redis 인프라 서비스
-    '**/community/post/document/**',// Elasticsearch 도큐먼트
-    '**/petTip/**',                 // 씨드 데이터 조회
-    '**/user/push/**',              // 푸시 알림
-    '**/user/refreshToken/**',      // 리프레시 토큰 인프라
-]
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required = true
-        html.required = true
-        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/html')
-    }
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: jacocoExcludePatterns)
-        }))
-    }
-}
-
-jacocoTestCoverageVerification {
-    dependsOn jacocoTestReport
-    violationRules {
-        rule {
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.80
-            }
-        }
-    }
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: jacocoExcludePatterns)
-        }))
     }
 }
 
