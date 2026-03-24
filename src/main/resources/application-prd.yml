@@ -43,6 +43,8 @@ spring:
       host: ${REDIS_HOST}
       port: 6380
       password: ${REDIS_PASSWORD}
+      ssl:
+        enabled: true
 
 oauth:
   kakao:

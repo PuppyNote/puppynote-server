@@ -102,3 +102,16 @@ include::{snippets}/community-post-hashtag-suggestions/query-parameters.adoc[]
 
 include::{snippets}/community-post-hashtag-suggestions/http-response.adoc[]
 include::{snippets}/community-post-hashtag-suggestions/response-fields.adoc[]
+
+[[community-post-like-toggle]]
+=== 게시물 좋아요 토글
+
+==== HTTP Request
+
+include::{snippets}/community-post-like-toggle/http-request.adoc[]
+include::{snippets}/community-post-like-toggle/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/community-post-like-toggle/http-response.adoc[]
+include::{snippets}/community-post-like-toggle/response-fields.adoc[]

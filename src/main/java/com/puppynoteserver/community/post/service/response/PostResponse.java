@@ -19,11 +19,14 @@ public class PostResponse {
     private final List<String> imageUrls;
     private final List<String> hashtags;
     private final LocalDateTime createdDate;
+    private final long likeCount;
+    private final boolean isLiked;
 
     @Builder
     private PostResponse(Long postId, Long userId, String userNickname, String userProfileUrl,
                          String content, List<String> imageKeys, List<String> imageUrls,
-                         List<String> hashtags, LocalDateTime createdDate) {
+                         List<String> hashtags, LocalDateTime createdDate,
+                         long likeCount, boolean isLiked) {
         this.postId = postId;
         this.userId = userId;
         this.userNickname = userNickname;
@@ -33,10 +36,13 @@ public class PostResponse {
         this.imageUrls = imageUrls;
         this.hashtags = hashtags;
         this.createdDate = createdDate;
+        this.likeCount = likeCount;
+        this.isLiked = isLiked;
     }
 
     public static PostResponse of(Post post, String userProfileUrl,
-                                  List<String> imageKeys, List<String> imageUrls) {
+                                  List<String> imageKeys, List<String> imageUrls,
+                                  long likeCount, boolean isLiked) {
         return PostResponse.builder()
                 .postId(post.getId())
                 .userId(post.getUser().getId())
@@ -47,6 +53,8 @@ public class PostResponse {
                 .imageUrls(imageUrls)
                 .hashtags(List.copyOf(post.getHashtags()))
                 .createdDate(post.getCreatedDate())
+                .likeCount(likeCount)
+                .isLiked(isLiked)
                 .build();
     }
 }

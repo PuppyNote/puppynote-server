@@ -128,6 +128,8 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.posts[].imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
                                 fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
                                 fieldWithPath("data.posts[].createdDate").type(JsonFieldType.STRING).description("작성일시"),
+                                fieldWithPath("data.posts[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                fieldWithPath("data.posts[].liked").type(JsonFieldType.BOOLEAN).description("현재 사용자의 좋아요 여부"),
                                 fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                 fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
                                 fieldWithPath("data.totalCount").type(JsonFieldType.NUMBER).description("전체 게시물 수")
@@ -185,6 +187,8 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.posts[].imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
                                 fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
                                 fieldWithPath("data.posts[].createdDate").type(JsonFieldType.STRING).description("작성일시"),
+                                fieldWithPath("data.posts[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                fieldWithPath("data.posts[].liked").type(JsonFieldType.BOOLEAN).description("현재 사용자의 좋아요 여부"),
                                 fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                 fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
                                 fieldWithPath("data.totalCount").type(JsonFieldType.NUMBER).description("검색된 게시물 수")
@@ -239,6 +243,8 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.posts[].imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
                                 fieldWithPath("data.posts[].hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
                                 fieldWithPath("data.posts[].createdDate").type(JsonFieldType.STRING).description("작성일시"),
+                                fieldWithPath("data.posts[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                fieldWithPath("data.posts[].liked").type(JsonFieldType.BOOLEAN).description("현재 사용자의 좋아요 여부"),
                                 fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                 fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
                                 fieldWithPath("data.totalCount").type(JsonFieldType.NUMBER).description("전체 게시물 수")
@@ -289,7 +295,9 @@ public class CommunityPostControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.imageKeys").type(JsonFieldType.ARRAY).description("첨부 이미지 S3 키 목록 (수정 시 deleteImageKeys에 사용)"),
                                 fieldWithPath("data.imageUrls").type(JsonFieldType.ARRAY).description("첨부 이미지 Presigned URL 목록"),
                                 fieldWithPath("data.hashtags").type(JsonFieldType.ARRAY).description("해시태그 목록"),
-                                fieldWithPath("data.createdDate").type(JsonFieldType.STRING).description("작성일시")
+                                fieldWithPath("data.createdDate").type(JsonFieldType.STRING).description("작성일시"),
+                                fieldWithPath("data.likeCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                fieldWithPath("data.liked").type(JsonFieldType.BOOLEAN).description("현재 사용자의 좋아요 여부")
                         )
                 ));
     }

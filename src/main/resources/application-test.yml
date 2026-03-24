@@ -14,6 +14,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           exception-handling: ignore
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
