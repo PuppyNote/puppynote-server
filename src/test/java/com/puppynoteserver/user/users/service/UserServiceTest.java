@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -40,10 +39,9 @@ public class UserServiceTest extends IntegrationTestSupport {
         SignUpResponse response = userService.signUp(request);
 
         // then
-        assertAll(
-                () -> assertThat(response.getEmail()).isEqualTo("test@test.com"),
-                () -> assertThat(response.getNickName()).isEqualTo("테스트유저")
-        );
+        assertThat(response)
+                .extracting("email", "nickName")
+                .containsExactly("test@test.com", "테스트유저");
 
         assertThat(userRepository.existsByEmail("test@test.com")).isTrue();
     }

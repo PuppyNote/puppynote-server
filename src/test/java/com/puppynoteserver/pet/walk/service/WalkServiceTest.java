@@ -91,12 +91,9 @@ class WalkServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(response.getWalkId()).isNotNull();
-        assertThat(response.getPetId()).isEqualTo(pet.getId());
-        assertThat(response.getStartTime()).isEqualTo(startTime);
-        assertThat(response.getEndTime()).isEqualTo(endTime);
-        assertThat(response.getLocation()).isEqualTo("서울 중구");
-        assertThat(response.getMemo()).isEqualTo("오늘 날씨 좋음");
-        assertThat(response.getPhotoUrl()).isNull();
+        assertThat(response)
+                .extracting("petId", "startTime", "endTime", "location", "memo", "photoUrl")
+                .containsExactly(pet.getId(), startTime, endTime, "서울 중구", "오늘 날씨 좋음", null);
 
         List<Walk> savedWalks = walkJpaRepository.findAllByPetId(pet.getId());
         assertThat(savedWalks).hasSize(1);
@@ -458,8 +455,9 @@ class WalkServiceTest extends IntegrationTestSupport {
         Walk result = walkReadService.findById(walk.getId());
 
         // then
-        assertThat(result.getId()).isEqualTo(walk.getId());
-        assertThat(result.getLocation()).isEqualTo("서울");
+        assertThat(result)
+                .extracting("id", "location")
+                .containsExactly(walk.getId(), "서울");
     }
 
     @DisplayName("존재하지 않는 산책 기록 ID로 조회 시 NotFoundException이 발생한다.")
@@ -493,11 +491,9 @@ class WalkServiceTest extends IntegrationTestSupport {
         WalkDetailResponse response = walkReadService.getWalkDetail(walk.getId());
 
         // then
-        assertThat(response.getWalkId()).isEqualTo(walk.getId());
-        assertThat(response.getLocation()).isEqualTo("서울 중구");
-        assertThat(response.getMemo()).isEqualTo("즐거운 산책");
-        assertThat(response.getStartTime()).isEqualTo(startTime);
-        assertThat(response.getEndTime()).isEqualTo(endTime);
+        assertThat(response)
+                .extracting("walkId", "location", "memo", "startTime", "endTime")
+                .containsExactly(walk.getId(), "서울 중구", "즐거운 산책", startTime, endTime);
         assertThat(response.getPhotoUrls()).isEmpty();
     }
 

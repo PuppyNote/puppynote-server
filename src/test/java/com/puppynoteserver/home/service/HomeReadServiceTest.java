@@ -85,9 +85,9 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getPetName()).isEqualTo("멍멍이");
-        assertThat(response.getPetProfileImageUrl()).isEqualTo("https://cdn.example.com/profile.jpg");
-        assertThat(response.getBirthDate()).isEqualTo(LocalDate.of(2020, 1, 1));
+        assertThat(response)
+                .extracting("petName", "petProfileImageUrl", "birthDate")
+                .containsExactly("멍멍이", "https://cdn.example.com/profile.jpg", LocalDate.of(2020, 1, 1));
     }
 
     @DisplayName("생일이 있는 펫의 나이와 D-day를 계산한다.")

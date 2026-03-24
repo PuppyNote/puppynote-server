@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
 
 class UserItemCategoryServiceTest extends IntegrationTestSupport {
@@ -49,11 +50,13 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
         List<UserItemCategoryResponse> responses = userItemCategoryWriteService.saveCategories(CategoryType.ITEM, categories);
 
         // then
-        assertThat(responses).hasSize(2);
-        assertThat(responses.get(0).getCategory()).isEqualTo(ItemCategory.FOOD.name());
-        assertThat(responses.get(1).getCategory()).isEqualTo(ItemCategory.SNACK.name());
-        assertThat(responses.get(0).getSort()).isEqualTo(1);
-        assertThat(responses.get(1).getSort()).isEqualTo(2);
+        assertThat(responses)
+                .hasSize(2)
+                .extracting("category", "sort")
+                .containsExactly(
+                        tuple(ItemCategory.FOOD.name(), 1),
+                        tuple(ItemCategory.SNACK.name(), 2)
+                );
     }
 
     @DisplayName("카테고리 저장 시 동일 타입의 기존 카테고리를 삭제하고 새로 저장한다.")
@@ -120,9 +123,10 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
         List<UserItemCategoryResponse> responses = userItemCategoryReadService.getMyCategories(CategoryType.ITEM);
 
         // then
-        assertThat(responses).hasSize(2);
-        assertThat(responses.get(0).getSort()).isEqualTo(1);
-        assertThat(responses.get(1).getSort()).isEqualTo(2);
+        assertThat(responses)
+                .hasSize(2)
+                .extracting("sort")
+                .containsExactly(1, 2);
     }
 
     @DisplayName("카테고리가 없을 때 빈 목록을 반환한다.")
@@ -156,11 +160,15 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
         List<UserItemCategoryResponse> activityResponses = userItemCategoryReadService.getMyCategories(CategoryType.ACTIVITY);
 
         // then
-        assertThat(itemResponses).hasSize(1);
-        assertThat(itemResponses.get(0).getCategoryType()).isEqualTo(CategoryType.ITEM.name());
+        assertThat(itemResponses)
+                .hasSize(1)
+                .extracting("categoryType")
+                .containsExactly(CategoryType.ITEM.name());
 
-        assertThat(activityResponses).hasSize(1);
-        assertThat(activityResponses.get(0).getCategoryType()).isEqualTo(CategoryType.ACTIVITY.name());
+        assertThat(activityResponses)
+                .hasSize(1)
+                .extracting("categoryType")
+                .containsExactly(CategoryType.ACTIVITY.name());
     }
 
     @DisplayName("빈 카테고리 목록으로 저장 시 기존 카테고리를 모두 삭제한다.")

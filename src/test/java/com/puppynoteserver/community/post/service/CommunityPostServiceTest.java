@@ -231,8 +231,9 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
         PostResponse response = communityPostReadService.getPost(post.getId());
 
         // then
-        assertThat(response.getPostId()).isEqualTo(post.getId());
-        assertThat(response.getContent()).isEqualTo("단건 조회 게시물");
+        assertThat(response)
+                .extracting("postId", "content")
+                .containsExactly(post.getId(), "단건 조회 게시물");
         assertThat(response.getHashtags()).containsExactly("태그");
     }
 
@@ -335,9 +336,9 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
         PostResponse response = communityPostReadService.getPost(post.getId());
 
         // then
-        assertThat(response.getPostId()).isEqualTo(post.getId());
-        assertThat(response.isLiked()).isTrue();
-        assertThat(response.getLikeCount()).isEqualTo(5L);
+        assertThat(response)
+                .extracting("postId", "liked", "likeCount")
+                .containsExactly(post.getId(), true, 5L);
     }
 
     @DisplayName("일부 게시물만 Redis에 캐시된 경우 캐시 히트 항목은 Redis, 미스 항목은 DB에서 조회한다.")

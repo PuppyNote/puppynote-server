@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 
 public class UserReadServiceTest extends IntegrationTestSupport {
@@ -31,11 +30,9 @@ public class UserReadServiceTest extends IntegrationTestSupport {
         User foundUser = userReadService.findByEmail("test@test.com");
 
         // then
-        assertAll(
-                () -> assertThat(foundUser.getId()).isEqualTo(savedUser.getId()),
-                () -> assertThat(foundUser.getEmail()).isEqualTo("test@test.com"),
-                () -> assertThat(foundUser.getNickName()).isEqualTo(savedUser.getNickName())
-        );
+        assertThat(foundUser)
+                .extracting("id", "email", "nickName")
+                .containsExactly(savedUser.getId(), "test@test.com", savedUser.getNickName());
     }
 
     @DisplayName("존재하지 않는 이메일로 조회 시 예외가 발생한다.")
@@ -59,11 +56,9 @@ public class UserReadServiceTest extends IntegrationTestSupport {
         User foundUser = userReadService.findById(savedUser.getId());
 
         // then
-        assertAll(
-                () -> assertThat(foundUser.getId()).isEqualTo(savedUser.getId()),
-                () -> assertThat(foundUser.getEmail()).isEqualTo("test@test.com"),
-                () -> assertThat(foundUser.getNickName()).isEqualTo(savedUser.getNickName())
-        );
+        assertThat(foundUser)
+                .extracting("id", "email", "nickName")
+                .containsExactly(savedUser.getId(), "test@test.com", savedUser.getNickName());
     }
 
     @DisplayName("존재하지 않는 ID로 조회 시 예외가 발생한다.")
@@ -104,11 +99,8 @@ public class UserReadServiceTest extends IntegrationTestSupport {
         UserProfileResponse response = userReadService.getMyProfile();
 
         // then
-        assertAll(
-                () -> assertThat(response.getUserId()).isEqualTo(savedUser.getId()),
-                () -> assertThat(response.getEmail()).isEqualTo("test@test.com"),
-                () -> assertThat(response.getNickName()).isEqualTo("테스트 닉네임"),
-                () -> assertThat(response.getProfileUrl()).isEqualTo(expectedCloudFrontUrl)
-        );
+        assertThat(response)
+                .extracting("userId", "email", "nickName", "profileUrl")
+                .containsExactly(savedUser.getId(), "test@test.com", "테스트 닉네임", expectedCloudFrontUrl);
     }
 }

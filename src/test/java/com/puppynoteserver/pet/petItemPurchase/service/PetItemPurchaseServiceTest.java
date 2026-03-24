@@ -91,12 +91,15 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(response.getId()).isNotNull();
-        assertThat(response.getPetItemId()).isEqualTo(petItem.getId());
-        assertThat(response.getPurchasedAt()).isEqualTo(purchasedDate);
+        assertThat(response)
+                .extracting("petItemId", "purchasedAt")
+                .containsExactly(petItem.getId(), purchasedDate);
 
         List<PetItemPurchase> purchases = petItemPurchaseJpaRepository.findAllByPetItemIdOrderByPurchasedAtDesc(petItem.getId());
-        assertThat(purchases).hasSize(1);
-        assertThat(purchases.get(0).getPurchasedAt()).isEqualTo(purchasedDate);
+        assertThat(purchases)
+                .hasSize(1)
+                .extracting("purchasedAt")
+                .containsExactly(purchasedDate);
     }
 
     @DisplayName("존재하지 않는 용품 ID로 구매 이력 등록 시 NotFoundException이 발생한다.")

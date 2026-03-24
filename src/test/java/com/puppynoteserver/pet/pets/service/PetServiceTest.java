@@ -74,14 +74,15 @@ class PetServiceTest extends IntegrationTestSupport {
         assertThat(response.getPetName()).isEqualTo("초코");
 
         Pet savedPet = petJpaRepository.findById(response.getPetId()).orElseThrow();
-        assertThat(savedPet.getName()).isEqualTo("초코");
-        assertThat(savedPet.getBirthDate()).isEqualTo(LocalDate.of(2020, 5, 1));
-        assertThat(savedPet.getRegistrationNumber()).isEqualTo("REG-001");
+        assertThat(savedPet)
+                .extracting("name", "birthDate", "registrationNumber")
+                .containsExactly("초코", LocalDate.of(2020, 5, 1), "REG-001");
 
         Optional<FamilyMember> ownerRecord = familyMemberJpaRepository.findByIdUserIdAndIdPetId(user.getId(), savedPet.getId());
         assertThat(ownerRecord).isPresent();
-        assertThat(ownerRecord.get().getRole()).isEqualTo(RoleType.OWNER);
-        assertThat(ownerRecord.get().getStatus()).isEqualTo(FamilyMemberStatus.DONE);
+        assertThat(ownerRecord.get())
+                .extracting("role", "status")
+                .containsExactly(RoleType.OWNER, FamilyMemberStatus.DONE);
     }
 
     @DisplayName("펫 생성 시 기존 가족(FAMILY) 유저도 자동으로 FAMILY로 등록된다.")
@@ -114,8 +115,9 @@ class PetServiceTest extends IntegrationTestSupport {
 
         Optional<FamilyMember> familyRecord = familyMemberJpaRepository.findByIdUserIdAndIdPetId(familyUser.getId(), response.getPetId());
         assertThat(familyRecord).isPresent();
-        assertThat(familyRecord.get().getRole()).isEqualTo(RoleType.FAMILY);
-        assertThat(familyRecord.get().getStatus()).isEqualTo(FamilyMemberStatus.DONE);
+        assertThat(familyRecord.get())
+                .extracting("role", "status")
+                .containsExactly(RoleType.FAMILY, FamilyMemberStatus.DONE);
     }
 
     // ==================== PetWriteService - updatePet ====================
@@ -140,10 +142,9 @@ class PetServiceTest extends IntegrationTestSupport {
 
         // then
         Pet updatedPet = petJpaRepository.findById(pet.getId()).orElseThrow();
-        assertThat(updatedPet.getName()).isEqualTo("코코");
-        assertThat(updatedPet.getBirthDate()).isEqualTo(LocalDate.of(2021, 6, 10));
-        assertThat(updatedPet.getProfileImage()).isEqualTo("new-image.jpg");
-        assertThat(updatedPet.getRegistrationNumber()).isEqualTo("NEW-REG");
+        assertThat(updatedPet)
+                .extracting("name", "birthDate", "profileImage", "registrationNumber")
+                .containsExactly("코코", LocalDate.of(2021, 6, 10), "new-image.jpg", "NEW-REG");
     }
 
     @DisplayName("존재하지 않는 펫 ID로 수정 시 NotFoundException이 발생한다.")
@@ -287,8 +288,9 @@ class PetServiceTest extends IntegrationTestSupport {
         Pet result = petReadService.findById(pet.getId());
 
         // then
-        assertThat(result.getId()).isEqualTo(pet.getId());
-        assertThat(result.getName()).isEqualTo("초코");
+        assertThat(result)
+                .extracting("id", "name")
+                .containsExactly(pet.getId(), "초코");
     }
 
     @DisplayName("존재하지 않는 펫 ID로 조회 시 NotFoundException이 발생한다.")

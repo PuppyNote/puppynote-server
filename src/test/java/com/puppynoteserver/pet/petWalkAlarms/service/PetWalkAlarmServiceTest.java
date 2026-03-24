@@ -84,13 +84,16 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(response.getAlarmId()).isNotNull();
-        assertThat(response.getAlarmStatus()).isEqualTo(AlarmStatus.YES);
+        assertThat(response)
+                .extracting("alarmStatus", "alarmTime")
+                .containsExactly(AlarmStatus.YES, LocalTime.of(8, 0));
         assertThat(response.getAlarmDays()).containsExactlyInAnyOrder(AlarmDay.MON, AlarmDay.WED, AlarmDay.FRI);
-        assertThat(response.getAlarmTime()).isEqualTo(LocalTime.of(8, 0));
 
         List<PetWalkAlarm> savedAlarms = petWalkAlarmJpaRepository.findByPetId(pet.getId());
-        assertThat(savedAlarms).hasSize(1);
-        assertThat(savedAlarms.get(0).getAlarmStatus()).isEqualTo(AlarmStatus.YES);
+        assertThat(savedAlarms)
+                .hasSize(1)
+                .extracting("alarmStatus")
+                .containsExactly(AlarmStatus.YES);
     }
 
     @DisplayName("존재하지 않는 펫 ID로 알람 생성 시 NotFoundException이 발생한다.")
@@ -134,10 +137,10 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
         PetWalkAlarmResponse response = petWalkAlarmWriteService.update(request);
 
         // then
-        assertThat(response.getAlarmId()).isEqualTo(alarm.getId());
-        assertThat(response.getAlarmStatus()).isEqualTo(AlarmStatus.NO);
+        assertThat(response)
+                .extracting("alarmId", "alarmStatus", "alarmTime")
+                .containsExactly(alarm.getId(), AlarmStatus.NO, LocalTime.of(18, 30));
         assertThat(response.getAlarmDays()).containsExactlyInAnyOrder(AlarmDay.TUE, AlarmDay.THU);
-        assertThat(response.getAlarmTime()).isEqualTo(LocalTime.of(18, 30));
 
         PetWalkAlarm updatedAlarm = petWalkAlarmJpaRepository.findById(alarm.getId()).orElseThrow();
         assertThat(updatedAlarm.getAlarmStatus()).isEqualTo(AlarmStatus.NO);
@@ -182,8 +185,9 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
         PetWalkAlarmResponse response = petWalkAlarmWriteService.updateStatus(request);
 
         // then
-        assertThat(response.getAlarmId()).isEqualTo(alarm.getId());
-        assertThat(response.getAlarmStatus()).isEqualTo(AlarmStatus.NO);
+        assertThat(response)
+                .extracting("alarmId", "alarmStatus")
+                .containsExactly(alarm.getId(), AlarmStatus.NO);
 
         PetWalkAlarm updatedAlarm = petWalkAlarmJpaRepository.findById(alarm.getId()).orElseThrow();
         assertThat(updatedAlarm.getAlarmStatus()).isEqualTo(AlarmStatus.NO);
@@ -273,8 +277,9 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
         PetWalkAlarm result = petWalkAlarmReadService.findById(alarm.getId());
 
         // then
-        assertThat(result.getId()).isEqualTo(alarm.getId());
-        assertThat(result.getAlarmStatus()).isEqualTo(AlarmStatus.YES);
+        assertThat(result)
+                .extracting("id", "alarmStatus")
+                .containsExactly(alarm.getId(), AlarmStatus.YES);
     }
 
     @DisplayName("존재하지 않는 알람 ID로 조회 시 NotFoundException이 발생한다.")

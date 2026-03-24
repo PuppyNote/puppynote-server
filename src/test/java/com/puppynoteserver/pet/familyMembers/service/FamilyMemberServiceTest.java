@@ -74,8 +74,9 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
         // then
         Optional<FamilyMember> pendingRecord = familyMemberJpaRepository.findByIdUserIdAndIdPetId(invitee.getId(), pet.getId());
         assertThat(pendingRecord).isPresent();
-        assertThat(pendingRecord.get().getRole()).isEqualTo(RoleType.FAMILY);
-        assertThat(pendingRecord.get().getStatus()).isEqualTo(FamilyMemberStatus.PENDING);
+        assertThat(pendingRecord.get())
+                .extracting("role", "status")
+                .containsExactly(RoleType.FAMILY, FamilyMemberStatus.PENDING);
     }
 
     @DisplayName("OWNER가 아닌 유저가 초대를 시도하면 PuppyNoteException이 발생한다.")
@@ -353,8 +354,10 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getUserId()).isEqualTo(otherUser1.getId());
-        assertThat(result).extracting("userId").doesNotContain(currentUser.getId());
+        assertThat(result)
+                .extracting("userId")
+                .containsExactly(otherUser1.getId())
+                .doesNotContain(currentUser.getId());
     }
 
     @DisplayName("일치하는 이메일이 없으면 빈 목록을 반환한다.")

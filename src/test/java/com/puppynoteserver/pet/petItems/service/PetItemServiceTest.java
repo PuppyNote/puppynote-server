@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.tuple;
 
 class PetItemServiceTest extends IntegrationTestSupport {
 
@@ -83,10 +84,9 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(response.getPetItemId()).isNotNull();
-        assertThat(response.getName()).isEqualTo("사료");
-        assertThat(response.getCategory()).isEqualTo(ItemCategory.FOOD);
-        assertThat(response.getPurchaseCycleDays()).isEqualTo(30);
-        assertThat(response.getPurchaseUrl()).isEqualTo("https://example.com/food");
+        assertThat(response)
+                .extracting("name", "category", "purchaseCycleDays", "purchaseUrl")
+                .containsExactly("사료", ItemCategory.FOOD, 30, "https://example.com/food");
 
         Optional<PetItem> savedItem = petItemJpaRepository.findById(response.getPetItemId());
         assertThat(savedItem).isPresent();
@@ -138,14 +138,14 @@ class PetItemServiceTest extends IntegrationTestSupport {
         PetItemResponse response = petItemWriteService.update(petItem.getId(), request);
 
         // then
-        assertThat(response.getName()).isEqualTo("간식");
-        assertThat(response.getCategory()).isEqualTo(ItemCategory.SNACK);
-        assertThat(response.getPurchaseCycleDays()).isEqualTo(14);
-        assertThat(response.getPurchaseUrl()).isEqualTo("https://new.com");
+        assertThat(response)
+                .extracting("name", "category", "purchaseCycleDays", "purchaseUrl")
+                .containsExactly("간식", ItemCategory.SNACK, 14, "https://new.com");
 
         PetItem updatedItem = petItemJpaRepository.findById(petItem.getId()).orElseThrow();
-        assertThat(updatedItem.getName()).isEqualTo("간식");
-        assertThat(updatedItem.getCategory()).isEqualTo(ItemCategory.SNACK);
+        assertThat(updatedItem)
+                .extracting("name", "category")
+                .containsExactly("간식", ItemCategory.SNACK);
     }
 
     @DisplayName("존재하지 않는 용품 ID로 수정 시 NotFoundException이 발생한다.")
@@ -255,9 +255,10 @@ class PetItemServiceTest extends IntegrationTestSupport {
         List<PetItemResponse> result = petItemReadService.getItemsByPetId(pet.getId(), ItemCategory.FOOD);
 
         // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getName()).isEqualTo("사료");
-        assertThat(result.get(0).getCategory()).isEqualTo(ItemCategory.FOOD);
+        assertThat(result)
+                .hasSize(1)
+                .extracting("name", "category")
+                .containsExactly(tuple("사료", ItemCategory.FOOD));
     }
 
     @DisplayName("용품이 없는 펫은 빈 목록을 반환한다.")
@@ -314,8 +315,9 @@ class PetItemServiceTest extends IntegrationTestSupport {
         PetItem result = petItemReadService.findById(petItem.getId());
 
         // then
-        assertThat(result.getId()).isEqualTo(petItem.getId());
-        assertThat(result.getName()).isEqualTo("사료");
+        assertThat(result)
+                .extracting("id", "name")
+                .containsExactly(petItem.getId(), "사료");
     }
 
     @DisplayName("존재하지 않는 용품 ID로 조회 시 NotFoundException이 발생한다.")
@@ -345,13 +347,9 @@ class PetItemServiceTest extends IntegrationTestSupport {
         PetItemResponse response = petItemReadService.getItemDetail(petItem.getId());
 
         // then
-        assertThat(response.getPetItemId()).isEqualTo(petItem.getId());
-        assertThat(response.getName()).isEqualTo("사료");
-        assertThat(response.getCategory()).isEqualTo(ItemCategory.FOOD);
-        assertThat(response.getPurchaseCycleDays()).isEqualTo(30);
-        assertThat(response.getPurchaseUrl()).isEqualTo("https://example.com/food");
-        assertThat(response.getLastPurchasedAt()).isNull();
-        assertThat(response.getNextPurchaseAt()).isNull();
+        assertThat(response)
+                .extracting("petItemId", "name", "category", "purchaseCycleDays", "purchaseUrl", "lastPurchasedAt", "nextPurchaseAt")
+                .containsExactly(petItem.getId(), "사료", ItemCategory.FOOD, 30, "https://example.com/food", null, null);
     }
 
     @DisplayName("존재하지 않는 용품 ID로 상세 조회 시 NotFoundException이 발생한다.")

@@ -55,8 +55,9 @@ class PostLikeServiceTest extends IntegrationTestSupport {
         PostLikeToggleResponse response = postLikeService.toggleLike(post.getId());
 
         // then
-        assertThat(response.isLiked()).isTrue();
-        assertThat(response.getLikeCount()).isEqualTo(1L);
+        assertThat(response)
+                .extracting("liked", "likeCount")
+                .containsExactly(true, 1L);
     }
 
     @DisplayName("좋아요가 있는 게시물에 좋아요 토글 시 liked=false를 반환한다.")
@@ -76,8 +77,9 @@ class PostLikeServiceTest extends IntegrationTestSupport {
         PostLikeToggleResponse response = postLikeService.toggleLike(post.getId());
 
         // then
-        assertThat(response.isLiked()).isFalse();
-        assertThat(response.getLikeCount()).isEqualTo(0L);
+        assertThat(response)
+                .extracting("liked", "likeCount")
+                .containsExactly(false, 0L);
     }
 
     @DisplayName("캐시 미스 시 DB에서 카운트와 좋아요 여부를 초기화한다.")
@@ -130,7 +132,8 @@ class PostLikeServiceTest extends IntegrationTestSupport {
         PostLikeToggleResponse response = postLikeService.toggleLike(post.getId());
 
         // then
-        assertThat(response.isLiked()).isTrue();
-        assertThat(response.getLikeCount()).isEqualTo(1L);
+        assertThat(response)
+                .extracting("liked", "likeCount")
+                .containsExactly(true, 1L);
     }
 }
