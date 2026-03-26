@@ -14,7 +14,7 @@ public enum SnsType {
 	NORMAL("일반"),
 	KAKAO("카카오"),
 	GOOGLE("구글"),
-	NAVER("네이버");
+	APPLE("네이버");
 
 	private final String text;
 
