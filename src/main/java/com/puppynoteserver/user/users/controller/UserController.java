@@ -44,4 +44,10 @@ public class UserController {
         return ApiResponse.ok(null);
     }
 
+    @DeleteMapping("/withdraw")
+    public ApiResponse<Void> withdraw() {
+        userService.withdraw();
+        return ApiResponse.ok(null);
+    }
+
 }

@@ -69,6 +69,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void withdraw() {
+        Long userId = securityService.getCurrentLoginUserInfo().getUserId();
+        User user = userReadService.findById(userId);
+        user.withdraw();
+    }
+
     private void checkExistEmail(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new PuppyNoteException("이미 사용 중인 이메일입니다.");

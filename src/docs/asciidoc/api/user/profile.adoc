@@ -26,3 +26,17 @@ include::{snippets}/user-profile-update/request-fields.adoc[]
 
 include::{snippets}/user-profile-update/http-response.adoc[]
 include::{snippets}/user-profile-update/response-fields.adoc[]
+
+[[user-withdraw]]
+=== 회원탈퇴
+
+현재 로그인한 사용자의 계정을 탈퇴 처리합니다.
+
+==== HTTP Request
+
+include::{snippets}/user-withdraw/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user-withdraw/http-response.adoc[]
+include::{snippets}/user-withdraw/response-fields.adoc[]

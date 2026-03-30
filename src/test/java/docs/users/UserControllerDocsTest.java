@@ -19,6 +19,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -143,6 +144,28 @@ public class UserControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("nickName").type(JsonFieldType.STRING).description("닉네임 (필수)"),
                                 fieldWithPath("profileUrl").type(JsonFieldType.STRING).description("프로필 이미지 URL").optional()
                         ),
+                        responseFields(
+                                fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메세지"),
+                                fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터 없음")
+                        )
+                ));
+    }
+
+    @DisplayName("회원탈퇴 API")
+    @Test
+    void withdraw() throws Exception {
+        willDoNothing().given(userService).withdraw();
+
+        mockMvc.perform(
+                        delete("/api/v1/user/withdraw")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user-withdraw",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("statusCode").type(JsonFieldType.NUMBER).description("코드"),
                                 fieldWithPath("httpStatus").type(JsonFieldType.STRING).description("상태"),

@@ -9,4 +9,5 @@ public interface UserService {
     SignUpResponse signUp(SignUpServiceRequest request);
     String sendVerificationEmail(EmailSendServiceRequest request);
     void updateProfile(UserProfileUpdateServiceRequest request);
+    void withdraw();
 }
