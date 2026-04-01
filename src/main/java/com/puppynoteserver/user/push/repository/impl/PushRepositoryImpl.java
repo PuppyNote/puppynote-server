@@ -36,6 +36,11 @@ public class PushRepositoryImpl implements PushRepository {
     }
 
     @Override
+    public Optional<Push> findByDeviceId(String deviceId) {
+        return pushJpaRepository.findByDeviceId(deviceId);
+    }
+
+    @Override
     public List<Push> findAllByUserId(Long userId) {
         return pushJpaRepository.findAllByUserId(userId);
     }

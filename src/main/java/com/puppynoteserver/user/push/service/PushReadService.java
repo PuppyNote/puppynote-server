@@ -9,5 +9,7 @@ public interface PushReadService {
 
     Optional<Push> findByUserId(Long userId);
 
+    Optional<Push> findByDeviceId(String deviceId);
+
     List<Push> findAllByUserId(Long userId);
 }

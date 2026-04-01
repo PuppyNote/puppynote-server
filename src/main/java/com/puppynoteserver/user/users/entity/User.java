@@ -87,19 +87,6 @@ public class User extends BaseTimeEntity {
                 );
     }
 
-    public void checkPushKey(String pushToken, String deviceId) {
-        pushes.stream()
-                .filter(push -> deviceId.equals(push.getDeviceId()))
-                .findFirst()
-                .ifPresentOrElse(
-                        existPush -> existPush.updatePushToken(pushToken),
-                        () -> {
-                            Push push = Push.of(deviceId, this, pushToken);
-                            push.updateUser(this);
-                        }
-                );
-    }
-
     public void updatePassword(String encodedPassword) {
         this.password = encodedPassword;
     }

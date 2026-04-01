@@ -3,6 +3,7 @@ package com.puppynoteserver.user.push.entity;
 import com.puppynoteserver.global.BaseTimeEntity;
 import com.puppynoteserver.user.users.entity.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class Push extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(unique = true)
 	private String deviceId;
 
 	private String pushToken;

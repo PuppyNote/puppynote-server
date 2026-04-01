@@ -12,6 +12,8 @@ public interface PushRepository {
 	void saveAll(List<Push> pushes);
 	Optional<Push> findByUserId(Long userId);
 
+	Optional<Push> findByDeviceId(String deviceId);
+
 	List<Push> findAllByUserId(Long userId);
 
 	List<Push> findAllByUserIds(List<Long> userIds);

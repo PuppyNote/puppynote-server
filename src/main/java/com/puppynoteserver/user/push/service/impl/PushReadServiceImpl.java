@@ -23,6 +23,11 @@ public class PushReadServiceImpl implements PushReadService {
     }
 
     @Override
+    public Optional<Push> findByDeviceId(String deviceId) {
+        return pushRepository.findByDeviceId(deviceId);
+    }
+
+    @Override
     public List<Push> findAllByUserId(Long userId) {
         return pushRepository.findAllByUserId(userId);
     }

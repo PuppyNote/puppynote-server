@@ -11,6 +11,7 @@ import com.puppynoteserver.user.users.entity.enums.Role;
 import com.puppynoteserver.user.users.entity.enums.SnsType;
 import com.puppynoteserver.user.users.oauth.client.OAuthApiClient;
 import com.puppynoteserver.user.users.repository.UserRepository;
+import com.puppynoteserver.user.push.service.PushWriteService;
 import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.UserReadService;
 import com.puppynoteserver.user.refreshToken.entity.RefreshToken;
@@ -48,10 +49,12 @@ public class LoginServiceImpl implements LoginService {
     private final UserRepository userRepository;
     private final UserReadService userReadService;
     private final RefreshTokenReadService refreshTokenReadService;
+    private final PushWriteService pushWriteService;
 
     public LoginServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, JwtTokenGenerator jwtTokenGenerator,
                             List<OAuthApiClient> clients, UserRepository userRepository, UserReadService userReadService,
-                            RefreshTokenReadService refreshTokenReadService, EmailService emailService) {
+                            RefreshTokenReadService refreshTokenReadService, EmailService emailService,
+                            PushWriteService pushWriteService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
         this.jwtTokenGenerator = jwtTokenGenerator;
@@ -61,6 +64,7 @@ public class LoginServiceImpl implements LoginService {
         this.userReadService = userReadService;
         this.refreshTokenReadService = refreshTokenReadService;
         this.emailService = emailService;
+        this.pushWriteService = pushWriteService;
     }
 
     @Override
@@ -139,7 +143,7 @@ public class LoginServiceImpl implements LoginService {
         LoginUserInfo userInfo = LoginUserInfo.of(user.getId());
         JwtToken jwtToken = jwtTokenGenerator.generate(userInfo);
         user.checkRefreshToken(jwtToken, deviceId);
-        user.checkPushKey(pushKey, deviceId);
+        pushWriteService.upsertByDeviceId(deviceId, user, pushKey);
         return jwtToken;
     }
 
