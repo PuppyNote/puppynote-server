@@ -1,24 +1,22 @@
 ---
 name: git-commits
-description: git 커밋 메시지 작성 가이드
+description: Git Commit Message Writing Guide
 ---
-# 커밋 메시지 작성 가이드
+# Git Commit Message Writing Guide
 
-## 개요
-git 변경사항을 분석하여 컨벤셔닝 커밋 형식에 맞는 한국어 커밋 메시지를 작성하는 가이드입니다.
+## Overview
+This is a guide for analyzing Git changes and writing Korean commit messages that adhere to the conventional commit format.
 
+## When to use?
+- When a commit message needs to be written.
+- When the user requests a Git commit.
 
-## 언제 사용하나요?
-- 커밋 메시지 작성이 필요한 경우
-- 사용자가 Git Commit을 요청한 경우
-
-## 커밋 메시지 작성 규칙
-- epic: 대규모 기능 추가나 변경
-- feat: 새로운 기능 추가
-- fix: 버그 수정
-- docs: 문서 변경
-- style: 코드 포맷팅, 세미콜론 누락 등 코드 변경이
-- refactor: 코드 리팩토링
-- test: 테스트 코드 추가
-- chore: 빌드 업무 수정, 패키지 매니저 수정 등 기타 변경
-
+## Commit Message Writing Rules
+- epic: Large-scale feature addition or change
+- feat: New feature addition
+- fix: Bug fix
+- docs: Documentation change
+- style: Code formatting, missing semicolons, etc. (no code changes)
+- refactor: Code refactoring
+- test: Test code addition
+- chore: Changes to build tasks, package manager updates, or other miscellaneous changes

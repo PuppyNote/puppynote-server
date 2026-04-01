@@ -1,22 +1,21 @@
 ---
 name: Restdocs
-description: Restdocs 테스트 코드 작성 가이드
+description: Restdocs Test Code Writing Guide
 ---
-# Restdocs 테스트 코드 작성 가이드
+# Restdocs Test Code Writing Guide
 
-## 개요
-Controller, Service, Repository 등 각 계층의 단위 테스트를 작성할 때 Junit을 사용하여 테스트 코드를 작성하는 방법에 대한 가이드입니다.
+## Overview
+This is a guide on how to write test codes using JUnit when creating unit tests for each layer, such as Controller, Service, and Repository.
 
+## When to use?
+- When the user requests to write Restdocs test codes.
+- When the user requests to add a feature.
+- When a bug occurs.
+- When the user requests to modify a feature.
 
-## 언제 사용하나요?
-- 사용자가 Restdocs 테스트 코드를 작성해달라고 요청했을 때
-- 사용자가 기능 추가를 요청했을 때
-- 버그가 발생했을 때
-- 사용자가 기능 수정을 요청했을 때
-
-## Restdocs 테스트 코드 작성 방법
-- Controller의 명세를 test/java/docs 폴더 하위에 작성합니다.
-- 패키지 구조는 실제 Controller의 패키지 구조와 동일하게 맞춰줍니다.
-- Service는 MockBean을 사용하여 Service 레이어를 Mocking하여 테스트합니다.
-- src/docs/asciidoc 폴더에 API 명세를 작성합니다.
-- API 명세는 실제 API 명세와 동일하게 작성합니다.
+## How to write Restdocs test codes
+- Write Controller specifications under the test/java/docs folder.
+- Match the package structure to be identical to the actual Controller's package structure.
+- Test the Service layer by mocking it using MockBean.
+- Write API specifications in the src/docs/asciidoc folder.
+- Write API specifications to be identical to the actual API specifications.
