@@ -51,7 +51,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
     @DisplayName("게시물을 정상적으로 생성한다.")
     @Transactional
     @Test
-    void createPost_success() {
+    void 게시물_생성_요청_시_DB에_저장된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -74,7 +74,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 사용자가 게시물 생성 시 예외가 발생한다.")
     @Test
-    void createPost_userNotFound_throwsException() {
+    void 존재하지_않는_사용자가_게시물_생성_시_예외가_발생한다() {
         // given
         Long nonExistentUserId = 999L;
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(nonExistentUserId));
@@ -93,7 +93,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
     @DisplayName("게시물 내용을 정상적으로 수정한다.")
     @Transactional
     @Test
-    void updatePost_success() {
+    void 게시물_수정_요청_시_내용과_해시태그가_변경된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "원본 내용", List.of("태그1")));
@@ -118,7 +118,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("게시물 작성자가 아닌 사용자가 수정 시 예외가 발생한다.")
     @Test
-    void updatePost_notOwner_throwsException() {
+    void 게시물_작성자가_아닌_사용자가_수정_시_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User other = userRepository.save(createUser("other@test.com", "password", SnsType.NORMAL));
@@ -141,7 +141,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("게시물을 정상적으로 소프트 삭제한다.")
     @Test
-    void deletePost_success() {
+    void 게시물_삭제_요청_시_소프트_삭제된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "삭제될 게시물", List.of()));
@@ -158,7 +158,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("게시물 작성자가 아닌 사용자가 삭제 시 예외가 발생한다.")
     @Test
-    void deletePost_notOwner_throwsException() {
+    void 게시물_작성자가_아닌_사용자가_삭제_시_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User other = userRepository.save(createUser("other@test.com", "password", SnsType.NORMAL));
@@ -174,7 +174,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("게시물 목록을 페이지네이션으로 조회한다.")
     @Test
-    void getPosts_success() {
+    void 게시물_목록을_페이지네이션으로_조회한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         postRepository.save(Post.of(user, "첫 번째 게시물", List.of()));
@@ -195,7 +195,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("키워드 없이 내 게시물 목록을 조회한다.")
     @Test
-    void getMyPosts_success() {
+    void 내_게시물_목록_조회_시_내_게시물만_반환된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         User other = userRepository.save(createUser("other@test.com", "password", SnsType.NORMAL));
@@ -217,7 +217,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("게시물 단건을 정상 조회한다.")
     @Test
-    void getPost_success() {
+    void 게시물_단건_조회_시_내용과_해시태그가_반환된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "단건 조회 게시물", List.of("태그")));
@@ -239,7 +239,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 게시물 단건 조회 시 예외가 발생한다.")
     @Test
-    void getPost_notFound_throwsException() {
+    void 존재하지_않는_게시물_단건_조회_시_예외가_발생한다() {
         // given
         Long nonExistentPostId = 999L;
 
@@ -253,7 +253,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("삭제된 게시물을 getPostOrThrow로 조회 시 예외가 발생한다.")
     @Test
-    void getPostOrThrow_deletedPost_throwsException() {
+    void 삭제된_게시물을_조회_시_예외가_발생한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "삭제될 게시물", List.of()));
@@ -268,7 +268,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("게시물 목록이 없을 때 빈 리스트를 반환한다.")
     @Test
-    void getPosts_empty_returnsEmptyList() {
+    void 게시물_목록이_없을_때_빈_리스트를_반환한다() {
         // given
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(1L));
 
@@ -282,7 +282,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("키워드로 게시물 검색 시 ES 검색 서비스를 통해 결과를 반환한다.")
     @Test
-    void getPosts_withKeyword_usesSearchService() {
+    void 키워드로_게시물_검색_시_검색_서비스를_통해_결과를_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post1 = postRepository.save(Post.of(user, "강아지 산책 게시물", List.of("강아지", "산책")));
@@ -307,7 +307,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("해시태그 자동완성 키워드로 검색 서비스의 결과를 반환한다.")
     @Test
-    void getHashtagSuggestions_returnsFromSearchService() {
+    void 해시태그_자동완성_키워드로_검색_서비스_결과를_반환한다() {
         // given
         List<String> suggestions = List.of("강아지", "산책");
         given(postSearchService.searchHashtags(anyString())).willReturn(suggestions);
@@ -322,7 +322,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("Redis에 좋아요 상태와 카운트가 모두 캐시된 경우 Redis 값을 반환한다.")
     @Test
-    void getPost_withRedisHit_returnsFromCache() {
+    void Redis에_좋아요_상태와_카운트가_캐시된_경우_Redis_값을_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "Redis 캐시 테스트 게시물", List.of("태그")));
@@ -343,7 +343,7 @@ class CommunityPostServiceTest extends IntegrationTestSupport {
 
     @DisplayName("일부 게시물만 Redis에 캐시된 경우 캐시 히트 항목은 Redis, 미스 항목은 DB에서 조회한다.")
     @Test
-    void getMyPosts_withKeyword_returnsEmpty() {
+    void 내_게시물이_없을_때_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
 

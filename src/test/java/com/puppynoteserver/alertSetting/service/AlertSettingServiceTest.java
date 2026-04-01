@@ -36,7 +36,7 @@ class AlertSettingServiceTest extends IntegrationTestSupport {
 
     @DisplayName("기존 알림 설정을 수정한다.")
     @Test
-    void updateAlertSetting() {
+    void 알림_설정이_있을_때_수정하면_변경된_값이_반환된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         alertSettingRepository.save(AlertSetting.createDefault(user));
@@ -53,14 +53,14 @@ class AlertSettingServiceTest extends IntegrationTestSupport {
         AlertSettingResponse result = alertSettingService.updateAlertSetting(request);
 
         // then
-        assertThat(result.getAll()).isEqualTo(AlertType.ON);
-        assertThat(result.getWalk()).isEqualTo(AlertType.OFF);
-        assertThat(result.getFriend()).isEqualTo(AlertType.ON);
+        assertThat(result)
+                .extracting("all", "walk", "friend")
+                .containsExactly(AlertType.ON, AlertType.OFF, AlertType.ON);
     }
 
     @DisplayName("알림 설정이 없을 때 수정하면 기본값이 생성된 후 수정된다.")
     @Test
-    void updateAlertSetting_createsDefaultAndUpdates() {
+    void 알림_설정이_없을_때_수정하면_기본값_생성_후_변경된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
 
@@ -76,14 +76,14 @@ class AlertSettingServiceTest extends IntegrationTestSupport {
         AlertSettingResponse result = alertSettingService.updateAlertSetting(request);
 
         // then
-        assertThat(result.getAll()).isEqualTo(AlertType.OFF);
-        assertThat(result.getWalk()).isEqualTo(AlertType.OFF);
-        assertThat(result.getFriend()).isEqualTo(AlertType.OFF);
+        assertThat(result)
+                .extracting("all", "walk", "friend")
+                .containsExactly(AlertType.OFF, AlertType.OFF, AlertType.OFF);
     }
 
     @DisplayName("알림 설정을 조회한다.")
     @Test
-    void getAlertSetting() {
+    void 알림_설정이_있을_때_조회하면_설정값을_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         alertSettingRepository.save(AlertSetting.createDefault(user));
@@ -94,14 +94,14 @@ class AlertSettingServiceTest extends IntegrationTestSupport {
         AlertSettingResponse result = alertSettingReadService.getAlertSetting();
 
         // then
-        assertThat(result.getAll()).isEqualTo(AlertType.ON);
-        assertThat(result.getWalk()).isEqualTo(AlertType.ON);
-        assertThat(result.getFriend()).isEqualTo(AlertType.ON);
+        assertThat(result)
+                .extracting("all", "walk", "friend")
+                .containsExactly(AlertType.ON, AlertType.ON, AlertType.ON);
     }
 
     @DisplayName("알림 설정이 없으면 기본값(모두 ON)으로 생성하여 반환한다.")
     @Test
-    void getAlertSetting_createsDefault() {
+    void 알림_설정이_없을_때_조회하면_기본값으로_생성하여_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
 
@@ -111,8 +111,8 @@ class AlertSettingServiceTest extends IntegrationTestSupport {
         AlertSettingResponse result = alertSettingReadService.getAlertSetting();
 
         // then
-        assertThat(result.getAll()).isEqualTo(AlertType.ON);
-        assertThat(result.getWalk()).isEqualTo(AlertType.ON);
-        assertThat(result.getFriend()).isEqualTo(AlertType.ON);
+        assertThat(result)
+                .extracting("all", "walk", "friend")
+                .containsExactly(AlertType.ON, AlertType.ON, AlertType.ON);
     }
 }

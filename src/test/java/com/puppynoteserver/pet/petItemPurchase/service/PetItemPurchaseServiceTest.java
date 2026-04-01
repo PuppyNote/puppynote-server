@@ -74,7 +74,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 용품 구매 이력을 정상적으로 등록한다.")
     @Test
-    void recordPurchase_success() {
+    void 펫_용품_구매_이력을_정상적으로_등록한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -104,7 +104,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 용품 ID로 구매 이력 등록 시 NotFoundException이 발생한다.")
     @Test
-    void recordPurchase_petItemNotFound() {
+    void 존재하지_않는_용품_ID로_구매_이력_등록_시_예외가_발생한다() {
         // given
         PetItemPurchaseCreateServiceRequest request = PetItemPurchaseCreateServiceRequest.builder()
                 .petItemId(999L)
@@ -121,7 +121,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("구매 이력을 정상적으로 삭제한다.")
     @Test
-    void deletePurchase_success() {
+    void 구매_이력을_정상적으로_삭제한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -141,7 +141,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 구매 이력 ID로 삭제 시 NotFoundException이 발생한다.")
     @Test
-    void deletePurchase_notFound() {
+    void 존재하지_않는_구매_이력_ID로_삭제_시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> petItemPurchaseWriteService.deletePurchase(999L))
                 .isInstanceOf(NotFoundException.class)
@@ -152,7 +152,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("특정 용품의 모든 구매 이력을 삭제한다.")
     @Test
-    void deleteAllByPetItemId_success() {
+    void 특정_용품의_모든_구매_이력을_삭제한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -173,7 +173,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("용품 ID로 구매 이력 목록을 정상적으로 조회한다.")
     @Test
-    void getPurchaseHistory_success() {
+    void 용품_ID로_구매_이력_목록을_정상적으로_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -193,7 +193,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("구매 이력이 없는 용품은 빈 목록을 반환한다.")
     @Test
-    void getPurchaseHistory_empty() {
+    void 구매_이력이_없는_용품은_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -210,7 +210,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("여러 용품 ID에 대한 최근 구매일을 배치 조회한다.")
     @Test
-    void findLatestPurchaseDatesByPetItemIds_success() {
+    void 여러_용품_ID에_대한_최근_구매일을_배치_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -239,7 +239,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("단일 용품의 가장 최근 구매일을 조회한다.")
     @Test
-    void findLatestPurchaseDateByPetItemId_success() {
+    void 단일_용품의_가장_최근_구매일을_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -259,7 +259,7 @@ class PetItemPurchaseServiceTest extends IntegrationTestSupport {
 
     @DisplayName("구매 이력이 없는 용품의 최근 구매일 조회 시 빈 Optional을 반환한다.")
     @Test
-    void findLatestPurchaseDateByPetItemId_noPurchase() {
+    void 구매_이력이_없는_용품의_최근_구매일_조회_시_빈_Optional을_반환한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");

@@ -67,7 +67,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 산책 알람을 정상적으로 생성한다.")
     @Test
-    void createAlarm_success() {
+    void 펫_산책_알람을_정상적으로_생성한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -98,7 +98,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 펫 ID로 알람 생성 시 NotFoundException이 발생한다.")
     @Test
-    void createAlarm_petNotFound() {
+    void 존재하지_않는_펫_ID로_알람_생성_시_예외가_발생한다() {
         // given
         PetWalkAlarmCreateServiceRequest request = PetWalkAlarmCreateServiceRequest.builder()
                 .petId(999L)
@@ -117,7 +117,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 산책 알람을 정상적으로 수정한다.")
     @Test
-    void updateAlarm_success() {
+    void 펫_산책_알람을_정상적으로_수정한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -148,7 +148,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 알람 ID로 수정 시 NotFoundException이 발생한다.")
     @Test
-    void updateAlarm_notFound() {
+    void 존재하지_않는_알람_ID로_수정_시_예외가_발생한다() {
         // given
         PetWalkAlarmUpdateServiceRequest request = PetWalkAlarmUpdateServiceRequest.builder()
                 .alarmId(999L)
@@ -167,7 +167,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 산책 알람 상태를 정상적으로 변경한다.")
     @Test
-    void updateAlarmStatus_success() {
+    void 펫_산책_알람_상태를_정상적으로_변경한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -195,7 +195,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 알람 ID로 상태 변경 시 NotFoundException이 발생한다.")
     @Test
-    void updateAlarmStatus_notFound() {
+    void 존재하지_않는_알람_ID로_상태_변경_시_예외가_발생한다() {
         // given
         PetWalkAlarmStatusUpdateServiceRequest request = PetWalkAlarmStatusUpdateServiceRequest.builder()
                 .alarmId(999L)
@@ -212,7 +212,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 산책 알람을 정상적으로 삭제한다.")
     @Test
-    void deleteAlarm_success() {
+    void 펫_산책_알람을_정상적으로_삭제한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -231,7 +231,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 알람 ID로 삭제 시 예외 없이 처리된다.")
     @Test
-    void deleteAlarm_notExists_noException() {
+    void 존재하지_않는_알람_ID로_삭제_시_예외_없이_처리된다() {
         // when & then (존재하지 않을 경우 ifPresent이므로 예외 없이 통과)
         petWalkAlarmWriteService.delete(999L);
     }
@@ -240,7 +240,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("특정 펫의 모든 산책 알람을 삭제한다.")
     @Test
-    void deleteAllByPetId_success() {
+    void 특정_펫의_모든_산책_알람을_삭제한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -264,7 +264,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하는 알람 ID로 조회 시 알람 엔티티를 반환한다.")
     @Test
-    void findById_success() {
+    void 존재하는_알람_ID로_조회_시_알람_엔티티를_반환한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -284,7 +284,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 알람 ID로 조회 시 NotFoundException이 발생한다.")
     @Test
-    void findById_notFound() {
+    void 존재하지_않는_알람_ID로_조회_시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> petWalkAlarmReadService.findById(999L))
                 .isInstanceOf(NotFoundException.class)
@@ -295,7 +295,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 ID로 산책 알람 목록을 정상적으로 조회한다.")
     @Test
-    void getAlarmsByPetId_success() {
+    void 펫_ID로_산책_알람_목록을_정상적으로_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -318,7 +318,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("알람이 없는 펫은 빈 목록을 반환한다.")
     @Test
-    void getAlarmsByPetId_empty() {
+    void 알람이_없는_펫은_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -334,7 +334,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("오늘 요일에 해당하는 활성화된 알람 시간 목록을 조회한다.")
     @Test
-    void getTodayAlarmTimes_returnsActiveAlarmsForToday() {
+    void 오늘_요일에_해당하는_활성화된_알람_시간_목록을_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");
@@ -362,7 +362,7 @@ class PetWalkAlarmServiceTest extends IntegrationTestSupport {
 
     @DisplayName("오늘 요일에 해당하는 알람이 없으면 빈 목록을 반환한다.")
     @Test
-    void getTodayAlarmTimes_empty() {
+    void 오늘_요일에_해당하는_알람이_없으면_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = createAndSavePet(user, "초코");

@@ -18,7 +18,7 @@ public class PetControllerTest extends ControllerTestSupport {
     @DisplayName("내 펫 목록을 조회한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void getMyPets() throws Exception {
+    void 내_펫_목록을_조회한다() throws Exception {
         // when // then
         mockMvc.perform(
                 get("/api/v1/pets")
@@ -31,7 +31,7 @@ public class PetControllerTest extends ControllerTestSupport {
     @DisplayName("펫을 생성한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void createPet() throws Exception {
+    void 펫을_생성한다() throws Exception {
         // given
         PetCreateRequest request = PetCreateRequest.builder()
             .name("멍멍이")
@@ -52,7 +52,7 @@ public class PetControllerTest extends ControllerTestSupport {
     @DisplayName("펫을 생성할 시 펫 이름은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void createPetWithoutName() throws Exception {
+    void 펫을_생성할_시_펫_이름은_필수이다() throws Exception {
         // given
         PetCreateRequest request = PetCreateRequest.builder()
             .build();
@@ -73,7 +73,7 @@ public class PetControllerTest extends ControllerTestSupport {
     @DisplayName("펫 정보를 수정한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void updatePet() throws Exception {
+    void 펫_정보를_수정한다() throws Exception {
         // given
         PetUpdateRequest request = PetUpdateRequest.builder()
             .name("멍멍이수정")
@@ -94,7 +94,7 @@ public class PetControllerTest extends ControllerTestSupport {
     @DisplayName("펫 정보를 수정할 시 펫 이름은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void updatePetWithoutName() throws Exception {
+    void 펫_정보를_수정할_시_펫_이름은_필수이다() throws Exception {
         // given
         PetUpdateRequest request = PetUpdateRequest.builder()
             .build();
@@ -115,7 +115,7 @@ public class PetControllerTest extends ControllerTestSupport {
     @DisplayName("펫을 삭제한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void deletePet() throws Exception {
+    void 펫을_삭제한다() throws Exception {
         // when // then
         mockMvc.perform(
                 delete("/api/v1/pets/{petId}", 1L)

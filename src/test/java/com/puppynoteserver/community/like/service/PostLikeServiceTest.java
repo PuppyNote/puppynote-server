@@ -41,7 +41,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
 
     @DisplayName("좋아요가 없는 게시물에 좋아요 토글 시 liked=true를 반환한다.")
     @Test
-    void toggleLike_whenNotLiked_returnsLikedTrue() {
+    void 좋아요가_없는_게시물에_토글_시_liked가_true를_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "테스트 게시물", List.of()));
@@ -62,7 +62,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
 
     @DisplayName("좋아요가 있는 게시물에 좋아요 토글 시 liked=false를 반환한다.")
     @Test
-    void toggleLike_whenAlreadyLiked_returnsLikedFalse() {
+    void 좋아요가_있는_게시물에_토글_시_liked가_false를_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "테스트 게시물", List.of()));
@@ -84,7 +84,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
 
     @DisplayName("캐시 미스 시 DB에서 카운트와 좋아요 여부를 초기화한다.")
     @Test
-    void toggleLike_cacheMiss_initializesFromDb() {
+    void 캐시_미스_시_DB에서_카운트와_좋아요_여부를_초기화한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "테스트 게시물", List.of()));
@@ -103,7 +103,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 게시물 ID로 좋아요 토글 시 예외가 발생한다.")
     @Test
-    void toggleLike_postNotFound_throwsException() {
+    void 존재하지_않는_게시물에_좋아요_토글_시_예외가_발생한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Long nonExistentPostId = 999L;
@@ -118,7 +118,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
 
     @DisplayName("Redis 카운트 캐시는 있지만 좋아요 캐시가 없을 때도 정상 동작한다.")
     @Test
-    void toggleLike_countCacheHitLikedCacheMiss() {
+    void 카운트_캐시는_있고_좋아요_캐시가_없을_때_정상_동작한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Post post = postRepository.save(Post.of(user, "테스트 게시물", List.of()));

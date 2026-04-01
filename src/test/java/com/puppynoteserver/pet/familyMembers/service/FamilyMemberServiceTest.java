@@ -54,7 +54,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("OWNER가 다른 유저를 가족으로 초대하면 PENDING 상태로 저장된다.")
     @Test
-    void invite_success() {
+    void OWNER가_다른_유저를_가족으로_초대하면_PENDING_상태로_저장된다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User invitee = userRepository.save(createUser("invitee@test.com", "password", SnsType.NORMAL));
@@ -81,7 +81,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("OWNER가 아닌 유저가 초대를 시도하면 PuppyNoteException이 발생한다.")
     @Test
-    void invite_nonOwnerCannotInvite() {
+    void OWNER가_아닌_유저가_초대를_시도하면_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User family = userRepository.save(createUser("family@test.com", "password", SnsType.NORMAL));
@@ -105,7 +105,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("이미 가족이거나 초대 대기 중인 유저를 초대하면 PuppyNoteException이 발생한다.")
     @Test
-    void invite_alreadyInvited() {
+    void 이미_가족이거나_초대_대기_중인_유저를_초대하면_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User alreadyInvited = userRepository.save(createUser("already@test.com", "password", SnsType.NORMAL));
@@ -128,7 +128,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("초대자가 해당 펫의 멤버가 아닌 경우 NotFoundException이 발생한다.")
     @Test
-    void invite_inviterNotFoundInPet() {
+    void 초대자가_해당_펫의_멤버가_아닌_경우_예외가_발생한다() {
         // given
         User stranger = userRepository.save(createUser("stranger@test.com", "password", SnsType.NORMAL));
         User invitee = userRepository.save(createUser("invitee@test.com", "password", SnsType.NORMAL));
@@ -151,7 +151,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("PENDING 상태의 초대를 수락하면 DONE 상태로 변경된다.")
     @Test
-    void register_success() {
+    void PENDING_상태의_초대를_수락하면_DONE_상태로_변경된다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User invitee = userRepository.save(createUser("invitee@test.com", "password", SnsType.NORMAL));
@@ -174,7 +174,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("초대 내역이 없는 경우 register 시 NotFoundException이 발생한다.")
     @Test
-    void register_noPendingRecord() {
+    void 초대_내역이_없는_경우_register_시_예외가_발생한다() {
         // given
         User user = userRepository.save(createUser("user@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -192,7 +192,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("이미 DONE 상태인 레코드를 register하면 PuppyNoteException이 발생한다.")
     @Test
-    void register_alreadyDone() {
+    void 이미_DONE_상태인_레코드를_register하면_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User member = userRepository.save(createUser("member@test.com", "password", SnsType.NORMAL));
@@ -215,7 +215,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("OWNER가 FAMILY 멤버를 삭제하면 해당 가족 관계가 제거된다.")
     @Test
-    void deleteFamilyRelation_ownerDeletesFamily() {
+    void OWNER가_FAMILY_멤버를_삭제하면_해당_가족_관계가_제거된다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User family = userRepository.save(createUser("family@test.com", "password", SnsType.NORMAL));
@@ -235,7 +235,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("FAMILY 멤버가 OWNER와의 관계를 스스로 탈퇴할 수 있다.")
     @Test
-    void deleteFamilyRelation_familyLeavesPet() {
+    void FAMILY_멤버가_OWNER와의_관계를_스스로_탈퇴할_수_있다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User family = userRepository.save(createUser("family@test.com", "password", SnsType.NORMAL));
@@ -255,7 +255,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("OWNER가 OWNER를 삭제 시도하면 PuppyNoteException이 발생한다.")
     @Test
-    void deleteFamilyRelation_ownerCannotDeleteOwner() {
+    void OWNER가_OWNER를_삭제_시도하면_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User anotherOwner = userRepository.save(createUser("anotherowner@test.com", "password", SnsType.NORMAL));
@@ -273,7 +273,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("FAMILY가 FAMILY를 삭제 시도하면 PuppyNoteException이 발생한다.")
     @Test
-    void deleteFamilyRelation_familyCannotDeleteFamily() {
+    void FAMILY가_FAMILY를_삭제_시도하면_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User family1 = userRepository.save(createUser("family1@test.com", "password", SnsType.NORMAL));
@@ -295,7 +295,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫의 DONE 상태 가족 목록 조회 시 현재 로그인 유저는 제외된다.")
     @Test
-    void getFamilyMembers_excludesCurrentUser() {
+    void 펫의_DONE_상태_가족_목록_조회_시_현재_로그인_유저는_제외된다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User family1 = userRepository.save(createUser("family1@test.com", "password", SnsType.NORMAL));
@@ -320,7 +320,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("PENDING 상태의 멤버는 가족 목록 조회에 포함되지 않는다.")
     @Test
-    void getFamilyMembers_pendingExcluded() {
+    void PENDING_상태의_멤버는_가족_목록_조회에_포함되지_않는다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User pendingUser = userRepository.save(createUser("pending@test.com", "password", SnsType.NORMAL));
@@ -341,7 +341,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("이메일로 유저 검색 시 현재 로그인 유저 본인은 제외된다.")
     @Test
-    void searchUsersByEmail_excludesCurrentUser() {
+    void 이메일로_유저_검색_시_현재_로그인_유저_본인은_제외된다() {
         // given
         User currentUser = userRepository.save(createUser("search@test.com", "password", SnsType.NORMAL));
         User otherUser1 = userRepository.save(createUser("search2@test.com", "password", SnsType.NORMAL));
@@ -362,7 +362,7 @@ class FamilyMemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("일치하는 이메일이 없으면 빈 목록을 반환한다.")
     @Test
-    void searchUsersByEmail_noMatch() {
+    void 일치하는_이메일이_없으면_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("user@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));

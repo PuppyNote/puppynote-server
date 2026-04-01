@@ -17,8 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -29,7 +28,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("일반으로 등록된 사용자가 있을 경우 일반 로그인을 한다.")
     @Test
-    void normalLoginIfUserExist() throws JsonProcessingException {
+    void 등록된_유저가_있을_때_일반_로그인_시_토큰을_반환한다() throws JsonProcessingException {
         // given
         User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
 
@@ -52,7 +51,7 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
     @DisplayName("SNS로 등록된 사용자가 있을 경우 일반 로그인이 되지 않는다.")
     @Test
-    void normalLoginIfSnsUserExist() {
+    void SNS_유저가_있을_때_일반_로그인_시_예외가_발생한다() {
         // given
         User user = createUser("tkdrl8908@naver.com", "1234", SnsType.KAKAO);
 
@@ -64,16 +63,14 @@ public class LoginServiceTest extends IntegrationTestSupport {
                 .deviceId("asdfasdfasdfsadfsf")
                 .build();
 
-        // when
-        // then
-        assertThrows(PuppyNoteException.class, () -> {
-            loginService.normalLogin(request);
-        });
+        // when & then
+        assertThatThrownBy(() -> loginService.normalLogin(request))
+                .isInstanceOf(PuppyNoteException.class);
     }
 
     @DisplayName("등록된 사용자가 없을 경우 일반 로그인을 할 시 예외를 발생시킨다.")
     @Test
-    void normalLoginIfUserNotExist() {
+    void 등록된_유저가_없을_때_일반_로그인_시_예외가_발생한다() {
         // given
         LoginServiceRequest request = LoginServiceRequest.builder()
                 .email("tkdrl8908@naver.com")
@@ -81,16 +78,14 @@ public class LoginServiceTest extends IntegrationTestSupport {
                 .deviceId("testdeviceId")
                 .build();
 
-        // when
-        // then
-        assertThrows(PuppyNoteException.class, () -> {
-            loginService.normalLogin(request);
-        });
+        // when & then
+        assertThatThrownBy(() -> loginService.normalLogin(request))
+                .isInstanceOf(PuppyNoteException.class);
     }
 
     @DisplayName("일반 로그인시 비밀번호가 틀렸을 경우 예외를 발생시킨다.")
     @Test
-    void normalLoginIncorrectPassword() {
+    void 일반_로그인_시_비밀번호가_틀렸을_경우_예외가_발생한다() {
         // given
         User user = createUser("tkdrl8908@naver.com", "1234", SnsType.NORMAL);
 
@@ -102,11 +97,9 @@ public class LoginServiceTest extends IntegrationTestSupport {
                 .deviceId("testdeviceId")
                 .build();
 
-        // when
-        // then
-        assertThrows(PuppyNoteException.class, () -> {
-            loginService.normalLogin(request);
-        });
+        // when & then
+        assertThatThrownBy(() -> loginService.normalLogin(request))
+                .isInstanceOf(PuppyNoteException.class);
     }
 
     @DisplayName("카카오 로그인을 한다.")
@@ -136,11 +129,9 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
-        assertAll(
-                () -> assertThat(oAuthLoginResponse.getAccessToken()).isNotNull(),
-                () -> assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull(),
-                () -> assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com")
-        );
+        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
     }
 
     @DisplayName("구글 로그인을 한다.")
@@ -168,11 +159,9 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
-        assertAll(
-                () -> assertThat(oAuthLoginResponse.getAccessToken()).isNotNull(),
-                () -> assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull(),
-                () -> assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com")
-        );
+        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
     }
 
     @DisplayName("카카오 로그인을 할 시 이미 등록되어있는 이메일이라면 예외가 발생한다.")
@@ -198,10 +187,8 @@ public class LoginServiceTest extends IntegrationTestSupport {
 
         OAuthLoginResponse oAuthLoginResponse = loginService.oauthLogin(oAuthLoginServiceRequest);
 
-        assertAll(
-                () -> assertThat(oAuthLoginResponse.getAccessToken()).isNotNull(),
-                () -> assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull(),
-                () -> assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com")
-        );
+        assertThat(oAuthLoginResponse.getAccessToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getRefreshToken()).isNotNull();
+        assertThat(oAuthLoginResponse.getEmail()).isEqualTo("test@test.com");
     }
 }

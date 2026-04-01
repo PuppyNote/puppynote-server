@@ -39,7 +39,7 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("용품 카테고리를 정상적으로 저장한다.")
     @Test
-    void saveCategories_success() {
+    void 용품_카테고리를_정상적으로_저장한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -61,7 +61,7 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("카테고리 저장 시 동일 타입의 기존 카테고리를 삭제하고 새로 저장한다.")
     @Test
-    void saveCategories_replacesPreviousCategories() {
+    void 카테고리_저장_시_동일_타입의_기존_카테고리를_삭제하고_새로_저장한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -84,7 +84,7 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("다른 타입의 카테고리는 영향을 받지 않는다.")
     @Test
-    void saveCategories_doesNotAffectOtherCategoryType() {
+    void 다른_타입의_카테고리는_영향을_받지_않는다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -109,7 +109,7 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("내 카테고리 목록을 정상적으로 조회한다.")
     @Test
-    void getMyCategories_success() {
+    void 내_카테고리_목록을_정상적으로_조회한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -131,7 +131,7 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("카테고리가 없을 때 빈 목록을 반환한다.")
     @Test
-    void getMyCategories_empty_returnsEmptyList() {
+    void 카테고리가_없을_때_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -145,7 +145,7 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("카테고리 타입별로 필터링하여 조회한다.")
     @Test
-    void getMyCategories_filteredByCategoryType() {
+    void 카테고리_타입별로_필터링하여_조회한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -173,7 +173,7 @@ class UserItemCategoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("빈 카테고리 목록으로 저장 시 기존 카테고리를 모두 삭제한다.")
     @Test
-    void saveCategories_emptyList_clearsAllCategories() {
+    void 빈_카테고리_목록으로_저장_시_기존_카테고리를_모두_삭제한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));

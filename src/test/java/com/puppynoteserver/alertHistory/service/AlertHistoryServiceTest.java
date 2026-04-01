@@ -43,7 +43,7 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("알림 내역을 UNCHECKED 상태로 생성한다.")
     @Test
-    void createAlertHistory() {
+    void 알림_내역_생성_시_UNCHECKED_상태로_저장된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         AlertHistoryServiceRequest request = AlertHistoryServiceRequest.builder()
@@ -58,15 +58,14 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result.getId()).isNotNull();
-        assertThat(result.getAlertDescription()).isEqualTo("친구 요청이 도착했습니다.");
-        assertThat(result.getAlertHistoryStatus()).isEqualTo(AlertHistoryStatus.UNCHECKED);
-        assertThat(result.getAlertDestinationType()).isEqualTo(AlertDestinationType.FRIEND_CODE);
-        assertThat(result.getAlertDestinationInfo()).isEqualTo("ABC123");
+        assertThat(result)
+                .extracting("alertDescription", "alertHistoryStatus", "alertDestinationType", "alertDestinationInfo")
+                .containsExactly("친구 요청이 도착했습니다.", AlertHistoryStatus.UNCHECKED, AlertDestinationType.FRIEND_CODE, "ABC123");
     }
 
     @DisplayName("알림 내역 상태를 CHECKED로 변경한다.")
     @Test
-    void updateAlertHistoryStatus() {
+    void 알림_내역이_있을_때_상태_변경_시_CHECKED로_변경된다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         AlertHistory alertHistory = alertHistoryRepository.save(
@@ -88,7 +87,7 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 알림 내역 ID로 상태 변경 시 예외가 발생한다.")
     @Test
-    void updateAlertHistoryStatus_notFound() {
+    void 존재하지_않는_알림_ID로_상태_변경_시_예외가_발생한다() {
         // given
         Long nonExistentId = 999L;
 
@@ -100,7 +99,7 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("현재 로그인한 사용자의 알림 내역 목록을 페이지네이션으로 조회한다.")
     @Test
-    void getAlertHistory() {
+    void 현재_유저의_알림_내역_목록을_페이지네이션으로_조회한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         alertHistoryRepository.save(AlertHistory.builder()
@@ -130,13 +129,14 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result.getContent()).hasSize(2);
-        assertThat(result.getPageInfo().getCurrentPage()).isEqualTo(1);
-        assertThat(result.getPageInfo().getTotalElement()).isEqualTo(2);
+        assertThat(result.getPageInfo())
+                .extracting("currentPage", "totalElement")
+                .containsExactly(1, 2L);
     }
 
     @DisplayName("미확인 알림이 있으면 hasUncheckedAlerts가 true를 반환한다.")
     @Test
-    void hasUncheckedAlerts_returnsTrue() {
+    void 미확인_알림이_있을_때_hasUncheckedAlerts가_true를_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         alertHistoryRepository.save(AlertHistory.builder()
@@ -158,7 +158,7 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("미확인 알림이 없으면 hasUncheckedAlerts가 false를 반환한다.")
     @Test
-    void hasUncheckedAlerts_returnsFalse() {
+    void 미확인_알림이_없을_때_hasUncheckedAlerts가_false를_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         alertHistoryRepository.save(AlertHistory.builder()
@@ -180,7 +180,7 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("해당 friendCode가 존재하면 hasFriendCode가 true를 반환한다.")
     @Test
-    void hasFriendCode_returnsTrue() {
+    void friendCode가_있을_때_hasFriendCode가_true를_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         String friendCode = "ABC123";
@@ -201,7 +201,7 @@ class AlertHistoryServiceTest extends IntegrationTestSupport {
 
     @DisplayName("해당 friendCode가 없으면 hasFriendCode가 false를 반환한다.")
     @Test
-    void hasFriendCode_returnsFalse() {
+    void friendCode가_없을_때_hasFriendCode가_false를_반환한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
 

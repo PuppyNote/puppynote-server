@@ -64,7 +64,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 용품을 정상적으로 생성한다.")
     @Test
-    void createPetItem_success() {
+    void 펫_용품을_정상적으로_생성한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -95,7 +95,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 펫 ID로 용품 생성 시 NotFoundException이 발생한다.")
     @Test
-    void createPetItem_petNotFound() {
+    void 존재하지_않는_펫_ID로_용품_생성_시_예외가_발생한다() {
         // given
         PetItemCreateServiceRequest request = PetItemCreateServiceRequest.builder()
                 .petId(999L)
@@ -116,7 +116,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 용품 정보를 정상적으로 수정한다.")
     @Test
-    void updatePetItem_success() {
+    void 펫_용품_정보를_정상적으로_수정한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -150,7 +150,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 용품 ID로 수정 시 NotFoundException이 발생한다.")
     @Test
-    void updatePetItem_notFound() {
+    void 존재하지_않는_용품_ID로_수정_시_예외가_발생한다() {
         // given
         PetItemUpdateServiceRequest request = PetItemUpdateServiceRequest.builder()
                 .name("간식")
@@ -170,7 +170,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 용품을 정상적으로 삭제한다.")
     @Test
-    void deletePetItem_success() {
+    void 펫_용품을_정상적으로_삭제한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -190,7 +190,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 용품 ID로 삭제 시 NotFoundException이 발생한다.")
     @Test
-    void deletePetItem_notFound() {
+    void 존재하지_않는_용품_ID로_삭제_시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> petItemWriteService.delete(999L))
                 .isInstanceOf(NotFoundException.class)
@@ -201,7 +201,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("특정 펫의 모든 용품을 삭제한다.")
     @Test
-    void deleteAllByPetId_success() {
+    void 특정_펫의_모든_용품을_삭제한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -222,7 +222,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 ID로 카테고리 없이 전체 용품 목록을 조회한다.")
     @Test
-    void getItemsByPetId_noCategory() {
+    void 펫_ID로_카테고리_없이_전체_용품_목록을_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -242,7 +242,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 ID와 카테고리로 필터링된 용품 목록을 조회한다.")
     @Test
-    void getItemsByPetId_withCategory() {
+    void 펫_ID와_카테고리로_필터링된_용품_목록을_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -263,7 +263,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("용품이 없는 펫은 빈 목록을 반환한다.")
     @Test
-    void getItemsByPetId_empty() {
+    void 용품이_없는_펫은_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -280,7 +280,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 ID로 용품 개수를 정상적으로 조회한다.")
     @Test
-    void countItemsByPetId_success() {
+    void 펫_ID로_용품_개수를_정상적으로_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -301,7 +301,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하는 용품 ID로 조회 시 용품 엔티티를 반환한다.")
     @Test
-    void findById_success() {
+    void 존재하는_용품_ID로_조회_시_용품_엔티티를_반환한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -322,7 +322,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 용품 ID로 조회 시 NotFoundException이 발생한다.")
     @Test
-    void findById_notFound() {
+    void 존재하지_않는_용품_ID로_조회_시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> petItemReadService.findById(999L))
                 .isInstanceOf(NotFoundException.class)
@@ -333,7 +333,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("용품 상세 정보를 정상적으로 조회한다.")
     @Test
-    void getItemDetail_success() {
+    void 용품_상세_정보를_정상적으로_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
@@ -354,7 +354,7 @@ class PetItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 용품 ID로 상세 조회 시 NotFoundException이 발생한다.")
     @Test
-    void getItemDetail_notFound() {
+    void 존재하지_않는_용품_ID로_상세_조회_시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> petItemReadService.getItemDetail(999L))
                 .isInstanceOf(NotFoundException.class)

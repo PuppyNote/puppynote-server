@@ -21,7 +21,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입을 한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void signUp() throws Exception {
+    void 회원가입을_한다() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .email("test@example.com")
@@ -43,7 +43,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입 시 이메일은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void signUpWithoutEmail() throws Exception {
+    void 회원가입_시_이메일은_필수이다() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .password("password123")
@@ -66,7 +66,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입 시 이메일 형식이 올바르지 않으면 안된다.")
     @Test
     @WithMockUser(roles = "USER")
-    void signUpWithInvalidEmail() throws Exception {
+    void 회원가입_시_이메일_형식이_올바르지_않으면_안된다() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .email("not-an-email")
@@ -90,7 +90,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입 시 비밀번호는 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void signUpWithoutPassword() throws Exception {
+    void 회원가입_시_비밀번호는_필수이다() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .email("test@example.com")
@@ -113,7 +113,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입 시 비밀번호는 최소 8자 이상이어야 한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void signUpWithTooShortPassword() throws Exception {
+    void 회원가입_시_비밀번호는_최소_8자_이상이어야_한다() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .email("test@example.com")
@@ -137,7 +137,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입 시 닉네임은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void signUpWithoutNickName() throws Exception {
+    void 회원가입_시_닉네임은_필수이다() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .email("test@example.com")
@@ -160,12 +160,12 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입 시 닉네임은 최대 20자까지 입력 가능하다.")
     @Test
     @WithMockUser(roles = "USER")
-    void signUpWithTooLongNickName() throws Exception {
+    void 회원가입_시_닉네임은_최대_20자까지_입력_가능하다() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .email("test@example.com")
                 .password("password123")
-                .nickName("이닉네임은스물한자이상입니다초과입니다")
+                .nickName("이닉네임은스물한자이상입니다초과입니다초과입니다.")
                 .build();
 
         // when // then
@@ -186,7 +186,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("이메일 인증 메일을 전송한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void sendVerificationEmail() throws Exception {
+    void 이메일_인증_메일을_전송한다() throws Exception {
         // given
         EmailSendRequest request = EmailSendRequest.builder()
                 .email("test@example.com")
@@ -207,7 +207,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("이메일 인증 메일 전송 시 이메일은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void sendVerificationEmailWithoutEmail() throws Exception {
+    void 이메일_인증_메일_전송_시_이메일은_필수이다() throws Exception {
         // given
         EmailSendRequest request = EmailSendRequest.builder()
                 .build();
@@ -228,7 +228,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("이메일 인증 메일 전송 시 이메일 형식이 올바르지 않으면 안된다.")
     @Test
     @WithMockUser(roles = "USER")
-    void sendVerificationEmailWithInvalidEmail() throws Exception {
+    void 이메일_인증_메일_전송_시_이메일_형식이_올바르지_않으면_안된다() throws Exception {
         // given
         EmailSendRequest request = EmailSendRequest.builder()
                 .email("not-an-email")
@@ -252,7 +252,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("내 프로필을 조회한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void getMyProfile() throws Exception {
+    void 내_프로필을_조회한다() throws Exception {
         // when // then
         mockMvc.perform(
                         get("/api/v1/user/profile")
@@ -267,7 +267,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("프로필을 수정한다.")
     @Test
     @WithMockUser(roles = "USER")
-    void updateProfile() throws Exception {
+    void 프로필을_수정한다() throws Exception {
         // given
         UserProfileUpdateRequest request = UserProfileUpdateRequest.builder()
                 .nickName("새닉네임")
@@ -289,7 +289,7 @@ public class UserControllerTest extends ControllerTestSupport {
     @DisplayName("프로필 수정 시 닉네임은 필수이다.")
     @Test
     @WithMockUser(roles = "USER")
-    void updateProfileWithoutNickName() throws Exception {
+    void 프로필_수정_시_닉네임은_필수이다() throws Exception {
         // given
         UserProfileUpdateRequest request = UserProfileUpdateRequest.builder()
                 .profileUrl("https://example.com/profile.jpg")

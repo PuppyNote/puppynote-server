@@ -21,7 +21,7 @@ public class LoginControllerTest extends ControllerTestSupport {
 	@DisplayName("일반 로그인을 한다.")
 	@Test
 	@WithMockUser(roles = "USER")
-	void normalLogin() throws Exception {
+	void 일반_로그인을_한다() throws Exception {
 		// given
 		LoginRequest request = LoginRequest.builder()
 			.email("tkdrl8908@naver.com")
@@ -47,7 +47,7 @@ public class LoginControllerTest extends ControllerTestSupport {
 	@DisplayName("일반 로그인을 할 시 이메일은 필수이다.")
 	@Test
 	@WithMockUser(roles = "USER")
-	void normalLoginWithoutEmail() throws Exception {
+	void 일반_로그인을_할_시_이메일은_필수이다() throws Exception {
 		// given
 		LoginRequest request = LoginRequest.builder()
 			.password("1234")
@@ -72,7 +72,7 @@ public class LoginControllerTest extends ControllerTestSupport {
 	@DisplayName("일반 로그인을 할 시 비밀번호는 필수이다.")
 	@Test
 	@WithMockUser(roles = "USER")
-	void normalLoginWithoutPassword() throws Exception {
+	void 일반_로그인을_할_시_비밀번호는_필수이다() throws Exception {
 		// given
 		LoginRequest request = LoginRequest.builder()
 			.email("tkdrl8908@naver.com")
@@ -97,7 +97,7 @@ public class LoginControllerTest extends ControllerTestSupport {
 	@DisplayName("일반 로그인을 할 시 디바이스ID는 필수이다.")
 	@Test
 	@WithMockUser(roles = "USER")
-	void normalLoginWithoutDeviceId() throws Exception {
+	void 일반_로그인을_할_시_디바이스ID는_필수이다() throws Exception {
 		// given
 		LoginRequest request = LoginRequest.builder()
 			.email("tkdrl8908@naver.com")

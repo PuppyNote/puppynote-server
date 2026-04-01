@@ -69,7 +69,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("홈 정보를 정상적으로 조회한다.")
     @Test
-    void getHomeInfo_success() {
+    void 펫_ID로_홈_정보를_정상적으로_조회한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(
@@ -92,7 +92,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("생일이 있는 펫의 나이와 D-day를 계산한다.")
     @Test
-    void getHomeInfo_calculatesPetAgeAndBirthdayDday() {
+    void 생일이_있는_펫의_나이와_D_day를_계산한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         // 2년 전 생일로 설정
@@ -116,7 +116,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("생일이 null인 펫의 나이와 D-day는 null이다.")
     @Test
-    void getHomeInfo_nullBirthDate_returnsNullAgeAndDday() {
+    void 생일이_null인_펫의_나이와_D_day는_null이다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(
@@ -137,7 +137,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("오늘 산책한 펫의 walkedToday는 true이다.")
     @Test
-    void getHomeInfo_walkedToday_returnsTrue() {
+    void 오늘_산책한_펫의_walkedToday는_true이다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(
@@ -161,7 +161,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("오늘 산책하지 않은 펫의 walkedToday는 false이다.")
     @Test
-    void getHomeInfo_notWalkedToday_returnsFalse() {
+    void 오늘_산책하지_않은_펫의_walkedToday는_false이다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(
@@ -181,7 +181,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 용품 수를 정상적으로 조회한다.")
     @Test
-    void getHomeInfo_petItemCount() {
+    void 펫_용품_수를_정상적으로_조회한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(
@@ -204,7 +204,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("오늘의 산책 알람 시간 목록을 조회한다.")
     @Test
-    void getHomeInfo_todayWalkAlarmTimes() {
+    void 오늘의_산책_알람_시간_목록을_조회한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(
@@ -231,7 +231,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 펫 ID로 조회 시 예외가 발생한다.")
     @Test
-    void getHomeInfo_petNotFound_throwsException() {
+    void 존재하지_않는_펫_ID로_조회_시_예외가_발생한다() {
         // given
         Long nonExistentPetId = 999L;
 
@@ -243,7 +243,7 @@ class HomeReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("최근 7일 산책 횟수를 정상적으로 집계한다.")
     @Test
-    void getHomeInfo_recentWalkCount() {
+    void 최근_7일_산책_횟수를_정상적으로_집계한다() {
         // given
         User user = userRepository.save(createUser("test@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(

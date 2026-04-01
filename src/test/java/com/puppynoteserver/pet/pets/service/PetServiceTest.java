@@ -54,7 +54,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫을 생성하면 DB에 저장되고, 현재 유저가 OWNER로 등록된다.")
     @Test
-    void createPet_success() {
+    void 펫을_생성하면_DB에_저장되고_현재_유저가_OWNER로_등록된다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -87,7 +87,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 생성 시 기존 가족(FAMILY) 유저도 자동으로 FAMILY로 등록된다.")
     @Test
-    void createPet_existingFamilyAutoAdded() {
+    void 펫_생성_시_기존_가족_유저도_자동으로_FAMILY로_등록된다() {
         // given
         // owner1이 펫A를 소유하고, familyUser를 FAMILY로 초대해 DONE 상태
         User owner1 = userRepository.save(createUser("owner1@test.com", "password", SnsType.NORMAL));
@@ -124,7 +124,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("펫 정보를 정상적으로 수정한다.")
     @Test
-    void updatePet_success() {
+    void 펫_정보를_정상적으로_수정한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), "old-image.jpg", "OLD-REG"));
@@ -149,7 +149,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 펫 ID로 수정 시 NotFoundException이 발생한다.")
     @Test
-    void updatePet_petNotFound() {
+    void 존재하지_않는_펫_ID로_수정_시_예외가_발생한다() {
         // given
         Long nonExistentPetId = 999L;
         PetUpdateServiceRequest request = PetUpdateServiceRequest.builder()
@@ -169,7 +169,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("OWNER 유저가 펫을 삭제하면 펫과 가족 레코드가 모두 제거된다.")
     @Test
-    void deletePet_ownerSuccess() {
+    void OWNER_유저가_펫을_삭제하면_펫과_가족_레코드가_모두_제거된다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), "profile.jpg", null));
@@ -187,7 +187,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("FAMILY 유저가 펫 삭제를 시도하면 PuppyNoteException이 발생한다.")
     @Test
-    void deletePet_familyCannotDelete() {
+    void FAMILY_유저가_펫_삭제를_시도하면_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User family = userRepository.save(createUser("family@test.com", "password", SnsType.NORMAL));
@@ -205,7 +205,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("가족 구성원이 아닌 유저가 펫 삭제를 시도하면 NotFoundException이 발생한다.")
     @Test
-    void deletePet_notFamilyMember() {
+    void 가족_구성원이_아닌_유저가_펫_삭제를_시도하면_예외가_발생한다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User stranger = userRepository.save(createUser("stranger@test.com", "password", SnsType.NORMAL));
@@ -224,7 +224,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("현재 로그인한 유저의 펫 목록을 조회한다.")
     @Test
-    void getMyPets_success() {
+    void 현재_로그인한_유저의_펫_목록을_조회한다() {
         // given
         User user = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         Pet pet1 = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), "img1.jpg", null));
@@ -245,7 +245,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("PENDING 상태의 가족 멤버는 내 펫 목록에 포함되지 않는다.")
     @Test
-    void getMyPets_pendingExcluded() {
+    void PENDING_상태의_가족_멤버는_내_펫_목록에_포함되지_않는다() {
         // given
         User owner = userRepository.save(createUser("owner@test.com", "password", SnsType.NORMAL));
         User pendingUser = userRepository.save(createUser("pending@test.com", "password", SnsType.NORMAL));
@@ -264,7 +264,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("가입된 펫이 없는 유저는 빈 목록을 반환한다.")
     @Test
-    void getMyPets_empty() {
+    void 가입된_펫이_없는_유저는_빈_목록을_반환한다() {
         // given
         User user = userRepository.save(createUser("user@test.com", "password", SnsType.NORMAL));
         given(securityService.getCurrentLoginUserInfo()).willReturn(createLoginUserInfo(user.getId()));
@@ -280,7 +280,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하는 펫 ID로 조회 시 펫 엔티티를 반환한다.")
     @Test
-    void findById_success() {
+    void 존재하는_펫_ID로_조회_시_펫_엔티티를_반환한다() {
         // given
         Pet pet = petJpaRepository.save(Pet.of("초코", LocalDate.of(2020, 1, 1), null, null));
 
@@ -295,7 +295,7 @@ class PetServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 펫 ID로 조회 시 NotFoundException이 발생한다.")
     @Test
-    void findById_notFound() {
+    void 존재하지_않는_펫_ID로_조회_시_예외가_발생한다() {
         // given
         Long nonExistentId = 999L;
 

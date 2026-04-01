@@ -21,7 +21,7 @@ public class UserReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("이메일로 사용자를 조회한다.")
     @Test
-    void findByEmail_success() {
+    void 이메일로_사용자를_조회한다() {
         // given
         User user = createUser("test@test.com", "password123", SnsType.NORMAL);
         User savedUser = userRepository.save(user);
@@ -37,7 +37,7 @@ public class UserReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 이메일로 조회 시 예외가 발생한다.")
     @Test
-    void findByEmail_notFound_throwsException() {
+    void 존재하지_않는_이메일로_조회_시_예외가_발생한다() {
         // given
         // when / then
         assertThatThrownBy(() -> userReadService.findByEmail("notexist@test.com"))
@@ -47,7 +47,7 @@ public class UserReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("ID로 사용자를 조회한다.")
     @Test
-    void findById_success() {
+    void ID로_사용자를_조회한다() {
         // given
         User user = createUser("test@test.com", "password123", SnsType.NORMAL);
         User savedUser = userRepository.save(user);
@@ -63,7 +63,7 @@ public class UserReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 ID로 조회 시 예외가 발생한다.")
     @Test
-    void findById_notFound_throwsException() {
+    void 존재하지_않는_ID로_조회_시_예외가_발생한다() {
         // given
         Long nonExistentId = 999999L;
 
@@ -75,7 +75,7 @@ public class UserReadServiceTest extends IntegrationTestSupport {
 
     @DisplayName("내 프로필을 조회한다.")
     @Test
-    void getMyProfile_success() {
+    void 내_프로필을_조회한다() {
         // given
         User user = User.builder()
                 .email("test@test.com")
