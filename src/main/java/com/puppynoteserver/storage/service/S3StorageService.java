@@ -137,21 +137,8 @@ public class S3StorageService {
         validateFile(file);
 
         String contentType = file.getContentType();
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw new IllegalArgumentException("이미지 파일만 업로드 가능합니다.");
-        }
-
-        String[] allowedTypes = {"image/jpeg", "image/png", "image/gif", "image/webp"};
-        boolean isAllowed = false;
-        for (String allowedType : allowedTypes) {
-            if (allowedType.equals(contentType)) {
-                isAllowed = true;
-                break;
-            }
-        }
-
-        if (!isAllowed) {
-            throw new IllegalArgumentException("지원하지 않는 이미지 형식입니다. (JPEG, PNG, GIF, WebP만 지원)");
+        if (contentType != null && contentType.startsWith("video/")) {
+            throw new IllegalArgumentException("동영상 파일은 업로드할 수 없습니다.");
         }
     }
 
