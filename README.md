@@ -8,10 +8,10 @@
 |---|---|
 | Framework | Spring Boot 3.4.2, Java 17 |
 | ORM | Spring Data JPA, QueryDSL 5.0 |
-| DB | MySQL 8 (운영), H2 (테스트) |
+| DB | MySQL 8 (운영), H2 (테스트), ElasticSearch, Logstash |
 | Security | Spring Security, JWT |
-| OAuth2 | Kakao, Google (OpenFeign) |
-| Push | Firebase FCM |
+| OAuth2 | Kakao |
+| Push | expo go |
 | Storage | AWS S3 |
 | Mail | Spring Mail (Gmail SMTP) |
 | Docs | Spring REST Docs |
