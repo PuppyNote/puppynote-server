@@ -49,8 +49,8 @@ JAR_FILE=$(ls $APP_DIR/*.jar | head -1)
 echo "시작할 JAR: $JAR_FILE (포트: $INACTIVE_PORT)"
 
 nohup java \
-  -XX:+UseContainerSupport \
-  -XX:MaxRAMPercentage=75.0 \
+  -Xms512m \
+  -Xmx2g \
   -XX:+UseG1GC \
   -Dspring.profiles.active=prd \
   -Dserver.port=$INACTIVE_PORT \
