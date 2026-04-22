@@ -45,6 +45,13 @@ public class RedisService {
         redisTemplate.opsForValue().set(key, value, ttl);
     }
 
+    // 키가 존재하지 않을 때만 값을 저장한다 (SET NX)
+    // 저장 성공 시 true, 이미 존재하면 false를 반환한다
+    public boolean setIfAbsent(String key, String value, Duration ttl) {
+        Boolean result = redisTemplate.opsForValue().setIfAbsent(key, value, ttl);
+        return Boolean.TRUE.equals(result);
+    }
+
     // 여러 String 키의 값을 한 번의 네트워크 호출로 조회한다 (MGET)
     // 존재하지 않는 키는 null로 반환된다
     public List<String> mGet(List<String> keys) {

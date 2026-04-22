@@ -86,9 +86,9 @@ public class PostLikeRedisService {
         );
     }
 
-    // 게시물의 좋아요 수 캐시를 저장한다
+    // 게시물의 좋아요 수 캐시를 저장한다 (SET NX: 이미 존재하면 덮어쓰지 않음)
     public void setCountCache(Long postId, long count) {
-        redisService.setValue(
+        redisService.setIfAbsent(
                 PostLikeRedisKey.POST_LIKE_COUNT.of(postId),
                 String.valueOf(count),
                 POST_COUNT_TTL
