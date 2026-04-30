@@ -2,6 +2,7 @@ package com.puppynoteserver.docs.weather;
 
 import com.puppynoteserver.docs.RestDocsSupport;
 import com.puppynoteserver.weather.controller.WeatherController;
+import com.puppynoteserver.weather.entity.WalkCondition;
 import com.puppynoteserver.weather.service.WeatherService;
 import com.puppynoteserver.weather.service.request.WeatherServiceRequest;
 import com.puppynoteserver.weather.service.response.WeatherResponse;
@@ -35,7 +36,7 @@ class WeatherControllerDocsTest extends RestDocsSupport {
     @Test
     void getWeather() throws Exception {
         // given
-        WeatherResponse response = new WeatherResponse(5.2, 0, "맑음", 12.5, 0.0);
+        WeatherResponse response = new WeatherResponse(5.2, 0, "맑음", 12.5, 0.0, WalkCondition.GREAT);
         given(weatherService.getWeather(any(WeatherServiceRequest.class))).willReturn(response);
 
         // when & then
@@ -84,7 +85,18 @@ class WeatherControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.windSpeed").type(JsonFieldType.NUMBER)
                                         .description("풍속 (km/h)"),
                                 fieldWithPath("data.precipitation").type(JsonFieldType.NUMBER)
-                                        .description("강수량 (mm, 직전 15분 누적)")
+                                        .description("강수량 (mm, 직전 15분 누적)"),
+                                fieldWithPath("data.walkCondition").type(JsonFieldType.STRING)
+                                        .description("""
+                                                강아지 산책 적합도 (날씨 코드·기온 중 더 나쁜 쪽 기준) +
+                                                `GREAT` 최적 (맑음/대체로 맑음, 기온 -5°C 이상 ~ 23°C 미만) +
+                                                `GOOD` 좋음 (부분적으로 흐림, 흐림) +
+                                                `MODERATE` 보통 (안개, 눈, 눈 소나기, 기온 0°C 이하 또는 23°C 이상) +
+                                                `BAD` 나쁨 (이슬비, 비, 소나기, 기온 28°C 이상) +
+                                                `DANGER` 위험 (어는 비, 뇌우, 우박 동반 뇌우, 기온 32°C 이상 또는 -10°C 이하)\
+                                                """),
+                                fieldWithPath("data.walkMessage").type(JsonFieldType.STRING)
+                                        .description("산책 안내 메시지 (한국어)")
                         )
                 ));
     }
