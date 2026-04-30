@@ -2,6 +2,7 @@ package com.puppynoteserver.weather.service.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.puppynoteserver.weather.entity.WalkCondition;
 import com.puppynoteserver.weather.feign.response.OpenMeteoResponse;
 import lombok.Getter;
 
@@ -13,6 +14,7 @@ public class WeatherResponse {
     private final String weatherDescription;
     private final double windSpeed;
     private final double precipitation;
+    private final WalkCondition walkCondition;
 
     @JsonCreator
     public WeatherResponse(
@@ -20,23 +22,33 @@ public class WeatherResponse {
             @JsonProperty("weatherCode") int weatherCode,
             @JsonProperty("weatherDescription") String weatherDescription,
             @JsonProperty("windSpeed") double windSpeed,
-            @JsonProperty("precipitation") double precipitation) {
+            @JsonProperty("precipitation") double precipitation,
+            @JsonProperty("walkCondition") WalkCondition walkCondition) {
         this.temperature = temperature;
         this.weatherCode = weatherCode;
         this.weatherDescription = weatherDescription;
         this.windSpeed = windSpeed;
         this.precipitation = precipitation;
+        this.walkCondition = walkCondition;
     }
 
     public static WeatherResponse of(OpenMeteoResponse response) {
         OpenMeteoResponse.Current current = response.getCurrent();
+        int code = current.getWeatherCode();
+        double temp = current.getTemperature();
         return new WeatherResponse(
-                current.getTemperature(),
-                current.getWeatherCode(),
-                resolveDescription(current.getWeatherCode()),
+                temp,
+                code,
+                resolveDescription(code),
                 current.getWindSpeed(),
-                current.getPrecipitation()
+                current.getPrecipitation(),
+                WalkCondition.from(code, temp)
         );
+    }
+
+    @JsonProperty("walkMessage")
+    public String getWalkMessage() {
+        return WalkCondition.resolveMessage(weatherCode, temperature);
     }
 
     private static String resolveDescription(int code) {

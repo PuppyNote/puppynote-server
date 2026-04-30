@@ -45,7 +45,6 @@ public class WeatherServiceImpl implements WeatherService {
         return response;
     }
 
-    // 0.05도 그리드로 반올림하여 ~5km 반경 내 동일 캐시 키 사용
     private String buildCacheKey(double latitude, double longitude) {
         double gridLat = Math.round(latitude / 0.05) * 0.05;
         double gridLon = Math.round(longitude / 0.05) * 0.05;
