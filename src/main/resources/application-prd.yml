@@ -46,6 +46,10 @@ spring:
       ssl:
         enabled: true
 
+openmeteo:
+  api:
+    url: https://api.open-meteo.com
+
 oauth:
   kakao:
     api:
