@@ -76,6 +76,11 @@ include::api/petTip/pet-tip.adoc[]
 
 include::api/community/community-post.adoc[]
 
+[[Weather-API]]
+== Weather API
+
+include::api/weather/weather.adoc[]
+
 [[Storage-API]]
 == Storage API
 
