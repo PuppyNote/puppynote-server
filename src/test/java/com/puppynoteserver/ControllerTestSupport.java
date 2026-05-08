@@ -44,6 +44,8 @@ import com.puppynoteserver.user.users.controller.UserController;
 import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.UserReadService;
 import com.puppynoteserver.user.users.service.UserService;
+import com.puppynoteserver.weather.controller.WeatherController;
+import com.puppynoteserver.weather.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -68,6 +70,7 @@ import org.springframework.test.web.servlet.MockMvc;
         UserItemCategoryController.class,
         LoginController.class,
         UserController.class,
+        WeatherController.class,
 })
 public abstract class ControllerTestSupport {
 
@@ -146,4 +149,8 @@ public abstract class ControllerTestSupport {
     protected UserService userService;
     @MockitoBean
     protected UserReadService userReadService;
+
+    // weather
+    @MockitoBean
+    protected WeatherService weatherService;
 }
