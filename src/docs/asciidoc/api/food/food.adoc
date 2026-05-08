@@ -1,5 +1,7 @@
 [[food-search]]
-=== 음식 조회 (ES 캐시)
+=== 음식 조회 (ES 검색)
+
+결과가 없으면 빈 배열을 반환합니다. 클라이언트는 빈 배열을 받으면 AI 조회 여부를 사용자에게 확인 후 AI 조회 API를 호출합니다.
 
 ==== HTTP Request
 
@@ -11,15 +13,30 @@ include::{snippets}/food-search/query-parameters.adoc[]
 include::{snippets}/food-search/http-response.adoc[]
 include::{snippets}/food-search/response-fields.adoc[]
 
-[[food-search-ai]]
-=== 음식 조회 (AI 신규 응답)
+[[food-ask-ai]]
+=== 음식 AI 조회
+
+ES에 결과가 없을 때 사용자 확인 후 호출합니다. AI가 음식과 관련 없다고 판단하면 400을 반환합니다.
 
 ==== HTTP Request
 
-include::{snippets}/food-search-ai/http-request.adoc[]
-include::{snippets}/food-search-ai/query-parameters.adoc[]
+include::{snippets}/food-ask-ai/http-request.adoc[]
+include::{snippets}/food-ask-ai/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/food-search-ai/http-response.adoc[]
-include::{snippets}/food-search-ai/response-fields.adoc[]
+include::{snippets}/food-ask-ai/http-response.adoc[]
+include::{snippets}/food-ask-ai/response-fields.adoc[]
+
+[[food-ask-ai-not-food]]
+=== 음식 AI 조회 - 음식 관련 질문이 아닌 경우 (400)
+
+==== HTTP Request
+
+include::{snippets}/food-ask-ai-not-food/http-request.adoc[]
+include::{snippets}/food-ask-ai-not-food/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/food-ask-ai-not-food/http-response.adoc[]
+include::{snippets}/food-ask-ai-not-food/response-fields.adoc[]

@@ -1,9 +1,12 @@
 package com.puppynoteserver.foodChat.controller;
 
+import com.puppynoteserver.foodChat.controller.request.FoodChatRequest;
 import com.puppynoteserver.foodChat.service.FoodChatService;
 import com.puppynoteserver.foodChat.service.request.FoodChatServiceRequest;
 import com.puppynoteserver.foodChat.service.response.FoodListResponse;
+import com.puppynoteserver.foodChat.service.response.FoodResponse;
 import com.puppynoteserver.global.ApiResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -24,5 +27,10 @@ public class FoodChatController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ApiResponse.ok(foodChatService.search(new FoodChatServiceRequest(question, page, size)));
+    }
+
+    @PostMapping("/ai")
+    public ApiResponse<FoodResponse> ask(@RequestBody @Valid FoodChatRequest request) {
+        return ApiResponse.ok(foodChatService.ask(request.toServiceRequest()));
     }
 }
