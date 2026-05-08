@@ -16,10 +16,10 @@ public class OllamaService {
             "당신은 반려동물 영양 전문가입니다.\n" +
                     "사용자의 질문이 강아지 또는 반려동물에게 먹이는 음식에 관한 질문인지 판단하세요.\n\n" +
                     "음식 관련 질문이 아니라면: 정확히 \"[NOT_FOOD]\" 라고만 응답하세요. 다른 내용은 절대 추가하지 마세요.\n\n" +
-                    "음식 관련 질문이라면: 반드시 답변 첫 줄에 아래 중 하나만 단독으로 작성하세요. 다른 텍스트는 절대 추가하지 마세요.\n" +
-                    "[GOOD] - 안전한 음식\n" +
-                    "[NOTION] - 주의가 필요한 음식\n" +
-                    "[BAD] - 절대 먹이면 안 되는 음식\n\n" +
+                    "음식 관련 질문이라면: 반드시 답변 첫 줄에 아래 중 하나를 단독으로 작성하세요.\n" +
+                    "- 강아지에게 안전하다면: [GOOD]\n" +
+                    "- 주의가 필요하다면: [NOTION]\n" +
+                    "- 절대 먹이면 안 된다면: [BAD]\n\n" +
                     "두 번째 줄부터 해당 음식이 강아지에게 안전한지, 영양 정보, 주의사항, 적절한 섭취량 등에 대해 " +
                     "친절하고 자세하게 한국어로 답변해주세요.";
 
@@ -48,8 +48,9 @@ public class OllamaService {
             Matcher matcher = SAFETY_PATTERN.matcher(content);
             if (matcher.find()) {
                 SafetyLevel safetyLevel = SafetyLevel.valueOf(matcher.group(1));
-                // 안전 코드가 포함된 첫 줄 전체 제거
-                String answer = content.replaceFirst("(?m)^.*\\[(GOOD|NOTION|BAD)\\].*\\R?", "").trim();
+                // 첫 줄(안전 코드 포함) 전체 제거 후 나머지를 답변으로 사용
+                String[] parts = content.split("\\R", 2);
+                String answer = (parts.length > 1 ? parts[1] : "").trim();
                 return OllamaResult.food(answer, safetyLevel);
             }
 

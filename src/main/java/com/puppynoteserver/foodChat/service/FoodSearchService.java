@@ -1,6 +1,7 @@
 package com.puppynoteserver.foodChat.service;
 
 import com.puppynoteserver.foodChat.document.FoodDocument;
+import com.puppynoteserver.foodChat.repository.FoodDocumentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class FoodSearchService {
 
     private final ElasticsearchOperations elasticsearchOperations;
+    private final FoodDocumentRepository foodDocumentRepository;
 
     public List<Long> search(String question, int page, int size) {
         try {
@@ -43,5 +45,10 @@ public class FoodSearchService {
             log.warn("ES 조회 실패, AI 호출로 전환합니다: {}", e.getMessage());
             return List.of();
         }
+    }
+
+    public void delete(String id) {
+        foodDocumentRepository.deleteById(id);
+        log.info("ES food_chat 문서 삭제 완료: {}", id);
     }
 }
