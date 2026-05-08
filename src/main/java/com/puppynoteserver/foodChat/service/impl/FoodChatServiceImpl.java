@@ -30,6 +30,15 @@ public class FoodChatServiceImpl implements FoodChatService {
 
     @Override
     public FoodListResponse search(FoodChatServiceRequest request) {
+        if (request.question() == null || request.question().isBlank()) {
+            List<FoodResponse> responses = foodChatHistoryRepository
+                    .findAllOrderByCreatedDateDesc(request.page(), request.size())
+                    .stream()
+                    .map(FoodResponse::of)
+                    .toList();
+            return FoodListResponse.of(responses, request.page(), foodChatHistoryRepository.count());
+        }
+
         List<Long> ids = foodSearchService.search(request.question(), request.page(), request.size());
         if (ids.isEmpty()) {
             return FoodListResponse.of(List.of(), request.page(), 0L);

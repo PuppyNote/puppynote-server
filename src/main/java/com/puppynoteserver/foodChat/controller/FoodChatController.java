@@ -8,7 +8,6 @@ import com.puppynoteserver.foodChat.service.response.FoodListResponse;
 import com.puppynoteserver.foodChat.service.response.FoodResponse;
 import com.puppynoteserver.global.ApiResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ public class FoodChatController {
 
     @GetMapping
     public ApiResponse<FoodListResponse> search(
-            @RequestParam @NotBlank(message = "질문을 입력해주세요.") String question,
+            @RequestParam(required = false) String question,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {

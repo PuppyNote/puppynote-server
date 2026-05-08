@@ -9,4 +9,6 @@ public interface FoodChatHistoryRepository {
     FoodChatHistory save(FoodChatHistory foodChatHistory);
     List<FoodChatHistory> findAllByIdIn(List<Long> ids);
     Optional<FoodChatHistory> findByQuestion(String question);
+    List<FoodChatHistory> findAllOrderByCreatedDateDesc(int page, int size);
+    long count();
 }

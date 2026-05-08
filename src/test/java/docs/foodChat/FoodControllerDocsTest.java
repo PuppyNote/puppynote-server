@@ -3,6 +3,7 @@ package docs.foodChat;
 import com.puppynoteserver.foodChat.controller.FoodChatController;
 import com.puppynoteserver.foodChat.entity.FoodChatHistory.SafetyLevel;
 import com.puppynoteserver.foodChat.service.FoodChatService;
+import com.puppynoteserver.foodChat.service.FoodSearchService;
 import com.puppynoteserver.foodChat.service.response.FoodListResponse;
 import com.puppynoteserver.foodChat.service.response.FoodResponse;
 import com.puppynoteserver.global.exception.PuppyNoteException;
@@ -30,10 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FoodControllerDocsTest extends RestDocsSupport {
 
     private final FoodChatService foodChatService = mock(FoodChatService.class);
+    private final FoodSearchService foodSearchService = mock(FoodSearchService.class);
 
     @Override
     protected Object initController() {
-        return new FoodChatController(foodChatService);
+        return new FoodChatController(foodChatService, foodSearchService);
     }
 
     @DisplayName("음식 조회 API - ES 검색")
