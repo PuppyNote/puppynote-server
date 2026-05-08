@@ -1,0 +1,16 @@
+[[weather-get]]
+=== 날씨 조회
+
+현재 위치 기반으로 날씨 정보를 조회합니다. +
+동일 위치(~5km 반경)의 요청은 1시간 동안 캐시된 응답을 반환합니다. +
+응답에는 WMO 날씨 코드 기반 강아지 산책 적합도(`walkCondition`)와 안내 메시지(`walkMessage`)가 포함됩니다.
+
+==== HTTP Request
+
+include::{snippets}/weather-get/http-request.adoc[]
+include::{snippets}/weather-get/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/weather-get/http-response.adoc[]
+include::{snippets}/weather-get/response-fields.adoc[]

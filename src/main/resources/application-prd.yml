@@ -53,6 +53,10 @@ spring:
         options:
           temperature: 0.3
 
+openmeteo:
+  api:
+    url: https://api.open-meteo.com
+
 oauth:
   kakao:
     api:
