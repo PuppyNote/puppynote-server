@@ -1,0 +1,25 @@
+[[food-search]]
+=== 음식 조회 (ES 캐시)
+
+==== HTTP Request
+
+include::{snippets}/food-search/http-request.adoc[]
+include::{snippets}/food-search/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/food-search/http-response.adoc[]
+include::{snippets}/food-search/response-fields.adoc[]
+
+[[food-search-ai]]
+=== 음식 조회 (AI 신규 응답)
+
+==== HTTP Request
+
+include::{snippets}/food-search-ai/http-request.adoc[]
+include::{snippets}/food-search-ai/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/food-search-ai/http-response.adoc[]
+include::{snippets}/food-search-ai/response-fields.adoc[]
