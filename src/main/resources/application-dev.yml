@@ -44,6 +44,13 @@ spring:
       host: ${REDIS_HOST}
       port: 6379
       password: ${REDIS_PASSWORD}
+  ai:
+    ollama:
+      base-url: ${OLLAMA_HOST}
+      chat:
+        model: exaone3.5:7.8b
+        options:
+          temperature: 0.3
 
 oauth:
   kakao:

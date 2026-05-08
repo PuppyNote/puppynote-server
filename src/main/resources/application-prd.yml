@@ -45,6 +45,13 @@ spring:
       password: ${REDIS_PASSWORD}
       ssl:
         enabled: true
+  ai:
+    ollama:
+      base-url: ${OLLAMA_HOST}
+      chat:
+        model: exaone3.5:7.8b
+        options:
+          temperature: 0.3
 
 oauth:
   kakao:

@@ -18,7 +18,13 @@ spring:
     redis:
       host: localhost
       port: 6379
-
+  ai:
+    ollama:
+      base-url: ${OLLAMA_HOST:http://localhost:11434}
+      chat:
+        model: exaone3.5:7.8b
+        options:
+          temperature: 0.3
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
@@ -51,11 +57,11 @@ jwt:
   secret-key: 4a0pPV9g4/6OvKKzV1MpVdIchBeTfcjd/TRKbuWUgpNY3jyh6YA/aBnpe4kPsAY5WJoBBzOG358zqS5/E0TSag==
 
 aws:
-  access-key: testaccesskey  # AWS IAM Access Key
-  secret-key: testsecretkey  # AWS IAM Secret Key
+  access-key: testaccesskey
+  secret-key: testsecretkey
   s3:
-    region: ap-northeast-2  # Seoul Region
+    region: ap-northeast-2
     bucket:
-      name: puppynote-prd  # 통합 버킷
+      name: puppynote-prd
   cloudfront:
     domain: test.com
