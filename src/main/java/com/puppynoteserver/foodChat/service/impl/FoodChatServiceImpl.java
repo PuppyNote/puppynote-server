@@ -1,7 +1,6 @@
 package com.puppynoteserver.foodChat.service.impl;
 
 import com.puppynoteserver.foodChat.entity.FoodChatHistory;
-import com.puppynoteserver.foodChat.entity.FoodChatHistory.SafetyLevel;
 import com.puppynoteserver.foodChat.repository.FoodChatHistoryRepository;
 import com.puppynoteserver.foodChat.service.FoodChatService;
 import com.puppynoteserver.foodChat.service.FoodSearchService;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -44,15 +44,22 @@ public class FoodChatServiceImpl implements FoodChatService {
 
     @Override
     public FoodResponse ask(FoodAiServiceRequest request) {
-        OllamaService.OllamaResult result = ollamaService.ask(request.question());
+        String question = request.question();
+
+        Optional<FoodChatHistory> existing = foodChatHistoryRepository.findByQuestion(question);
+        if (existing.isPresent()) {
+            log.info("DB에 동일 질문 존재, 기존 답변 반환: {}", question);
+            return FoodResponse.of(existing.get());
+        }
+
+        OllamaService.OllamaResult result = ollamaService.ask(question);
 
         if (!result.isFood()) {
             throw new PuppyNoteException("음식에 관한 질문만 해주세요.");
         }
 
-        SafetyLevel safetyLevel = result.safetyLevel();
         FoodChatHistory saved = foodChatHistoryRepository.save(
-                FoodChatHistory.of(request.question(), result.answer(), safetyLevel)
+                FoodChatHistory.of(question, result.answer(), result.safetyLevel())
         );
 
         return FoodResponse.of(saved);
