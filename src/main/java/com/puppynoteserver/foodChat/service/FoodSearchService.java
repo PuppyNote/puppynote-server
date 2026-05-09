@@ -33,7 +33,7 @@ public class FoodSearchService {
                                     .minimumShouldMatch("80%")
                             )
                     )
-                    .withMinScore(1.5f)
+                    .withMinScore(0.5f)
                     .withPageable(PageRequest.of(page, size))
                     .build();
 

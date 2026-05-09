@@ -29,8 +29,8 @@ public class OllamaService {
                     "친절하고 자세하게 한국어로 답변해주세요.";
 
     private static final String NOT_FOOD_MARKER = "not_food";
-    private static final Pattern SAFETY_PATTERN = Pattern.compile("<safety>(GOOD|NOTION|BAD)</safety>");
-    private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<description>(.*?)</description>", Pattern.DOTALL);
+    private static final Pattern SAFETY_PATTERN = Pattern.compile("<safety>\\s*(GOOD|NOTION|BAD)\\s*</safety>", Pattern.CASE_INSENSITIVE);
+    private static final String DESC_OPEN_TAG = "<description>";
 
     private final ChatClient chatClient;
 
@@ -52,16 +52,23 @@ public class OllamaService {
             }
 
             Matcher safetyMatcher = SAFETY_PATTERN.matcher(content);
-            Matcher descMatcher = DESCRIPTION_PATTERN.matcher(content);
+            if (safetyMatcher.find()) {
+                SafetyLevel safetyLevel = SafetyLevel.valueOf(safetyMatcher.group(1).trim().toUpperCase());
 
-            if (safetyMatcher.find() && descMatcher.find()) {
-                SafetyLevel safetyLevel = SafetyLevel.valueOf(safetyMatcher.group(1));
-                String answer = descMatcher.group(1).trim();
+                int descStart = content.indexOf(DESC_OPEN_TAG);
+                String answer;
+                if (descStart != -1) {
+                    String afterTag = content.substring(descStart + DESC_OPEN_TAG.length());
+                    int descEnd = afterTag.lastIndexOf("</description>");
+                    answer = (descEnd != -1 ? afterTag.substring(0, descEnd) : afterTag).trim();
+                } else {
+                    answer = content.trim();
+                }
                 return OllamaResult.food(answer, safetyLevel);
             }
 
-            // 태그 파싱 실패 시 safetyLevel 없이 반환
-            log.warn("AI 응답에서 safety/description 태그를 파싱하지 못했습니다. 응답: {}", content);
+            // safety 태그 파싱 실패 시 safetyLevel 없이 반환
+            log.warn("AI 응답에서 safety 태그를 파싱하지 못했습니다. 응답: {}", content);
             return OllamaResult.food(content.trim(), null);
         } catch (Exception e) {
             log.error("Ollama 호출 실패: {}", e.getMessage());
