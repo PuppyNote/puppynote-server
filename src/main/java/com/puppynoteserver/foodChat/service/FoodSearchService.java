@@ -27,13 +27,11 @@ public class FoodSearchService {
         try {
             NativeQuery query = NativeQuery.builder()
                     .withQuery(q -> q
-                            .match(m -> m
+                            .wildcard(w -> w
                                     .field("question")
-                                    .query(question)
-                                    .minimumShouldMatch("80%")
+                                    .wildcard("*" + question + "*")
                             )
                     )
-                    .withMinScore(0.5f)
                     .withPageable(PageRequest.of(page, size))
                     .build();
 
