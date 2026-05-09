@@ -15,16 +15,22 @@ public class OllamaService {
     private static final String SYSTEM_PROMPT =
             "당신은 반려동물 영양 전문가입니다.\n" +
                     "사용자의 질문이 강아지 또는 반려동물에게 먹이는 음식에 관한 질문인지 판단하세요.\n\n" +
-                    "음식 관련 질문이 아니라면: 정확히 \"[NOT_FOOD]\" 라고만 응답하세요. 다른 내용은 절대 추가하지 마세요.\n\n" +
-                    "음식 관련 질문이라면: 반드시 답변 첫 줄에 아래 중 하나를 단독으로 작성하세요.\n" +
-                    "- 강아지에게 안전하다면: [GOOD]\n" +
-                    "- 주의가 필요하다면: [NOTION]\n" +
-                    "- 절대 먹이면 안 된다면: [BAD]\n\n" +
-                    "두 번째 줄부터 해당 음식이 강아지에게 안전한지, 영양 정보, 주의사항, 적절한 섭취량 등에 대해 " +
+                    "음식 관련 질문이 아니라면: 정확히 \"<not_food/>\" 라고만 응답하세요. 다른 내용은 절대 추가하지 마세요.\n\n" +
+                    "음식 관련 질문이라면: 반드시 아래 형식을 그대로 사용하세요.\n\n" +
+                    "<safety>GOOD</safety>\n" +
+                    "<description>\n" +
+                    "설명 내용\n" +
+                    "</description>\n\n" +
+                    "<safety> 태그 안에는 아래 셋 중 하나만 작성하세요.\n" +
+                    "- 강아지에게 안전하다면: GOOD\n" +
+                    "- 주의가 필요하다면: NOTION\n" +
+                    "- 절대 먹이면 안 된다면: BAD\n\n" +
+                    "<description> 태그 안에 해당 음식이 강아지에게 안전한지, 영양 정보, 주의사항, 적절한 섭취량 등에 대해 " +
                     "친절하고 자세하게 한국어로 답변해주세요.";
 
-    private static final String NOT_FOOD_MARKER = "NOT_FOOD";
-    private static final Pattern SAFETY_PATTERN = Pattern.compile("\\[(GOOD|NOTION|BAD)\\]");
+    private static final String NOT_FOOD_MARKER = "not_food";
+    private static final Pattern SAFETY_PATTERN = Pattern.compile("<safety>(GOOD|NOTION|BAD)</safety>");
+    private static final Pattern DESCRIPTION_PATTERN = Pattern.compile("<description>(.*?)</description>", Pattern.DOTALL);
 
     private final ChatClient chatClient;
 
@@ -45,17 +51,17 @@ public class OllamaService {
                 return OllamaResult.notFood();
             }
 
-            Matcher matcher = SAFETY_PATTERN.matcher(content);
-            if (matcher.find()) {
-                SafetyLevel safetyLevel = SafetyLevel.valueOf(matcher.group(1));
-                // 첫 줄(안전 코드 포함) 전체 제거 후 나머지를 답변으로 사용
-                String[] parts = content.split("\\R", 2);
-                String answer = (parts.length > 1 ? parts[1] : "").trim();
+            Matcher safetyMatcher = SAFETY_PATTERN.matcher(content);
+            Matcher descMatcher = DESCRIPTION_PATTERN.matcher(content);
+
+            if (safetyMatcher.find() && descMatcher.find()) {
+                SafetyLevel safetyLevel = SafetyLevel.valueOf(safetyMatcher.group(1));
+                String answer = descMatcher.group(1).trim();
                 return OllamaResult.food(answer, safetyLevel);
             }
 
-            // 안전 코드 파싱 실패 시 safetyLevel 없이 반환
-            log.warn("AI 응답에서 안전 코드를 파싱하지 못했습니다.");
+            // 태그 파싱 실패 시 safetyLevel 없이 반환
+            log.warn("AI 응답에서 safety/description 태그를 파싱하지 못했습니다. 응답: {}", content);
             return OllamaResult.food(content.trim(), null);
         } catch (Exception e) {
             log.error("Ollama 호출 실패: {}", e.getMessage());
