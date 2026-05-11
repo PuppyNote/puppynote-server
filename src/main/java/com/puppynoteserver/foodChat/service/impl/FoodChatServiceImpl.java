@@ -67,10 +67,10 @@ public class FoodChatServiceImpl implements FoodChatService {
             throw new PuppyNoteException("음식에 관한 질문만 해주세요.");
         }
 
-        FoodChatHistory saved = foodChatHistoryRepository.save(
-                FoodChatHistory.of(question, result.answer(), result.safetyLevel())
+        return FoodResponse.of(
+                foodChatHistoryRepository.save(
+                        FoodChatHistory.of(question, result.answer(), result.safetyLevel())
+                )
         );
-
-        return FoodResponse.of(saved);
     }
 }
