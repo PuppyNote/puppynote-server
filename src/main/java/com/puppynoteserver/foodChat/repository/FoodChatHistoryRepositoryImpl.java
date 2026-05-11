@@ -4,6 +4,7 @@ import com.puppynoteserver.foodChat.entity.FoodChatHistory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -29,6 +30,12 @@ public class FoodChatHistoryRepositoryImpl implements FoodChatHistoryRepository 
     @Override
     public Optional<FoodChatHistory> findByQuestion(String question) {
         return jpaRepository.findByQuestion(question);
+    }
+
+    @Override
+    public List<FoodChatHistory> findAllByQuestionContaining(String question, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+        return jpaRepository.findByQuestionContaining(question, pageable);
     }
 
     @Override

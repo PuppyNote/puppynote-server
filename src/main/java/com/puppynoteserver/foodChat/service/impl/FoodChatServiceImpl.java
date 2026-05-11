@@ -3,7 +3,6 @@ package com.puppynoteserver.foodChat.service.impl;
 import com.puppynoteserver.foodChat.entity.FoodChatHistory;
 import com.puppynoteserver.foodChat.repository.FoodChatHistoryRepository;
 import com.puppynoteserver.foodChat.service.FoodChatService;
-import com.puppynoteserver.foodChat.service.FoodSearchService;
 import com.puppynoteserver.foodChat.service.OllamaService;
 import com.puppynoteserver.foodChat.service.request.FoodAiServiceRequest;
 import com.puppynoteserver.foodChat.service.request.FoodChatServiceRequest;
@@ -26,7 +25,6 @@ public class FoodChatServiceImpl implements FoodChatService {
 
     private final FoodChatHistoryRepository foodChatHistoryRepository;
     private final OllamaService ollamaService;
-    private final FoodSearchService foodSearchService;
 
     @Override
     public FoodListResponse search(FoodChatServiceRequest request) {
@@ -39,16 +37,18 @@ public class FoodChatServiceImpl implements FoodChatService {
             return FoodListResponse.of(responses, request.page(), foodChatHistoryRepository.count());
         }
 
-        List<Long> ids = foodSearchService.search(request.question(), request.page(), request.size());
-        if (ids.isEmpty()) {
+        String q = request.question().trim();
+        List<FoodChatHistory> histories = q.length() >= 3
+                ? foodChatHistoryRepository.findAllByQuestionContaining(q, request.page(), request.size())
+                : foodChatHistoryRepository.findByQuestion(q).map(List::of).orElse(List.of());
+
+        if (histories.isEmpty()) {
             return FoodListResponse.of(List.of(), request.page(), 0L);
         }
-        log.info("ES 캐시에서 음식 정보 반환: {}", request.question());
-        List<FoodResponse> responses = foodChatHistoryRepository.findAllByIdIn(ids)
-                .stream()
-                .map(FoodResponse::of)
-                .toList();
-        return FoodListResponse.of(responses, request.page(), responses.size());
+
+        log.info("DB 캐시에서 음식 정보 반환: {}", q);
+        List<FoodResponse> responses = histories.stream().map(FoodResponse::of).toList();
+        return FoodListResponse.of(responses, request.page(), (long) responses.size());
     }
 
     @Override
