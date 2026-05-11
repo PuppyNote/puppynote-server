@@ -82,7 +82,7 @@ aws:
 
 elasticsearch:
   host: ${ES_HOST}
-  port: 9201
+  port: 9200
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
 
