@@ -1,5 +1,7 @@
 package com.puppynoteserver;
 
+import com.puppynoteserver.foodChat.service.FoodSearchService;
+import com.puppynoteserver.foodChat.service.OllamaService;
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.jwt.dto.LoginUserInfo;
 import com.puppynoteserver.user.push.entity.Push;
@@ -48,6 +50,10 @@ public abstract class IntegrationTestSupport {
     protected RefreshTokenRepository refreshTokenRepository;
     @Autowired
     protected PushRepository pushRepository;
+    @MockitoBean
+    protected OllamaService ollamaService;
+    @MockitoBean
+    protected FoodSearchService foodSearchService;
 
     @AfterEach
     public void tearDown() {

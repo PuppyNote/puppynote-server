@@ -3,19 +3,20 @@ version: 0.2
 env:
   parameter-store:
     # 빌드 타임 환경변수 (build.gradle processResources가 yml에 주입)
-    DB_HOST:               "/puppynote/prd/DB_HOST"
-    DB_USERNAME:           "/puppynote/prd/DB_USERNAME"
-    DB_PASSWORD:           "/puppynote/prd/DB_PASSWORD"
-    JWT_SECRET_KEY:        "/puppynote/prd/JWT_SECRET_KEY"
-    EMAIL_PASSWORD:        "/puppynote/prd/EMAIL_PASSWORD"
-    AWS_ACCESS_KEY:        "/puppynote/prd/AWS_ACCESS_KEY"
-    AWS_SECRET_KEY:        "/puppynote/prd/AWS_SECRET_KEY"
-    ES_HOST:               "/puppynote/prd/ES_HOST"
-    ES_USERNAME:           "/puppynote/prd/ES_USERNAME"
-    ES_PASSWORD:           "/puppynote/prd/ES_PASSWORD"
-    REDIS_HOST:            "/puppynote/prd/REDIS_HOST"
-    REDIS_PASSWORD:        "/puppynote/prd/REDIS_PASSWORD"
-    CLOUDFRONT_DOMAIN:     "/puppynote/prd/CLOUDFRONT_DOMAIN"
+    DB_HOST: "/puppynote/prd/DB_HOST"
+    DB_USERNAME: "/puppynote/prd/DB_USERNAME"
+    DB_PASSWORD: "/puppynote/prd/DB_PASSWORD"
+    JWT_SECRET_KEY: "/puppynote/prd/JWT_SECRET_KEY"
+    EMAIL_PASSWORD: "/puppynote/prd/EMAIL_PASSWORD"
+    AWS_ACCESS_KEY: "/puppynote/prd/AWS_ACCESS_KEY"
+    AWS_SECRET_KEY: "/puppynote/prd/AWS_SECRET_KEY"
+    ES_HOST: "/puppynote/prd/ES_HOST"
+    ES_USERNAME: "/puppynote/prd/ES_USERNAME"
+    ES_PASSWORD: "/puppynote/prd/ES_PASSWORD"
+    REDIS_HOST: "/puppynote/prd/REDIS_HOST"
+    REDIS_PASSWORD: "/puppynote/prd/REDIS_PASSWORD"
+    CLOUDFRONT_DOMAIN: "/puppynote/prd/CLOUDFRONT_DOMAIN"
+    OLLAMA_HOST: "/puppynote/prd/OLLAMA_HOST"
 
 phases:
   build:

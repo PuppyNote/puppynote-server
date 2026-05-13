@@ -85,3 +85,8 @@ include::api/weather/weather.adoc[]
 == Storage API
 
 include::api/storage/storage.adoc[]
+
+[[Food-API]]
+== Food API
+
+include::api/food/food.adoc[]
