@@ -97,6 +97,7 @@ public class LoginServiceImpl implements LoginService {
                 .orElseGet(() -> userRepository.save(
                         User.builder()
                                 .email(email)
+                                .nickName(email.split("@")[0])
                                 .snsType(snsType)
                                 .role(Role.USER)
                                 .useYn("Y")
