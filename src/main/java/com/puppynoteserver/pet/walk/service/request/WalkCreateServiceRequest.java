@@ -42,6 +42,7 @@ public class WalkCreateServiceRequest {
     }
 
     public Walk toEntity(Pet pet) {
-        return Walk.of(pet, startTime, endTime, latitude, longitude, location, memo);
+        LocalDateTime adjustedEndTime = endTime.isBefore(startTime) ? endTime.plusDays(1) : endTime;
+        return Walk.of(pet, startTime, adjustedEndTime, latitude, longitude, location, memo);
     }
 }
