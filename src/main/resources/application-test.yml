@@ -69,3 +69,7 @@ aws:
       name: puppynote-prd
   cloudfront:
     domain: test.com
+
+log-agent:
+  webhook-url: http://log-agent-api.sangkihan.co.kr/api/v1/webhook/error
+  server-name: puppynote

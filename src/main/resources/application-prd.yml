@@ -100,3 +100,9 @@ management:
   metrics:
     tags:
       application: puppynote-prd
+
+
+
+log-agent:
+  webhook-url: http://log-agent-api.sangkihan.co.kr/api/v1/webhook/error
+  server-name: puppynote
