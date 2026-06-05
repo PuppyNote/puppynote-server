@@ -53,24 +53,27 @@ public class FoodChatServiceImpl implements FoodChatService {
 
     @Override
     public FoodResponse ask(FoodAiServiceRequest request) {
-        String question = request.question();
+        // AI 점검중
+        throw new PuppyNoteException("죄송합니다. AI 점검중입니다.");
 
-        Optional<FoodChatHistory> existing = foodChatHistoryRepository.findByQuestion(question);
-        if (existing.isPresent()) {
-            log.info("DB에 동일 질문 존재, 기존 답변 반환: {}", question);
-            return FoodResponse.of(existing.get());
-        }
-
-        OllamaService.OllamaResult result = ollamaService.ask(question);
-
-        if (!result.isFood()) {
-            throw new PuppyNoteException("음식에 관한 질문만 해주세요.");
-        }
-
-        return FoodResponse.of(
-                foodChatHistoryRepository.save(
-                        FoodChatHistory.of(question, result.answer(), result.safetyLevel())
-                )
-        );
+//        String question = request.question();
+//
+//        Optional<FoodChatHistory> existing = foodChatHistoryRepository.findByQuestion(question);
+//        if (existing.isPresent()) {
+//            log.info("DB에 동일 질문 존재, 기존 답변 반환: {}", question);
+//            return FoodResponse.of(existing.get());
+//        }
+//
+//        OllamaService.OllamaResult result = ollamaService.ask(question);
+//
+//        if (!result.isFood()) {
+//            throw new PuppyNoteException("음식에 관한 질문만 해주세요.");
+//        }
+//
+//        return FoodResponse.of(
+//                foodChatHistoryRepository.save(
+//                        FoodChatHistory.of(question, result.answer(), result.safetyLevel())
+//                )
+//        );
     }
 }
