@@ -36,6 +36,9 @@ public class LogAgentWebhookService {
     }
 
     public void sendError(Exception e, HttpServletRequest request) {
+        String method = request.getMethod();
+        String uri = request.getRequestURI();
+
         CompletableFuture.runAsync(() -> {
             try {
                 ErrorEventPayload payload = ErrorEventPayload.builder()
@@ -44,8 +47,8 @@ public class LogAgentWebhookService {
                         .errorType(e.getClass().getSimpleName())
                         .message(e.getMessage() != null ? e.getMessage() : "")
                         .stackTrace(getStackTrace(e))
-                        .requestMethod(request.getMethod())
-                        .requestUrl(request.getRequestURI())
+                        .requestMethod(method)
+                        .requestUrl(uri)
                         .responseStatus(500)
                         .build();
 
