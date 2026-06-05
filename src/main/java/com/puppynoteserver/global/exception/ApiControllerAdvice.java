@@ -1,6 +1,7 @@
 package com.puppynoteserver.global.exception;
 
 import com.puppynoteserver.global.ApiResponse;
+import com.puppynoteserver.global.logagent.LogAgentWebhookService;
 import com.puppynoteserver.jwt.exception.JwtTokenException;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,8 @@ import java.nio.file.AccessDeniedException;
 @RequiredArgsConstructor
 public class ApiControllerAdvice {
 
+	private final LogAgentWebhookService logAgentWebhookService;
+
 	/**
 	 * 예상치 못한 서버로직에러 발생시 처리
 	 */
@@ -30,6 +33,7 @@ public class ApiControllerAdvice {
 	@ExceptionHandler(Exception.class)
 	public ApiResponse<Object> exception(Exception e, HttpServletRequest request) throws IOException {
 		log.error(e.getMessage(), e);
+		logAgentWebhookService.sendError(e, request);
 		return ApiResponse.of(
 			HttpStatus.INTERNAL_SERVER_ERROR,
 			"서버 로직 에러",

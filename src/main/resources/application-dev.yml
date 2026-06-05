@@ -85,6 +85,11 @@ elasticsearch:
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
 
+log-agent:
+  webhook-url: http://log-agent-api.sangkihan.co.kr/api/v1/webhook/error
+  server-name: puppynote
+  server-ip: ${SERVER_IP:127.0.0.1}
+
 management:
   endpoints:
     web:
