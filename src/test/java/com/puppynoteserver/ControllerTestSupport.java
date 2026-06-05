@@ -44,6 +44,7 @@ import com.puppynoteserver.user.users.controller.UserController;
 import com.puppynoteserver.user.users.service.LoginService;
 import com.puppynoteserver.user.users.service.UserReadService;
 import com.puppynoteserver.user.users.service.UserService;
+import com.puppynoteserver.global.logagent.LogAgentWebhookService;
 import com.puppynoteserver.weather.controller.WeatherController;
 import com.puppynoteserver.weather.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,10 @@ public abstract class ControllerTestSupport {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    // global
+    @MockitoBean
+    protected LogAgentWebhookService logAgentWebhookService;
 
     // alertHistory
     @MockitoBean
