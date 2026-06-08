@@ -18,6 +18,6 @@ public class TestErrorController {
     @GetMapping("/npe")
     public String triggerNpe() {
         String value = null;
-        return value.toUpperCase();
+        return (value != null) ? value.toUpperCase() : "EMPTY";
     }
 }
