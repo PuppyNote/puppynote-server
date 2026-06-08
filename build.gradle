@@ -194,7 +194,8 @@ tasks.processResources {
                 REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
                 REDIS_PASSWORD: System.getenv('REDIS_PASSWORD'),
                 CLOUDFRONT_DOMAIN: System.getenv('CLOUDFRONT_DOMAIN'),
-                OLLAMA_HOST: System.getenv('OLLAMA_HOST')
+                OLLAMA_HOST: System.getenv('OLLAMA_HOST'),
+                SERVER_IP: System.getenv('SERVER_IP')
         )
     }
 
@@ -214,7 +215,8 @@ tasks.processResources {
                 REDIS_HOST: System.getenv('REDIS_HOST') ?: 'localhost',
                 REDIS_PASSWORD: System.getenv('REDIS_PASSWORD'),
                 CLOUDFRONT_DOMAIN: System.getenv('CLOUDFRONT_DOMAIN'),
-                OLLAMA_HOST: System.getenv('OLLAMA_HOST')
+                OLLAMA_HOST: System.getenv('OLLAMA_HOST'),
+                SERVER_IP: System.getenv('SERVER_IP')
         )
     }
 }

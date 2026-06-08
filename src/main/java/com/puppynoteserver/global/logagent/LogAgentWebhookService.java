@@ -17,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
 public class LogAgentWebhookService {
 
     private final RestClient restClient = RestClient.create();
-    private final String serverIp;
 
     @Value("${log-agent.webhook-url}")
     private String webhookUrl;
@@ -25,15 +24,8 @@ public class LogAgentWebhookService {
     @Value("${log-agent.server-name}")
     private String serverName;
 
-    public LogAgentWebhookService() {
-        String ip;
-        try {
-            ip = InetAddress.getLocalHost().getHostAddress();
-        } catch (Exception e) {
-            ip = "unknown";
-        }
-        this.serverIp = ip;
-    }
+    @Value("${log-agent.server-ip}")
+    private String serverIp;
 
     public void sendError(Exception e, HttpServletRequest request) {
         String method = request.getMethod();

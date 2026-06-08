@@ -106,3 +106,4 @@ management:
 log-agent:
   webhook-url: https://log-agent-api.sangkihan.co.kr/api/v1/webhook/error
   server-name: puppynote
+  server-ip: ${SERVER_IP}

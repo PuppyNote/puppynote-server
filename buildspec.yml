@@ -17,6 +17,7 @@ env:
     REDIS_PASSWORD: "/puppynote/prd/REDIS_PASSWORD"
     CLOUDFRONT_DOMAIN: "/puppynote/prd/CLOUDFRONT_DOMAIN"
     OLLAMA_HOST: "/puppynote/prd/OLLAMA_HOST"
+    SERVER_IP: "/puppynote/prd/SERVER_IP"
 
 phases:
   build:
