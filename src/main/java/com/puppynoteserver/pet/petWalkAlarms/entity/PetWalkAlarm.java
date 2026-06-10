@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -40,6 +42,7 @@ public class PetWalkAlarm extends BaseTimeEntity {
     @Column(name = "alarm_day", length = 3, nullable = false)
     private Set<AlarmDay> alarmDays = new HashSet<>();
 
+    @JdbcTypeCode(SqlTypes.TIME)
     @Column(nullable = false)
     private LocalTime alarmTime;
 
