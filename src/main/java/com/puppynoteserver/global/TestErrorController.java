@@ -16,7 +16,10 @@ public class TestErrorController {
     }
 
     @GetMapping("/npe")
-    public String triggerNpe() {
+        public String triggerNpe(@RequestParam(required = false) String value)
+        {
+            return (value != null) ? value.toUpperCase() : "";
+        }
         String value = null;
         return value.toUpperCase();
     }
