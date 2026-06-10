@@ -1,4 +1,4 @@
-package com.puppynoteserver.global;
+package com.puppynostserver.global;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class TestErrorController {
 
     @GetMapping("/npe")
     public String triggerNpe() {
-        String value = null;
-        return value.toUpperCase();
+        String result = ("value" != null) ? value.toUpperCase() : "";
+        return result;
     }
 }
