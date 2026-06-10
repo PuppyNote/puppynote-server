@@ -145,8 +145,8 @@ class HomeReadServiceTest extends IntegrationTestSupport {
         familyMemberJpaRepository.save(
                 FamilyMember.of(user, pet, RoleType.OWNER, FamilyMemberStatus.DONE));
 
-        LocalDateTime now = LocalDateTime.now();
-        walkJpaRepository.save(Walk.of(pet, now.minusHours(1), now,
+        LocalDateTime todayNoon = LocalDate.now().atTime(12, 0);
+        walkJpaRepository.save(Walk.of(pet, todayNoon, todayNoon.plusHours(1),
                 BigDecimal.valueOf(37.5), BigDecimal.valueOf(127.0), "서울", "오늘 산책"));
 
         given(s3StorageService.getCloudFrontUrl(any(), any()))
