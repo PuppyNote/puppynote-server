@@ -92,6 +92,15 @@ public class GeminiService {
     }
 
     public AiResult ask(String question) {
+        AiResult result = callApi(question);
+        if (result.isFood() && (result.answer() == null || result.answer().isBlank())) {
+            log.warn("Gemini answer 비어있음, 재시도: {}", question);
+            result = callApi(question);
+        }
+        return result;
+    }
+
+    private AiResult callApi(String question) {
         Map<String, Object> requestBody = Map.of(
                 "contents", List.of(Map.of("parts", List.of(Map.of("text", question)))),
                 "systemInstruction", Map.of("parts", List.of(Map.of("text", SYSTEM_PROMPT))),
