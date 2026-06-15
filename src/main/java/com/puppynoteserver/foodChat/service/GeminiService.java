@@ -1,13 +1,23 @@
 package com.puppynoteserver.foodChat.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.puppynoteserver.foodChat.entity.FoodChatHistory.SafetyLevel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient;
+
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
-public class OllamaService {
+public class GeminiService {
+
+    private static final String GEMINI_BASE_URL = "https://generativelanguage.googleapis.com";
 
     private static final String SYSTEM_PROMPT =
             "당신은 20년 경력의 반려동물 영양 전문 수의사입니다.\n" +
@@ -64,35 +74,72 @@ public class OllamaService {
                     "- **알레르기 반응**: 일부 강아지는 십자화과 채소에 민감하게 반응할 수 있습니다. 초기 섭취 후 피부 가려움, 구토, 두드러기 등의 증상이 나타나면 즉시 급여를 중단하고 수의사 진료를 받으세요.\n" +
                     "- **특정 건강 상태**: 갑상선 기능 저하증이 있는 강아지는 십자화과 채소가 갑상선 호르몬 생성을 억제할 수 있어 급여를 피하는 것이 좋습니다. 신장 질환이 있는 경우에도 수의사와 상담 후 급여 여부를 결정하세요.";
 
-    private final ChatClient chatClient;
+    private final RestClient restClient;
+    private final ObjectMapper objectMapper;
+    private final String apiKey;
+    private final String model;
 
-    public OllamaService(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder
-                .defaultSystem(SYSTEM_PROMPT)
+    public GeminiService(
+            @Value("${gemini.api-key:}") String apiKey,
+            @Value("${gemini.model:gemini-2.5-flash-lite}") String model,
+            ObjectMapper objectMapper) {
+        this.apiKey = apiKey;
+        this.model = model;
+        this.objectMapper = objectMapper;
+        this.restClient = RestClient.builder()
+                .baseUrl(GEMINI_BASE_URL)
                 .build();
     }
 
     public AiResult ask(String question) {
-        try {
-            FoodAnalysis analysis = chatClient.prompt()
-                    .user(question)
-                    .call()
-                    .entity(FoodAnalysis.class);
+        Map<String, Object> requestBody = Map.of(
+                "contents", List.of(Map.of("parts", List.of(Map.of("text", question)))),
+                "systemInstruction", Map.of("parts", List.of(Map.of("text", SYSTEM_PROMPT))),
+                "generationConfig", Map.of(
+                        "temperature", 0.3,
+                        "responseMimeType", "application/json"
+                )
+        );
 
-            if (analysis == null || !analysis.isFood()) {
+        try {
+            String responseBody = restClient.post()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/v1beta/models/{model}:generateContent")
+                            .queryParam("key", apiKey)
+                            .build(model))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(requestBody)
+                    .retrieve()
+                    .body(String.class);
+
+            JsonNode root = objectMapper.readTree(responseBody);
+            String text = root.path("candidates").get(0)
+                    .path("content").path("parts").get(0).path("text").asText();
+
+            JsonNode analysis = objectMapper.readTree(text);
+            boolean isFood = analysis.path("isFood").asBoolean(false);
+
+            if (!isFood) {
                 return AiResult.notFood();
             }
 
-            SafetyLevel safetyLevel = analysis.safetyLevel() != null
-                    ? SafetyLevel.valueOf(analysis.safetyLevel())
-                    : null;
+            String safetyLevelStr = analysis.path("safetyLevel").asText(null);
+            SafetyLevel safetyLevel = (safetyLevelStr != null && !safetyLevelStr.isBlank())
+                    ? SafetyLevel.valueOf(safetyLevelStr) : null;
+            String answer = analysis.path("answer").asText();
 
-            return AiResult.food(analysis.answer(), safetyLevel);
+            return AiResult.food(answer, safetyLevel);
+
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode().value() == 429) {
+                log.warn("Gemini API 할당량 초과");
+                throw new GeminiQuotaExceededException();
+            }
+            log.error("Gemini API 호출 실패 - HTTP {}: {}", e.getStatusCode().value(), e.getMessage());
+            throw new RuntimeException("Gemini AI 서비스 호출에 실패했습니다.");
         } catch (Exception e) {
-            log.error("Ollama 호출 실패: {}", e.getMessage());
-            throw new RuntimeException("AI 서비스 호출에 실패했습니다.");
+            log.error("Gemini API 처리 실패: {}", e.getMessage());
+            throw new RuntimeException("Gemini AI 서비스 처리에 실패했습니다.", e);
         }
     }
-
-    private record FoodAnalysis(boolean isFood, String safetyLevel, String answer) {}
 }

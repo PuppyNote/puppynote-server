@@ -52,6 +52,10 @@ spring:
         options:
           temperature: 0.3
 
+gemini:
+  api-key: ${GEMINI_API_KEY}
+  model: gemini-2.5-flash-lite
+
 openmeteo:
   api:
     url: https://api.open-meteo.com

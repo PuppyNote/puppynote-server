@@ -1,6 +1,8 @@
 package com.puppynoteserver;
 
+import com.puppynoteserver.foodChat.service.FoodChatAsyncService;
 import com.puppynoteserver.foodChat.service.FoodSearchService;
+import com.puppynoteserver.foodChat.service.GeminiService;
 import com.puppynoteserver.foodChat.service.OllamaService;
 import com.puppynoteserver.global.security.SecurityService;
 import com.puppynoteserver.jwt.dto.LoginUserInfo;
@@ -51,7 +53,11 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected PushRepository pushRepository;
     @MockitoBean
+    protected GeminiService geminiService;
+    @MockitoBean
     protected OllamaService ollamaService;
+    @MockitoBean
+    protected FoodChatAsyncService foodChatAsyncService;
     @MockitoBean
     protected FoodSearchService foodSearchService;
 

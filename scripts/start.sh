@@ -44,6 +44,7 @@ export ES_USERNAME=$(get_ssm ES_USERNAME)
 export ES_PASSWORD=$(get_ssm ES_PASSWORD)
 export CLOUDFRONT_DOMAIN=$(get_ssm CLOUDFRONT_DOMAIN)
 export SERVER_IP=$(get_ssm SERVER_IP)
+export GEMINI_API_KEY=$(get_ssm GEMINI_API_KEY)
 echo "환경변수 로드 완료"
 
 JAR_FILE=$(ls $APP_DIR/*.jar | head -1)

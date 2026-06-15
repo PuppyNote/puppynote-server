@@ -43,6 +43,10 @@ spring:
             enable: true
           auth: true
 
+gemini:
+  api-key: test-dummy-api-key
+  model: gemini-2.5-flash-lite
+
 openmeteo:
   api:
     url: https://api.open-meteo.com

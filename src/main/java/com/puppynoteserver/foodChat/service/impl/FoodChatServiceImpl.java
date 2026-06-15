@@ -2,7 +2,11 @@ package com.puppynoteserver.foodChat.service.impl;
 
 import com.puppynoteserver.foodChat.entity.FoodChatHistory;
 import com.puppynoteserver.foodChat.repository.FoodChatHistoryRepository;
+import com.puppynoteserver.foodChat.service.AiResult;
+import com.puppynoteserver.foodChat.service.FoodChatAsyncService;
 import com.puppynoteserver.foodChat.service.FoodChatService;
+import com.puppynoteserver.foodChat.service.GeminiQuotaExceededException;
+import com.puppynoteserver.foodChat.service.GeminiService;
 import com.puppynoteserver.foodChat.service.OllamaService;
 import com.puppynoteserver.foodChat.service.request.FoodAiServiceRequest;
 import com.puppynoteserver.foodChat.service.request.FoodChatServiceRequest;
@@ -24,7 +28,9 @@ import java.util.Optional;
 public class FoodChatServiceImpl implements FoodChatService {
 
     private final FoodChatHistoryRepository foodChatHistoryRepository;
+    private final GeminiService geminiService;
     private final OllamaService ollamaService;
+    private final FoodChatAsyncService foodChatAsyncService;
 
     @Override
     public FoodListResponse search(FoodChatServiceRequest request) {
@@ -53,27 +59,30 @@ public class FoodChatServiceImpl implements FoodChatService {
 
     @Override
     public FoodResponse ask(FoodAiServiceRequest request) {
-        // AI 점검중
-        throw new PuppyNoteException("죄송합니다. AI 점검중입니다.");
+        String question = request.question();
 
-//        String question = request.question();
-//
-//        Optional<FoodChatHistory> existing = foodChatHistoryRepository.findByQuestion(question);
-//        if (existing.isPresent()) {
-//            log.info("DB에 동일 질문 존재, 기존 답변 반환: {}", question);
-//            return FoodResponse.of(existing.get());
-//        }
-//
-//        OllamaService.OllamaResult result = ollamaService.ask(question);
-//
-//        if (!result.isFood()) {
-//            throw new PuppyNoteException("음식에 관한 질문만 해주세요.");
-//        }
-//
-//        return FoodResponse.of(
-//                foodChatHistoryRepository.save(
-//                        FoodChatHistory.of(question, result.answer(), result.safetyLevel())
-//                )
-//        );
+        Optional<FoodChatHistory> existing = foodChatHistoryRepository.findByQuestion(question);
+        if (existing.isPresent()) {
+            log.info("DB에 동일 질문 존재, 기존 답변 반환: {}", question);
+            return FoodResponse.of(existing.get());
+        }
+
+        try {
+            AiResult result = geminiService.ask(question);
+
+            if (!result.isFood()) {
+                throw new PuppyNoteException("음식에 관한 질문만 해주세요.");
+            }
+
+            return FoodResponse.of(
+                    foodChatHistoryRepository.save(
+                            FoodChatHistory.of(question, result.answer(), result.safetyLevel())
+                    )
+            );
+        } catch (GeminiQuotaExceededException e) {
+            log.warn("Gemini 할당량 초과, Ollama 비동기 처리로 전환: {}", question);
+            foodChatAsyncService.askWithOllamaAndSave(question);
+            throw new PuppyNoteException("AI 응답을 준비 중입니다. 약 5분 후에 다시 확인해주세요.");
+        }
     }
 }

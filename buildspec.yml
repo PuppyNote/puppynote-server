@@ -18,6 +18,7 @@ env:
     CLOUDFRONT_DOMAIN: "/puppynote/prd/CLOUDFRONT_DOMAIN"
     OLLAMA_HOST: "/puppynote/prd/OLLAMA_HOST"
     SERVER_IP: "/puppynote/prd/SERVER_IP"
+    GEMINI_API_KEY: "/puppynote/prd/GEMINI_API_KEY"
 
 phases:
   build:
