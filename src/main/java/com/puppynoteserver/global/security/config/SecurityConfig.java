@@ -6,6 +6,7 @@ import com.puppynoteserver.jwt.filter.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -57,6 +58,9 @@ public class SecurityConfig {
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/*.env", "**/.env").denyAll()
+                        .requestMatchers("/api/**", "/auth/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/", "/about").permitAll()
                         .requestMatchers(getPublicMatchers()).permitAll()
                         .anyRequest().hasAnyAuthority("USER", "ADMIN")
                 )
@@ -84,4 +88,3 @@ public class SecurityConfig {
         };
     }
 }
-
