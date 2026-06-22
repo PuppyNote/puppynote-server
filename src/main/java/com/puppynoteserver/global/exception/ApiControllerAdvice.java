@@ -133,6 +133,17 @@ public class ApiControllerAdvice {
 		);
 	}
 
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+	public ApiResponse<Object> noResourceFoundException(org.springframework.web.servlet.resource.NoResourceFoundException e) {
+		log.error(e.getMessage());
+		return ApiResponse.of(
+			HttpStatus.NOT_FOUND,
+			"요청한 리소스를 찾을 수 없습니다.",
+			null
+		);
+	}
+
     // 401 - 커스텀
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthenticatedException.class)
