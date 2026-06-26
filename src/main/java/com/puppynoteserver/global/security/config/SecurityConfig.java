@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/*.env", "**/.env").denyAll()
+                        .requestMatchers(new AntPathRequestMatcher("/*.env"), new AntPathRequestMatcher("/**/.env")).denyAll()
                         .requestMatchers("/api/**", "/auth/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/", "/about").permitAll()
                         .requestMatchers(getPublicMatchers()).permitAll()
