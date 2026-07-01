@@ -3,6 +3,7 @@ package com.puppynoteserver.global;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,8 +17,8 @@ public class TestErrorController {
     }
 
     @GetMapping("/npe")
-    public String triggerNpe() {
-        String value = null;
-        return value.toUpperCase();
-    }
+    public String triggerNpe(@RequestParam(name = "val") String val)
+        {
+            return (val != null) ? val.toUpperCase() : "";
+        }
 }
