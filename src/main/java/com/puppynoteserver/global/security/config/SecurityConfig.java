@@ -59,9 +59,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/*.env"), new AntPathRequestMatcher("/**/.env")).denyAll()
-                        .requestMatchers("/api/**", "/auth/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/", "/about").permitAll()
                         .requestMatchers(getPublicMatchers()).permitAll()
+                        .requestMatchers("/api/**", "/auth/**").authenticated()
                         .anyRequest().hasAnyAuthority("USER", "ADMIN")
                 )
 
