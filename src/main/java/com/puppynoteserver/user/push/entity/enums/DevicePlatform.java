@@ -2,7 +2,6 @@ package com.puppynoteserver.user.push.entity.enums;
 
 import java.util.Arrays;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.puppynoteserver.global.exception.PuppyNoteException;
 
 import lombok.Getter;
@@ -24,8 +23,9 @@ public enum DevicePlatform {
 
 	/**
 	 * 클라이언트가 대소문자를 섞어 보내도(ios, Web 등) 허용한다.
+	 * 역직렬화 시점이 아니라 요청 DTO 변환 시점에 호출해야
+	 * 잘못된 값이 400(PuppyNoteException)으로 응답된다.
 	 */
-	@JsonCreator
 	public static DevicePlatform from(String value) {
 		return Arrays.stream(values())
 			.filter(platform -> platform.name().equalsIgnoreCase(value))
