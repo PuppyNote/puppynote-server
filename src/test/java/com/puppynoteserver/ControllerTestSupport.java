@@ -36,8 +36,6 @@ import com.puppynoteserver.petTip.controller.PetTipController;
 import com.puppynoteserver.petTip.service.PetTipReadService;
 import com.puppynoteserver.storage.controller.StorageController;
 import com.puppynoteserver.storage.service.S3StorageService;
-import com.puppynoteserver.user.push.controller.DeviceTokenController;
-import com.puppynoteserver.user.push.service.PushWriteService;
 import com.puppynoteserver.user.userItemCategories.controller.UserItemCategoryController;
 import com.puppynoteserver.user.userItemCategories.service.UserItemCategoryReadService;
 import com.puppynoteserver.user.userItemCategories.service.UserItemCategoryWriteService;
@@ -71,7 +69,6 @@ import org.springframework.test.web.servlet.MockMvc;
         PetTipController.class,
         StorageController.class,
         UserItemCategoryController.class,
-        DeviceTokenController.class,
         LoginController.class,
         UserController.class,
         WeatherController.class,
@@ -151,8 +148,6 @@ public abstract class ControllerTestSupport {
     protected UserItemCategoryWriteService userItemCategoryWriteService;
     @MockitoBean
     protected UserItemCategoryReadService userItemCategoryReadService;
-    @MockitoBean
-    protected PushWriteService pushWriteService;
     @MockitoBean
     protected LoginService loginService;
     @MockitoBean
