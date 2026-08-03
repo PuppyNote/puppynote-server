@@ -64,6 +64,12 @@ oauth:
 jwt:
   secret-key: 4a0pPV9g4/6OvKKzV1MpVdIchBeTfcjd/TRKbuWUgpNY3jyh6YA/aBnpe4kPsAY5WJoBBzOG358zqS5/E0TSag==
 
+cors:
+  allowed-origin-patterns:
+    - "http://localhost:[*]"
+    - "https://front-web.example.com"   # yml에 추가한 정확한 Origin이 동작하는지 검증용
+  max-age: 3600
+
 aws:
   access-key: testaccesskey
   secret-key: testsecretkey

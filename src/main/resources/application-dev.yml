@@ -73,6 +73,14 @@ oauth:
 jwt:
   secret-key: ${JWT_SECRET_KEY}
 
+# 브라우저에서 직접 호출하는 클라이언트의 Origin 목록. 도메인 추가 시 이 목록에만 추가하면 된다.
+# 정확한 Origin(https://web.puppynote.co.kr)과 포트 패턴(http://localhost:[*]) 둘 다 사용 가능하다.
+cors:
+  allowed-origin-patterns:
+    - "http://localhost:[*]"      # 모바일 웹 로컬 개발 서버(vite 등) 및 앱 개발 서버
+    - "http://127.0.0.1:[*]"
+  max-age: 3600
+
 aws:
   access-key: ${AWS_ACCESS_KEY}  # AWS IAM Access Key
   secret-key: ${AWS_SECRET_KEY}  # AWS IAM Secret Key

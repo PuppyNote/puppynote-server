@@ -18,8 +18,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @RequiredArgsConstructor
@@ -28,6 +28,7 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final CorsProperties corsProperties;
 
     @Bean
     public BCryptPasswordEncoder encoder() {
@@ -39,12 +40,10 @@ public class SecurityConfig {
             CorsConfiguration config = new CorsConfiguration();
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOrigins(Arrays.asList(
-                    "https://www.quitmate.co.kr",
-                    "https://quitmate.co.kr",
-                    "http://localhost:8081"
-            ));
+            // 허용 Origin은 profile별 yml(cors.allowed-origin-patterns)에서 관리한다.
+            config.setAllowedOriginPatterns(corsProperties.getAllowedOriginPatterns());
             config.setAllowCredentials(true);
+            config.setMaxAge(corsProperties.getMaxAge());
             return config;
         };
     }
@@ -57,11 +56,15 @@ public class SecurityConfig {
 
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
+                // 규칙은 선언 순서대로 평가되고 먼저 매칭된 규칙이 적용되므로,
+                // permitAll 대상은 반드시 authenticated() 규칙보다 위에 선언해야 한다.
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/*.env"), new AntPathRequestMatcher("/**/.env")).denyAll()
-                        .requestMatchers("/api/**", "/auth/**").authenticated()
+                        // 브라우저는 preflight(OPTIONS)에 Authorization 헤더를 싣지 않으므로 인증 대상에서 제외한다.
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(HttpMethod.GET, "/", "/about").permitAll()
                         .requestMatchers(getPublicMatchers()).permitAll()
+                        .requestMatchers("/api/**", "/auth/**").authenticated()
                         .anyRequest().hasAnyAuthority("USER", "ADMIN")
                 )
 
