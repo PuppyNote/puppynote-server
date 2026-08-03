@@ -13,6 +13,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -40,6 +41,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+        // 브라우저의 CORS preflight(OPTIONS)는 Authorization 헤더를 싣지 않으므로 토큰 검증에서 제외한다.
+        if (CorsUtils.isPreFlightRequest(request)) {
+            return true;
+        }
         String path = request.getServletPath();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PuppyNote Server is a Spring Boot 3.4.2 REST API for a pet care management platform. It handles user authentication, pet profiles, health records, feeding logs, walking activity, reminders, and supply tracking.
+PuppyNote Server is a Spring Boot 3.4.2 REST API for a pet care management platform. It handles user authentication, pet profiles, walking activity, supply tracking, community posts, notifications, and AI-assisted food Q&A.
 
 ## Build & Test Commands
 
@@ -71,6 +71,8 @@ All responses are wrapped in `ApiResponse<T>`:
 - Custom exceptions: `PuppyNoteException`, `NotFoundException`, `UnauthenticatedException`, `JwtTokenException`
 - Global exception handler: `global/exception/ApiControllerAdvice.java`
 - OAuth2 social login (Kakao, Google) via OpenFeign
+- Authorization rules in `SecurityConfig` are evaluated **in declaration order** — `permitAll` matchers must be declared before the broad `/api/**` `authenticated()` rule
+- CORS: allowed origins are **not** hardcoded. Add them to `cors.allowed-origin-patterns` in the profile yml (exact origins and port patterns like `http://localhost:[*]` are both supported); bound by `global/security/config/CorsProperties.java`
 
 ### Database
 
@@ -97,11 +99,18 @@ All responses are wrapped in `ApiResponse<T>`:
 
 ### Domain Modules
 
-- `user` — authentication, JWT, OAuth, push notifications
-- `pet` — pet profiles, family member associations
-- `healthRecord` — pet health tracking
-- `feeding` — feeding logs and schedules
-- `walk` — walking activity
-- `reminder` — care reminders
-- `supply` — supply management
-- `global` — shared security config, exceptions, utilities
+Top-level packages under `src/main/java/com/puppynoteserver/`:
+
+- `user` — authentication/signup (`users`), refresh tokens (`refreshToken`), push notifications (`push`), user item categories (`userItemCategories`)
+- `pet` — pet profiles (`pets`), family member associations (`familyMembers`), supplies (`petItems`, `petItemPurchase`), walking activity (`walk`), walk alarms (`petWalkAlarms`)
+- `community` — community posts (`post`) and likes (`like`)
+- `home` — home screen aggregation
+- `petTip` — pet care tips
+- `foodChat` — AI food Q&A (Gemini / Ollama)
+- `weather` — weather lookup (Open-Meteo)
+- `alertSetting` / `alertHistory` — notification settings and history
+- `storage` — S3 file upload (`/api/v1/storage/{bucketKind}`)
+- `redis` — Redis-backed caches (post likes, etc.)
+- `jwt` — JWT provider and authentication filters
+- `batch`, `expo` — scheduled jobs and Expo push integration
+- `global` — shared security config, exceptions, interceptors, utilities
