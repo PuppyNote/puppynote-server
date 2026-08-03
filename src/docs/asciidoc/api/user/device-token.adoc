@@ -1,0 +1,21 @@
+[[device-token-register]]
+=== 디바이스 토큰 등록
+
+로그인 이후 푸시 디바이스 토큰을 서버에 등록/갱신합니다.
+JWT Bearer 인증이 필요하며, `deviceId` 기준 upsert이므로 같은 요청을 여러 번 보내도 안전합니다.
+
+네이티브 앱, 웹뷰, 모바일 웹이 `platform` 값만 달리해서 동일하게 사용합니다.
+
+- `platform`: `IOS`, `ANDROID`, `WEB` (대소문자 무관)
+- 이미 다른 유저가 사용하던 `deviceId`로 등록하면 해당 디바이스의 소유권이 현재 로그인 유저로 이전됩니다.
+
+==== HTTP Request
+
+include::{snippets}/device-token-register/http-request.adoc[]
+include::{snippets}/device-token-register/request-headers.adoc[]
+include::{snippets}/device-token-register/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/device-token-register/http-response.adoc[]
+include::{snippets}/device-token-register/response-fields.adoc[]
