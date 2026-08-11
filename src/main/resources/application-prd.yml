@@ -82,6 +82,7 @@ cors:
     - "https://quitmate.co.kr"       # TODO 상동
     - "http://localhost:[*]"         # TODO 모바일 웹 개발용. 운영 도메인 확정 후 제거
     - "http://127.0.0.1:[*]"         # TODO 상동
+    - "https://front.puppynote.co.kr" # 모바일 웹 운영 도메인
   max-age: 3600
 
 aws:
