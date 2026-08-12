@@ -83,6 +83,7 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/api/v1/jwt/**"),
                 new AntPathRequestMatcher("/api/v1/auth/**"),
                 new AntPathRequestMatcher("/api/v1/user/**"),
+                new AntPathRequestMatcher("/api/v1/app-version"),
                 new AntPathRequestMatcher("/docs/**"),
                 new AntPathRequestMatcher("/health-check"),
                 new AntPathRequestMatcher("/actuator/**"),

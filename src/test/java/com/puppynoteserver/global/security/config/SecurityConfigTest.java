@@ -57,6 +57,17 @@ class SecurityConfigTest extends IntegrationTestSupport {
                 .andExpect(status().isBadRequest());
     }
 
+    @DisplayName("permitAll 대상인 앱 버전 조회 API는 토큰 없이 호출해도 인증 오류가 발생하지 않는다.")
+    @Test
+    void 토큰없이_앱버전_조회API를_호출하면_200을_반환한다() throws Exception {
+        // when // then
+        mockMvc.perform(
+                        get("/api/v1/app-version")
+                                .servletPath("/api/v1/app-version")
+                )
+                .andExpect(status().isOk());
+    }
+
     @DisplayName("인증이 필요한 API는 토큰 없이 호출하면 401을 반환한다.")
     @Test
     void 토큰없이_인증이필요한API를_호출하면_401을_반환한다() throws Exception {

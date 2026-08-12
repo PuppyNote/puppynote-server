@@ -32,6 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/user/signup",
             "/api/v1/user/email/send",
             "/api/v1/confirmEmail",
+            "/api/v1/app-version",          //앱 실행 시 로그인 전 호출되는 최신버전 조회 API
             "/docs",                        //API문서는 예외
             "/health-check",
             "/actuator",                     //모니터링
