@@ -1,12 +1,17 @@
 package com.puppynoteserver.global.security.config;
 
 import com.puppynoteserver.IntegrationTestSupport;
+import com.puppynoteserver.appVersion.entity.AppVersion;
+import com.puppynoteserver.appVersion.entity.enums.Platform;
+import com.puppynoteserver.appVersion.repository.AppVersionJpaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * MockMvc는 servletPath를 자동으로 채워주지 않으므로, 실제 서블릿 컨테이너와 동일하게 servletPath를 지정한다.
  */
 @AutoConfigureMockMvc
+@Transactional
 class SecurityConfigTest extends IntegrationTestSupport {
 
     // application-test.yml의 cors.allowed-origin-patterns에 등록된 값
@@ -30,6 +36,27 @@ class SecurityConfigTest extends IntegrationTestSupport {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private AppVersionJpaRepository appVersionJpaRepository;
+
+    @BeforeEach
+    void setUpAppVersion() {
+        appVersionJpaRepository.save(AppVersion.builder()
+                .platform(Platform.IOS)
+                .latestVersion("1.0.2")
+                .minSupportedVersion("1.0.2")
+                .forceUpdate(false)
+                .storeUrl("https://apps.apple.com/kr/app/puppynote/id6760515755")
+                .build());
+        appVersionJpaRepository.save(AppVersion.builder()
+                .platform(Platform.AOS)
+                .latestVersion("1.0.2")
+                .minSupportedVersion("1.0.2")
+                .forceUpdate(false)
+                .storeUrl("https://play.google.com/store/apps/details?id=com.puppynote")
+                .build());
+    }
 
     @DisplayName("permitAll 대상인 회원가입 API는 토큰 없이 호출해도 인증 오류가 발생하지 않는다.")
     @Test
