@@ -1,7 +1,11 @@
 plugins {
     id 'java'
+    // bootJar/bootRun 태스크 및 실행 가능한 jar 패키징을 위해 각 서비스 모듈에 개별 적용이 필요하다.
+    // (Gradle 플러그인은 project(':contracts:common') 의존만으로는 전파되지 않는다.)
+    id 'org.springframework.boot' version '3.4.2'
 }
 
 dependencies {
+    // spring-boot-starter, spring-security, spring-data-jpa 등은 contracts:common이 'api'로 전파한다.
     implementation project(':contracts:common')
 }

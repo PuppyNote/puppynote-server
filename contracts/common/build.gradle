@@ -1,32 +1,33 @@
 plugins {
-    id 'java'
-    id 'io.spring.dependency-management' version '1.1.7'
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:3.4.2"
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
-    }
+    // java-library를 써야 'api' 의존성이 이 모듈을 project(':contracts:common')로 의존하는
+    // 다른 모듈의 컴파일 클래스패스까지 전파된다 (plain 'java'는 런타임에만 전파됨).
+    id 'java-library'
 }
 
 dependencies {
+    // 플랫폼(BOM)으로 버전을 관리한다. io.spring.dependency-management 플러그인과 달리
+    // 이 방식은 project(':contracts:common')로 의존하는 다른 모듈에도 버전 정보가 전파된다.
+    api platform('org.springframework.boot:spring-boot-dependencies:3.4.2')
+    api platform('org.springframework.cloud:spring-cloud-dependencies:2024.0.0')
+
+    // SpringApplication / @SpringBootApplication 등 실행 진입점 - 각 서비스의 XxxApplication이 필요로 함
+    api 'org.springframework.boot:spring-boot-starter'
     // API 응답/컨트롤러 어드바이스, 서블릿 필터 등에서 필요
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springframework.boot:spring-boot-starter-web'
     // SecurityConfig, JwtAuthenticationFilter 등 인증/인가
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    api 'org.springframework.boot:spring-boot-starter-security'
     // JwtAuthenticationFilter의 jakarta.validation 어노테이션
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // BaseTimeEntity(@MappedSuperclass), JpaAuditingConfig
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // ApiControllerAdvice의 FeignException 처리
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    api 'org.springframework.boot:spring-boot-starter-validation'
+    // BaseTimeEntity(@MappedSuperclass) 등 각 도메인 엔티티가 상속해서 씀
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // ApiControllerAdvice의 FeignException 처리 + 각 도메인의 Feign 클라이언트
+    api 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-    // JWT
+    // JWT - JwtTokenProvider 내부 구현체라 컴파일 전파가 필요 없음
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
