@@ -35,6 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
-/src/main/generated
-/src/main/generated
-/src/main/generated
+/apps/legacy/src/main/generated

@@ -1,1 +1,12 @@
 rootProject.name = 'puppynote-server'
+
+include 'apps:legacy'
+include 'apps:user'
+include 'apps:pet'
+include 'apps:community'
+include 'apps:foodChat'
+include 'apps:notification'
+include 'apps:petTip'
+include 'apps:weather'
+include 'apps:appVersion'
+include 'common'

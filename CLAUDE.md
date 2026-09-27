@@ -8,24 +8,26 @@ PuppyNote Server is a Spring Boot 3.4.2 REST API for a pet care management platf
 
 ## Build & Test Commands
 
+This is a Gradle multi-module project. The entire application currently lives in the `apps/legacy` module (see "Module Layout" below), so build/test/run commands must be scoped to it:
+
 ```bash
 # Build
-./gradlew build
+./gradlew :apps:legacy:build
 
 # Run tests
-./gradlew test
+./gradlew :apps:legacy:test
 
 # Run a single test class
-./gradlew test --tests "com.puppynoteserver.ClassName"
+./gradlew :apps:legacy:test --tests "com.puppynoteserver.ClassName"
 
 # Run application (dev profile)
-./gradlew bootRun --args='--spring.profiles.active=dev'
+./gradlew :apps:legacy:bootRun --args='--spring.profiles.active=dev'
 
 # Generate REST API documentation
-./gradlew asciidoctor
+./gradlew :apps:legacy:asciidoctor
 
 # Build Docker image artifact
-./gradlew bootJar
+./gradlew :apps:legacy:bootJar
 ```
 
 ## Architecture
@@ -85,11 +87,11 @@ All responses are wrapped in `ApiResponse<T>`:
 
 | File | Purpose |
 |---|---|
-| `src/main/resources/application-dev.yml` | Dev environment (MySQL, OAuth URLs, JWT from env vars) |
-| `src/main/resources/application-prd.yml` | Production environment |
-| `src/main/resources/application-test.yml` | Test environment (H2) |
-| `build.gradle` | Dependencies, QueryDSL setup, REST Docs, env var injection |
-| `Dockerfile` | Java 17 Alpine-based image |
+| `apps/legacy/src/main/resources/application-dev.yml` | Dev environment (MySQL, OAuth URLs, JWT from env vars) |
+| `apps/legacy/src/main/resources/application-prd.yml` | Production environment |
+| `apps/legacy/src/main/resources/application-test.yml` | Test environment (H2) |
+| `apps/legacy/build.gradle` | Dependencies, QueryDSL setup, REST Docs, env var injection |
+| `Dockerfile` | Java 17 Alpine-based image (packages `apps/legacy/build/libs/*.jar`) |
 
 ### Test Base Classes
 
@@ -97,20 +99,23 @@ All responses are wrapped in `ApiResponse<T>`:
 - `IntegrationTestSupport` — base for full integration tests
 - `RestDocsSupport` — base for Spring REST Docs API documentation tests
 
-### Domain Modules
+### Module Layout (MSA migration in progress)
 
-Top-level packages under `src/main/java/com/puppynoteserver/`:
+This repo is being restructured toward an MSA layout modeled on `chatplanet-server` (Gradle multi-module, one `apps/*` module per bounded context). This is step one of that migration: domain boundaries have been decided and empty module skeletons created, but **no code has been moved out of the monolith yet** — all existing code still lives untouched in `apps/legacy`.
+
+- `apps/legacy` — the entire current application, unchanged. All packages listed below still live under `apps/legacy/src/main/java/com/puppynoteserver/`.
+- `apps/user`, `apps/pet`, `apps/community`, `apps/foodChat`, `apps/notification`, `apps/petTip`, `apps/weather`, `apps/appVersion` — empty domain module skeletons (`package-info.java` placeholders only) that code will be migrated into over time.
+- `common` — empty module skeleton (`com.puppynoteserver.global`) intended to eventually hold shared infra (`jwt`, `redis`, `storage`, `global`) once it's extracted out of `apps/legacy`.
+
+Planned domain boundaries for the eventual migration:
 
 - `user` — authentication/signup (`users`), refresh tokens (`refreshToken`), push notifications (`push`), user item categories (`userItemCategories`)
-- `pet` — pet profiles (`pets`), family member associations (`familyMembers`), supplies (`petItems`, `petItemPurchase`), walking activity (`walk`), walk alarms (`petWalkAlarms`)
+- `pet` — pet profiles (`pets`), family member associations (`familyMembers`), supplies (`petItems`, `petItemPurchase`), walking activity (`walk`), walk alarms (`petWalkAlarms`) — kept as one domain for now due to tight coupling between these sub-features
 - `community` — community posts (`post`) and likes (`like`)
-- `home` — home screen aggregation
+- `notification` — `alertSetting`, `alertHistory`, `expo` (push dispatch), and the device-token part of `user.push`
 - `petTip` — pet care tips
 - `foodChat` — AI food Q&A (Gemini / Ollama)
 - `weather` — weather lookup (Open-Meteo)
-- `alertSetting` / `alertHistory` — notification settings and history
-- `storage` — S3 file upload (`/api/v1/storage/{bucketKind}`)
-- `redis` — Redis-backed caches (post likes, etc.)
-- `jwt` — JWT provider and authentication filters
-- `batch`, `expo` — scheduled jobs and Expo push integration
-- `global` — shared security config, exceptions, interceptors, utilities
+- `appVersion` — app version metadata
+- `common` — `jwt` (JWT provider/filters), `redis` (caches), `storage` (S3 upload), `global` (security config, exceptions, interceptors, utilities)
+- `home` (BFF/home-screen aggregation) and `batch` (scheduled jobs) have no module yet — deferred until real service extraction begins, since they aggregate/reach across the other domains.
