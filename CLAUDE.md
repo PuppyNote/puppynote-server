@@ -103,9 +103,9 @@ All responses are wrapped in `ApiResponse<T>`:
 
 This repo is being restructured toward an MSA layout modeled on `chatplanet-server` (Gradle multi-module, one `apps/*` module per bounded context). This is step one of that migration: domain boundaries have been decided and empty module skeletons created, but **no code has been moved out of the monolith yet** — all existing code still lives untouched in `apps/legacy`.
 
-- `apps/legacy` — the entire current application, unchanged. All packages listed below still live under `apps/legacy/src/main/java/com/puppynoteserver/`.
-- `apps/user`, `apps/pet`, `apps/community`, `apps/foodChat`, `apps/notification`, `apps/petTip`, `apps/weather`, `apps/appVersion` — empty domain module skeletons (`package-info.java` placeholders only) that code will be migrated into over time.
-- `contracts/common` — empty module skeleton (`com.puppynoteserver.global`) intended to eventually hold shared infra (`jwt`, `redis`, `storage`, `global`) once it's extracted out of `apps/legacy`. Named `contracts/` to mirror `chatplanet-server`'s convention of keeping shared/cross-service modules separate from the deployable `apps/*` services.
+- `apps/legacy` — the entire current application, unchanged and still the only deployed artifact. All packages listed below still live under `apps/legacy/src/main/java/com/puppynoteserver/`.
+- `apps/user`, `apps/pet`, `apps/community`, `apps/foodChat`, `apps/notification`, `apps/petTip`, `apps/weather`, `apps/appVersion` — empty domain module skeletons (`package-info.java` placeholders only) that code will be migrated into over time. Each depends on `contracts:common`.
+- `contracts/common` (`com.puppynoteserver.jwt`, `com.puppynoteserver.global.{security,exception,logagent,config}`) — a **copy** of `apps/legacy`'s JWT/Security/exception-handling/BaseTimeEntity code, so every new domain module has the auth baseline every service needs. This was copied rather than moved: `apps/legacy` keeps its own original copies untouched and keeps working exactly as before. The two copies are duplicated on purpose until `apps/legacy`'s domains are actually migrated out, at which point `apps/legacy` should be switched to depend on `contracts:common` and its local copies deleted. Named `contracts/` to mirror `chatplanet-server`'s convention of keeping shared/cross-service modules separate from the deployable `apps/*` services.
 
 Planned domain boundaries for the eventual migration:
 
@@ -117,5 +117,5 @@ Planned domain boundaries for the eventual migration:
 - `foodChat` — AI food Q&A (Gemini / Ollama)
 - `weather` — weather lookup (Open-Meteo)
 - `appVersion` — app version metadata
-- `contracts/common` — `jwt` (JWT provider/filters), `redis` (caches), `storage` (S3 upload), `global` (security config, exceptions, interceptors, utilities)
+- `contracts/common` — `jwt` (JWT provider/filters, already copied in), `redis` (caches), `storage` (S3 upload), `global` (security config, exceptions, interceptors, utilities — security/exception/logagent/BaseTimeEntity already copied in)
 - `home` (BFF/home-screen aggregation) and `batch` (scheduled jobs) have no module yet — deferred until real service extraction begins, since they aggregate/reach across the other domains.
