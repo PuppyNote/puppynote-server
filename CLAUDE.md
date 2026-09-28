@@ -105,7 +105,7 @@ This repo is being restructured toward an MSA layout modeled on `chatplanet-serv
 
 - `apps/legacy` — the entire current application, unchanged. All packages listed below still live under `apps/legacy/src/main/java/com/puppynoteserver/`.
 - `apps/user`, `apps/pet`, `apps/community`, `apps/foodChat`, `apps/notification`, `apps/petTip`, `apps/weather`, `apps/appVersion` — empty domain module skeletons (`package-info.java` placeholders only) that code will be migrated into over time.
-- `common` — empty module skeleton (`com.puppynoteserver.global`) intended to eventually hold shared infra (`jwt`, `redis`, `storage`, `global`) once it's extracted out of `apps/legacy`.
+- `contracts/common` — empty module skeleton (`com.puppynoteserver.global`) intended to eventually hold shared infra (`jwt`, `redis`, `storage`, `global`) once it's extracted out of `apps/legacy`. Named `contracts/` to mirror `chatplanet-server`'s convention of keeping shared/cross-service modules separate from the deployable `apps/*` services.
 
 Planned domain boundaries for the eventual migration:
 
@@ -117,5 +117,5 @@ Planned domain boundaries for the eventual migration:
 - `foodChat` — AI food Q&A (Gemini / Ollama)
 - `weather` — weather lookup (Open-Meteo)
 - `appVersion` — app version metadata
-- `common` — `jwt` (JWT provider/filters), `redis` (caches), `storage` (S3 upload), `global` (security config, exceptions, interceptors, utilities)
+- `contracts/common` — `jwt` (JWT provider/filters), `redis` (caches), `storage` (S3 upload), `global` (security config, exceptions, interceptors, utilities)
 - `home` (BFF/home-screen aggregation) and `batch` (scheduled jobs) have no module yet — deferred until real service extraction begins, since they aggregate/reach across the other domains.
