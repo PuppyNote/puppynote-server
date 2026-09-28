@@ -27,11 +27,11 @@ phases:
       - chmod +x gradlew
       # clean으로 src/main/generated 초기화 → QueryDSL Q클래스 충돌 방지
       # test → asciidoctor(문서 생성) → bootJar(docs 포함) 순서로 실행
-      - ./gradlew clean bootJar --no-daemon
+      - ./gradlew clean :apps:legacy:bootJar --no-daemon
 
 artifacts:
   files:
-    - build/libs/*.jar
+    - apps/legacy/build/libs/*.jar
     - appspec.yml
     - scripts/**/*
   discard-paths: no
