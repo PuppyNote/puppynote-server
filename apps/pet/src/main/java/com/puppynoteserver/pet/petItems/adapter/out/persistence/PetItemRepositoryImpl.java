@@ -1,0 +1,52 @@
+package com.puppynoteserver.pet.petItems.adapter.out.persistence;
+
+import com.puppynoteserver.pet.petItems.application.port.out.persistence.PetItemRepository;
+import com.puppynoteserver.pet.petItems.domain.entity.PetItem;
+import com.puppynoteserver.pet.petItems.domain.entity.enums.ItemCategory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class PetItemRepositoryImpl implements PetItemRepository {
+
+    private final PetItemJpaRepository petItemJpaRepository;
+
+    @Override
+    public PetItem save(PetItem petItem) {
+        return petItemJpaRepository.save(petItem);
+    }
+
+    @Override
+    public Optional<PetItem> findById(Long id) {
+        return petItemJpaRepository.findById(id);
+    }
+
+    @Override
+    public List<PetItem> findByPetId(Long petId) {
+        return petItemJpaRepository.findByPetId(petId);
+    }
+
+    @Override
+    public List<PetItem> findByPetIdAndCategory(Long petId, ItemCategory category) {
+        return petItemJpaRepository.findByPetIdAndCategory(petId, category);
+    }
+
+    @Override
+    public long countByPetId(Long petId) {
+        return petItemJpaRepository.countByPetId(petId);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        petItemJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        petItemJpaRepository.deleteAllByPetId(petId);
+    }
+}

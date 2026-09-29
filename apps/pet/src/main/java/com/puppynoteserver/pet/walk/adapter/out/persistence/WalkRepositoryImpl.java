@@ -1,0 +1,63 @@
+package com.puppynoteserver.pet.walk.adapter.out.persistence;
+
+import com.puppynoteserver.pet.walk.application.port.out.persistence.WalkRepository;
+import com.puppynoteserver.pet.walk.domain.entity.Walk;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class WalkRepositoryImpl implements WalkRepository {
+
+    private final WalkJpaRepository walkJpaRepository;
+
+    @Override
+    public Walk save(Walk walk) {
+        return walkJpaRepository.save(walk);
+    }
+
+    @Override
+    public List<Walk> findByPetIdAndStartTimeBetweenOrderByEndTimeDesc(Long petId, LocalDateTime startOfDay, LocalDateTime endOfDay) {
+        return walkJpaRepository.findByPetIdAndStartTimeBetweenOrderByEndTimeDesc(petId, startOfDay, endOfDay);
+    }
+
+    @Override
+    public List<Walk> findByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end) {
+        return walkJpaRepository.findByPetIdAndStartTimeBetween(petId, start, end);
+    }
+
+    @Override
+    public Optional<Walk> findById(Long walkId) {
+        return walkJpaRepository.findWithPhotosById(walkId);
+    }
+
+    @Override
+    public long countByPetIdAndStartTimeBetween(Long petId, LocalDateTime start, LocalDateTime end) {
+        return walkJpaRepository.countByPetIdAndStartTimeBetween(petId, start, end);
+    }
+
+    @Override
+    public Optional<Walk> findTopByPetIdOrderByStartTimeDesc(Long petId) {
+        return walkJpaRepository.findTopByPetIdOrderByStartTimeDesc(petId);
+    }
+
+    @Override
+    public List<Walk> findAllByPetId(Long petId) {
+        return walkJpaRepository.findAllByPetId(petId);
+    }
+
+    @Override
+    public void deleteById(Long walkId) {
+        walkJpaRepository.deleteById(walkId);
+    }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        List<Walk> walks = walkJpaRepository.findAllByPetId(petId);
+        walkJpaRepository.deleteAll(walks);
+    }
+}

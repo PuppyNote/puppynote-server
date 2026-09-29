@@ -1,0 +1,40 @@
+package com.puppynoteserver.pet.pets.adapter.in.web.request;
+
+import com.puppynoteserver.pet.pets.application.port.in.request.PetUpdateServiceRequest;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
+@Getter
+@NoArgsConstructor
+public class PetUpdateRequest {
+
+    @NotBlank(message = "펫 이름은 필수입니다.")
+    private String name;
+
+    private LocalDate birthDate;
+
+    private String profileImage;
+
+    private String registrationNumber;
+
+    @Builder
+    private PetUpdateRequest(String name, LocalDate birthDate, String profileImage, String registrationNumber) {
+        this.name = name;
+        this.birthDate = birthDate;
+        this.profileImage = profileImage;
+        this.registrationNumber = registrationNumber;
+    }
+
+    public PetUpdateServiceRequest toServiceRequest() {
+        return PetUpdateServiceRequest.builder()
+                .name(name)
+                .birthDate(birthDate)
+                .profileImage(profileImage)
+                .registrationNumber(registrationNumber)
+                .build();
+    }
+}

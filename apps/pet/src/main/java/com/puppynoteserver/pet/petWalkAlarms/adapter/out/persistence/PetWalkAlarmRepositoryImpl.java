@@ -1,0 +1,54 @@
+package com.puppynoteserver.pet.petWalkAlarms.adapter.out.persistence;
+
+import com.puppynoteserver.pet.petWalkAlarms.application.port.out.persistence.PetWalkAlarmRepository;
+import com.puppynoteserver.pet.petWalkAlarms.domain.entity.PetWalkAlarm;
+import com.puppynoteserver.pet.petWalkAlarms.domain.entity.enums.AlarmDay;
+import com.puppynoteserver.pet.petWalkAlarms.domain.entity.enums.AlarmStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class PetWalkAlarmRepositoryImpl implements PetWalkAlarmRepository {
+
+    private final PetWalkAlarmJpaRepository petWalkAlarmJpaRepository;
+
+    @Override
+    public PetWalkAlarm save(PetWalkAlarm petWalkAlarm) {
+        return petWalkAlarmJpaRepository.save(petWalkAlarm);
+    }
+
+    @Override
+    public Optional<PetWalkAlarm> findById(Long alarmId) {
+        return petWalkAlarmJpaRepository.findById(alarmId);
+    }
+
+    @Override
+    public List<PetWalkAlarm> findByPetId(Long petId) {
+        return petWalkAlarmJpaRepository.findByPetId(petId);
+    }
+
+    @Override
+    public void delete(PetWalkAlarm petWalkAlarm) {
+        petWalkAlarmJpaRepository.delete(petWalkAlarm);
+    }
+
+    @Override
+    public List<PetWalkAlarm> findActiveAlarmsAtTimeAndDay(AlarmStatus status, LocalTime time, AlarmDay day) {
+        return petWalkAlarmJpaRepository.findActiveAlarmsAtTimeAndDay(status, time, day);
+    }
+
+    @Override
+    public List<PetWalkAlarm> findTodayAlarmsByPetId(Long petId, AlarmStatus status, AlarmDay day) {
+        return petWalkAlarmJpaRepository.findTodayAlarmsByPetId(petId, status, day);
+    }
+
+    @Override
+    public void deleteAllByPetId(Long petId) {
+        petWalkAlarmJpaRepository.deleteAllByPetId(petId);
+    }
+}
