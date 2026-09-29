@@ -15,7 +15,9 @@ public enum FamilyMemberErrorMessage {
     FAMILY_MEMBER_NOT_FOUND("해당 펫의 가족 구성원 정보를 찾을 수 없습니다."),
     RELATION_NOT_FOUND("삭제할 가족 관계를 찾을 수 없습니다."),
     ONLY_FAMILY_CAN_BE_REMOVED("FAMILY 멤버만 삭제할 수 있습니다."),
-    FAMILY_CANNOT_REMOVE_FAMILY("FAMILY는 FAMILY를 삭제할 수 없습니다.");
+    FAMILY_CANNOT_REMOVE_FAMILY("FAMILY는 FAMILY를 삭제할 수 없습니다."),
+    USER_PROFILE_SEARCH_FAILED("user 서비스 프로필 검색에 실패했습니다."),
+    USER_PROFILE_QUERY_FAILED("user 서비스 프로필 조회에 실패했습니다.");
 
     private final String message;
 

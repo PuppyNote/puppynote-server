@@ -170,4 +170,12 @@ public class ApiControllerAdvice {
         log.error(e.getMessage());
         return ApiResponse.of(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.", null);
     }
+
+    // 503 - 다른 내부 서비스 호출 실패
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler(InfrastructureException.class)
+    public ApiResponse<Object> infrastructure(InfrastructureException e) {
+        log.error(e.getMessage(), e);
+        return ApiResponse.of(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), null);
+    }
 }

@@ -45,6 +45,11 @@ public class UserRepositoryAdapter implements UserRepository {
 	}
 
 	@Override
+	public List<User> findAllByIds(List<Long> ids) {
+		return userJpaRepository.findAllById(ids);
+	}
+
+	@Override
 	public void deleteAllInBatch() {
 		userJpaRepository.deleteAllInBatch();
 	}

@@ -10,8 +10,9 @@ import com.puppynoteserver.pet.familyMembers.application.port.in.request.FamilyM
 import com.puppynoteserver.pet.familyMembers.application.port.in.request.FamilyMemberRegisterServiceRequest;
 import com.puppynoteserver.pet.familyMembers.application.port.in.response.FamilyMemberResponse;
 import com.puppynoteserver.pet.familyMembers.application.port.in.response.UserSearchResponse;
+import com.puppynoteserver.pet.familyMembers.application.port.out.NotificationSender;
+import com.puppynoteserver.pet.familyMembers.application.port.out.UserProfile;
 import com.puppynoteserver.pet.familyMembers.application.port.out.UserProfileReader;
-import com.puppynoteserver.pet.familyMembers.application.port.out.UserProfileReader.UserProfile;
 import com.puppynoteserver.pet.familyMembers.application.port.out.persistence.FamilyMemberRepository;
 import com.puppynoteserver.pet.familyMembers.domain.entity.FamilyMember;
 import com.puppynoteserver.pet.familyMembers.domain.entity.enums.FamilyMemberStatus;
@@ -35,6 +36,7 @@ public class FamilyMemberService implements FamilyMemberFinder, FamilyMemberRegi
 
     private final FamilyMemberRepository familyMemberRepository;
     private final UserProfileReader userProfileReader;
+    private final NotificationSender notificationSender;
     private final SecurityService securityService;
     private final FileStorage fileStorage;
 
@@ -97,8 +99,7 @@ public class FamilyMemberService implements FamilyMemberFinder, FamilyMemberRegi
 
         familyMemberRepository.save(FamilyMember.of(request.getInviteeUserId(), ownerRecord.getPet(), RoleType.FAMILY, FamilyMemberStatus.PENDING));
 
-        // TODO: 초대 푸시 알림 - notification이 별도 서비스로 분리되면서 인프로세스 이벤트 발행이 불가능해졌다.
-        // notification 쪽에 REST/이벤트 기반 알림 API가 생기면 다시 연결한다.
+        notificationSender.sendFamilyInvite(request.getInviteeUserId(), ownerRecord.getPet().getName());
     }
 
     @Override

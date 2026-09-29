@@ -88,7 +88,10 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/health-check"),
                 new AntPathRequestMatcher("/actuator/**"),
                 new AntPathRequestMatcher("/api/v1/test/**"),
-                new AntPathRequestMatcher("/test/**")
+                new AntPathRequestMatcher("/test/**"),
+                // 서비스 간 내부 호출용 API. 사람이 아니라 다른 서비스가 부르므로 인증을 요구하지 않는다.
+                // 실제 배포에서는 네트워크 경계(사설 서브넷/보안그룹)로 외부 접근을 막아야 한다.
+                new AntPathRequestMatcher("/internal/**")
         };
     }
 }

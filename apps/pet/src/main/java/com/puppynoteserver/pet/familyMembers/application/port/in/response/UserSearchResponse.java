@@ -1,6 +1,6 @@
 package com.puppynoteserver.pet.familyMembers.application.port.in.response;
 
-import com.puppynoteserver.pet.familyMembers.application.port.out.UserProfileReader.UserProfile;
+import com.puppynoteserver.pet.familyMembers.application.port.out.UserProfile;
 import lombok.Getter;
 
 @Getter
