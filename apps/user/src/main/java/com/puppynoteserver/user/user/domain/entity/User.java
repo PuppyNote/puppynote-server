@@ -10,9 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,9 +35,6 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     private String useYn;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Push> pushes = new ArrayList<>();
 
     @Builder
     public User(String email, Long id, String nickName, String password, String profileUrl, Role role, SnsType snsType, String useYn) {
