@@ -28,6 +28,9 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    compileOnly 'org.projectlombok:lombok:1.18.36'
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    // S3StorageAdapter 내부 구현체라 컴파일 전파가 필요 없음 (컨슈머는 FileStorage 인터페이스만 봄)
+    implementation platform('software.amazon.awssdk:bom:2.20.56')
+    implementation 'software.amazon.awssdk:s3'
+
+    // lombok은 루트 build.gradle의 subprojects 블록에서 모든 서브모듈에 공통 주입된다.
 }

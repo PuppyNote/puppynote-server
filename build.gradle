@@ -19,4 +19,13 @@ subprojects {
     java {
         sourceCompatibility = '17'
     }
+
+    // compileOnly/annotationProcessor는 project(':...') 의존으로는 전파되지 않으므로
+    // 여기서 모든 서브모듈에 직접 주입한다. apps:legacy는 원래대로 자체 선언을 그대로 쓰도록 제외.
+    if (project.path != ':apps:legacy') {
+        dependencies {
+            compileOnly 'org.projectlombok:lombok:1.18.36'
+            annotationProcessor 'org.projectlombok:lombok:1.18.36'
+        }
+    }
 }

@@ -1,0 +1,84 @@
+package com.puppynoteserver.user.user.domain.entity;
+
+import com.puppynoteserver.global.BaseTimeEntity;
+import com.puppynoteserver.user.user.domain.enums.Role;
+import com.puppynoteserver.user.user.domain.enums.Sex;
+import com.puppynoteserver.user.user.domain.enums.SnsType;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
+public class User extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String email;
+
+    private String password;
+
+    private String nickName;
+
+    private String profileUrl;
+
+    @Enumerated(EnumType.STRING)
+    private SnsType snsType;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private String useYn;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Push> pushes = new ArrayList<>();
+
+    @Builder
+    public User(String email, Long id, String nickName, String password, String profileUrl, Role role, SnsType snsType, String useYn) {
+        this.email = email;
+        this.id = id;
+        this.nickName = nickName;
+        this.password = password;
+        this.profileUrl = profileUrl;
+        this.role = role;
+        this.snsType = snsType;
+        this.useYn = useYn;
+    }
+
+    public void withdraw() {
+        this.useYn = "N";
+    }
+
+    public void updateProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public void checkSnsType(SnsType snsType) {
+        if (!this.snsType.equals(snsType)) {
+            this.snsType.checkSnsType();
+        }
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void updateProfile(String nickName, String introduction, Sex sex, String birthDay, String profileUrl) {
+        updateNickName(nickName);
+        updateProfileUrl(profileUrl);
+    }
+
+}
