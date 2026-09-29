@@ -7,5 +7,9 @@ plugins {
 
 dependencies {
     // spring-boot-starter, spring-security, spring-data-jpa 등은 contracts:common이 'api'로 전파한다.
+    // lombok은 루트 build.gradle의 subprojects 블록에서 공통 주입된다.
     implementation project(':contracts:common')
+
+    // SmtpEmailAdapter(JavaMailSender)용 - user 서비스만 쓰므로 common이 아닌 여기에 선언
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
